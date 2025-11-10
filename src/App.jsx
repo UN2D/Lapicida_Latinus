@@ -1,24 +1,15 @@
 // src/App.jsx
-//
-// Hauptentry der Lapicida-Latinus-App.
-// - Gemeinsamer Startscreen für alle Kategorien
-// - Mehrfachauswahl von Lemmata/Pronomen
-// - Verb-Spezialscreen für Zeit/Modus/Genus
-// - Startet Quiz mit generateRound()
-
 import { useState, useMemo } from "react";
 import { generateRound } from "./logic/generateRound";
 import { Quiz } from "./components/Quiz";
 
 import nounsAdjectives from "./data/nounsAdjectives.json";
-
 import verbsPraesens from "./data/verbs_praesens.json";
 import verbsImperfekt from "./data/verbs_imperfekt.json";
 import verbsPerfekt from "./data/verbs_perfekt.json";
 import verbsPlusquamperfekt from "./data/verbs_plusquamperfekt.json";
 import verbsFutur1 from "./data/verbs_futur1.json";
 import verbsFutur2 from "./data/verbs_futur2.json";
-
 import demonstratives from "./data/demonstratives.json";
 import possessives from "./data/possessives.json";
 
@@ -45,7 +36,6 @@ const TENSE_OPTIONS = [
 const MOOD_OPTIONS = ["Indikativ", "Konjunktiv", "Imperativ"];
 const VOICE_OPTIONS = ["Aktiv", "Passiv"];
 
-// Mapping (Zeit, Modus, Genus) -> Key in Verbtabellen
 function verbKey(tense, mood, voice) {
   const t = (tense || "").toLowerCase().replace(/\s+/g, "");
   const m = (mood || "").toLowerCase();
@@ -77,7 +67,6 @@ function verbKey(tense, mood, voice) {
   return null;
 }
 
-// Nutzt Verbtabellen, um zu prüfen, ob es für (tense, mood, voice) überhaupt Formen gibt.
 function hasComboForTense(tense, mood, voice) {
   const list = VERB_DATA_BY_TENSE[tense] || [];
   if (!list.length) return false;
@@ -86,22 +75,19 @@ function hasComboForTense(tense, mood, voice) {
   return list.some((verb) => verb.forms && verb.forms[key]);
 }
 
-// Ermittelt erlaubte (mood, voice)-Kombos für die gewählten Zeiten.
+// Kombinationen, die für ALLE gewählten Zeiten existieren
 function getAllowedCombosForTenses(tenses) {
   if (!tenses.length) return [];
-
   const allCombos = [];
   for (const mood of MOOD_OPTIONS) {
     for (const voice of VOICE_OPTIONS) {
       allCombos.push({ mood, voice });
     }
   }
-
   if (tenses.length === 1) {
     const t = tenses[0];
     return allCombos.filter((c) => hasComboForTense(t, c.mood, c.voice));
   }
-
   return allCombos.filter((c) =>
     tenses.every((t) => hasComboForTense(t, c.mood, c.voice))
   );
@@ -127,13 +113,9 @@ function buildVerbLemmaList() {
 export default function App() {
   const [category, setCategory] = useState("nouns");
   const [numQuestions, setNumQuestions] = useState(5);
-
-  // Für alle Kategorien: Mehrfachauswahl von Lemmata/Pronomen
   const [selectedItems, setSelectedItems] = useState([]);
-
   const [round, setRound] = useState(null);
 
-  // Verb-Spezialscreen
   const [showVerbSettings, setShowVerbSettings] = useState(false);
   const [verbSettings, setVerbSettings] = useState({
     tenses: ["Praesens"],
@@ -141,7 +123,7 @@ export default function App() {
     voices: ["Aktiv"]
   });
 
-  // -------- Lemmata / Pronomen-Listen --------
+  // ---- Lemmata pro Bereich ----
 
   const nounLemmas = useMemo(
     () =>
@@ -172,18 +154,20 @@ export default function App() {
   const demoLemmas = useMemo(
     () =>
       Array.from(
-        new Set((demonstratives || []).map((d) => d.lemma))
+        new Set((demonstratives || []).map((d) => d.lemma).filter(Boolean))
       ).sort(),
     []
   );
 
   const possLemmas = useMemo(
     () =>
-      Array.from(new Set((possessives || []).map((p) => p.lemma))).sort(),
+      Array.from(
+        new Set((possessives || []).map((p) => p.lemma).filter(Boolean))
+      ).sort(),
     []
   );
 
-  // -------- Helpers --------
+  // -------- Reset --------
 
   const reset = () => {
     setRound(null);
@@ -196,6 +180,8 @@ export default function App() {
     });
     setNumQuestions(5);
   };
+
+  // -------- Verb-Hilfen --------
 
   const getActiveTenses = () => {
     const selected = verbSettings.tenses.length
@@ -230,12 +216,10 @@ export default function App() {
         if (remaining.length > 0) {
           return { ...prev, tenses: remaining };
         }
-
         const fallback =
           (!isTenseDisabled("Praesens") && "Praesens") ||
           TENSE_OPTIONS.find((t) => !isTenseDisabled(t)) ||
           tense;
-
         return { ...prev, tenses: [fallback] };
       }
 
@@ -257,7 +241,7 @@ export default function App() {
     });
   };
 
-  // Auswahl-Toggle für alle Kategorien
+  // Auswahl-Toggle (Multi-Select) für alle Kategorien
   const toggleItem = (value) => {
     setSelectedItems((prev) =>
       prev.includes(value)
@@ -267,7 +251,6 @@ export default function App() {
   };
 
   const isStartDisabled = () => {
-    // Für diese Kategorien muss mind. ein Item gewählt sein
     if (
       ["nouns", "adj_with_noun", "verbs", "demonstratives", "possessives"].includes(
         category
@@ -276,6 +259,22 @@ export default function App() {
       return selectedItems.length === 0;
     }
     return false;
+  };
+
+  // Hilfsfunktion: Mapping Selection -> generateRound-Props
+  const buildRoundConfig = () => {
+    switch (category) {
+      case "nouns":
+      case "adj_with_noun":
+      case "verbs":
+        return { lemma: selectedItems };
+      case "demonstratives":
+        return { selectedDemos: selectedItems };
+      case "possessives":
+        return { selectedPossessives: selectedItems };
+      default:
+        return {};
+    }
   };
 
   // -------- Start vom Hauptscreen --------
@@ -287,10 +286,11 @@ export default function App() {
       return;
     }
 
+    const cfg = buildRoundConfig();
     const newRound = generateRound({
       category,
       numQuestions,
-      selectedItems
+      ...cfg
     });
 
     setRound(newRound);
@@ -302,15 +302,15 @@ export default function App() {
     if (!selectedItems.length) return;
 
     const activeTenses = getActiveTenses();
+    const cfg = {
+      lemma: selectedItems,
+      verbSettings: { ...verbSettings, tenses: activeTenses }
+    };
 
     const newRound = generateRound({
       category: "verbs",
       numQuestions,
-      selectedItems,
-      verbSettings: {
-        ...verbSettings,
-        tenses: activeTenses
-      }
+      ...cfg
     });
 
     setRound(newRound);
@@ -343,17 +343,14 @@ export default function App() {
         <main className="screen">
           <h1>Verbformen wählen</h1>
           <p className="hint">
-            Wähle Zeit(en), Modus und Genus. Es werden nur Kombinationen
-            angeboten, für die Formen vorhanden sind. Oben gewählte Verben:
-          </p>
-          <p className="hint selected-list">
-            {selectedItems.join(" · ")}
+            Wähle Zeit(en), Modus und Genus für:{" "}
+            <strong>{selectedItems.join(" · ")}</strong>
           </p>
 
           {/* Zeitform */}
-          <section className="section">
+          <div className="section">
             <h2>Zeitform</h2>
-            <div className="option-row">
+            <div className="option-grid">
               {TENSE_OPTIONS.map((t) => {
                 const disabled = isTenseDisabled(t);
                 const selected = verbSettings.tenses.includes(t);
@@ -361,7 +358,7 @@ export default function App() {
                   <button
                     key={t}
                     className={
-                      "pill-btn" +
+                      "option-btn" +
                       (selected ? " selected" : "") +
                       (disabled ? " disabled" : "")
                     }
@@ -373,10 +370,10 @@ export default function App() {
                 );
               })}
             </div>
-          </section>
+          </div>
 
           {/* Modus */}
-          <section className="section">
+          <div className="section">
             <h2>Modus</h2>
             <div className="option-row">
               {MOOD_OPTIONS.map((m) => {
@@ -386,7 +383,7 @@ export default function App() {
                   <button
                     key={m}
                     className={
-                      "pill-btn" +
+                      "option-btn" +
                       (selected ? " selected" : "") +
                       (disabled ? " disabled" : "")
                     }
@@ -400,10 +397,10 @@ export default function App() {
                 );
               })}
             </div>
-          </section>
+          </div>
 
           {/* Genus */}
-          <section className="section">
+          <div className="section">
             <h2>Genus (Diathese)</h2>
             <div className="option-row">
               {VOICE_OPTIONS.map((v) => {
@@ -413,7 +410,7 @@ export default function App() {
                   <button
                     key={v}
                     className={
-                      "pill-btn" +
+                      "option-btn" +
                       (selected ? " selected" : "") +
                       (disabled ? " disabled" : "")
                     }
@@ -427,25 +424,25 @@ export default function App() {
                 );
               })}
             </div>
-          </section>
+          </div>
 
-          {/* Anzahl Aufgaben (nur Anzeige, änderbar am Startscreen) */}
-          <section className="section">
+          {/* Anzahl Aufgaben (Info) */}
+          <div className="section">
             <h2>Anzahl Aufgaben</h2>
             <p className="hint">
-              Aktuelle Auswahl: {numQuestions} Aufgaben
-              (einstellbar auf dem Startbildschirm).
+              Aktuelle Auswahl: {numQuestions} Aufgaben (einstellbar auf dem
+              Startbildschirm).
             </p>
-          </section>
+          </div>
 
-          <button className="primary-btn" onClick={startVerbRound}>
+          <button className="start-btn" onClick={startVerbRound}>
             SPIELEN
           </button>
         </main>
 
         <footer className="bottom-bar">
-          <span>v0.8 Beta</span>
-          <span>Verben</span>
+          <div>v0.8 Beta</div>
+          <div>verbs</div>
         </footer>
       </div>
     );
@@ -454,6 +451,24 @@ export default function App() {
   // ================== Startscreen ==================
 
   if (!round) {
+    // Helper zum Rendern von Lemma-Optionen
+    const renderLemmaButtons = (lemmas) => (
+      <div className="option-grid">
+        {lemmas.map((lemma) => (
+          <button
+            key={lemma}
+            className={
+              "option-btn small" +
+              (selectedItems.includes(lemma) ? " selected" : "")
+            }
+            onClick={() => toggleItem(lemma)}
+          >
+            {lemma}
+          </button>
+        ))}
+      </div>
+    );
+
     return (
       <div className="app">
         <header className="top-bar">
@@ -461,208 +476,94 @@ export default function App() {
         </header>
 
         <main className="screen">
-          {/* Kategorien */}
-          <section className="section">
-            <div className="category-row">
-              <button
-                className={
-                  "pill-btn category" +
-                  (category === "nouns" ? " selected" : "")
-                }
-                onClick={() => {
-                  setCategory("nouns");
-                  setSelectedItems([]);
-                  setShowVerbSettings(false);
-                }}
-              >
-                Substantive
-              </button>
-              <button
-                className={
-                  "pill-btn category" +
-                  (category === "adj_with_noun" ? " selected" : "")
-                }
-                onClick={() => {
-                  setCategory("adj_with_noun");
-                  setSelectedItems([]);
-                  setShowVerbSettings(false);
-                }}
-              >
-                Adjektive im Kontext
-              </button>
-              <button
-                className={
-                  "pill-btn category" +
-                  (category === "verbs" ? " selected" : "")
-                }
-                onClick={() => {
-                  setCategory("verbs");
-                  setSelectedItems([]);
-                  setShowVerbSettings(false);
-                }}
-              >
-                Verben
-              </button>
+          {/* Kategorie-Wahl */}
+          <div className="section">
+            <div className="category-grid">
+              {[
+                ["nouns", "Substantive"],
+                ["adj_with_noun", "Adjektive im Kontext"],
+                ["verbs", "Verben"],
+                ["demonstratives", "Demonstrativpronomen"],
+                ["possessives", "Possessivpronomen"]
+              ].map(([key, label]) => (
+                <button
+                  key={key}
+                  className={
+                    "option-btn" +
+                    (category === key ? " selected" : "")
+                  }
+                  onClick={() => {
+                    setCategory(key);
+                    setSelectedItems([]);
+                    setShowVerbSettings(false);
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-            <div className="category-row">
-              <button
-                className={
-                  "pill-btn category" +
-                  (category === "demonstratives" ? " selected" : "")
-                }
-                onClick={() => {
-                  setCategory("demonstratives");
-                  setSelectedItems([]);
-                  setShowVerbSettings(false);
-                }}
-              >
-                Demonstrativpronomen
-              </button>
-              <button
-                className={
-                  "pill-btn category" +
-                  (category === "possessives" ? " selected" : "")
-                }
-                onClick={() => {
-                  setCategory("possessives");
-                  setSelectedItems([]);
-                  setShowVerbSettings(false);
-                }}
-              >
-                Possessivpronomen
-              </button>
-            </div>
-          </section>
+          </div>
 
-          {/* Auswahl nach Kategorie */}
-
+          {/* Wort-/Pronomen-/Verb-Auswahl */}
           {category === "nouns" && (
-            <section className="section">
+            <div className="section">
               <h1>Substantive wählen</h1>
               <p className="hint">
-                Wähle ein oder mehrere Substantive. Die Formen werden
-                gemischt abgefragt.
+                Du übst die Formen der ausgewählten Substantive.
               </p>
-              <div className="option-grid">
-                {nounLemmas.map((lemma) => (
-                  <button
-                    key={lemma}
-                    className={
-                      "pill-btn small" +
-                      (selectedItems.includes(lemma) ? " selected" : "")
-                    }
-                    onClick={() => toggleItem(lemma)}
-                  >
-                    {lemma}
-                  </button>
-                ))}
-              </div>
-            </section>
+              {renderLemmaButtons(nounLemmas)}
+            </div>
           )}
 
           {category === "adj_with_noun" && (
-            <section className="section">
-              <h1>Adjektive wählen</h1>
+            <div className="section">
+              <h1>Adjektive im Kontext wählen</h1>
               <p className="hint">
-                Du bestimmst die Form des Adjektivs im passenden
-                Nomen-Kontext.
+                Du bestimmst die Adjektivform im passenden Nomen-Kontext.
               </p>
-              <div className="option-grid">
-                {adjLemmas.map((lemma) => (
-                  <button
-                    key={lemma}
-                    className={
-                      "pill-btn small" +
-                      (selectedItems.includes(lemma) ? " selected" : "")
-                    }
-                    onClick={() => toggleItem(lemma)}
-                  >
-                    {lemma}
-                  </button>
-                ))}
-              </div>
-            </section>
+              {renderLemmaButtons(adjLemmas)}
+            </div>
           )}
 
           {category === "verbs" && (
-            <section className="section">
-              <h1>Verben wählen</h1>
+            <div className="section">
+              <h1>Verb wählen</h1>
               <p className="hint">
-                Wähle ein oder mehrere Verben. Im nächsten Schritt legst du
-                Zeit / Modus / Genus fest.
+                Danach wählst du auf der nächsten Seite Zeit, Modus und Genus.
               </p>
-              <div className="option-grid">
-                {verbLemmas.map((lemma) => (
-                  <button
-                    key={lemma}
-                    className={
-                      "pill-btn small" +
-                      (selectedItems.includes(lemma) ? " selected" : "")
-                    }
-                    onClick={() => toggleItem(lemma)}
-                  >
-                    {lemma}
-                  </button>
-                ))}
-              </div>
-            </section>
+              {renderLemmaButtons(verbLemmas)}
+            </div>
           )}
 
           {category === "demonstratives" && (
-            <section className="section">
+            <div className="section">
               <h1>Demonstrativpronomen wählen</h1>
               <p className="hint">
                 Wähle, welche Demonstrativpronomen abgefragt werden sollen.
               </p>
-              <div className="option-row">
-                {demoLemmas.map((l) => (
-                  <button
-                    key={l}
-                    className={
-                      "pill-btn small" +
-                      (selectedItems.includes(l) ? " selected" : "")
-                    }
-                    onClick={() => toggleItem(l)}
-                  >
-                    {l}
-                  </button>
-                ))}
-              </div>
-            </section>
+              {renderLemmaButtons(demoLemmas)}
+            </div>
           )}
 
           {category === "possessives" && (
-            <section className="section">
+            <div className="section">
               <h1>Possessivpronomen wählen</h1>
               <p className="hint">
                 Wähle, welche Possessivpronomen abgefragt werden sollen.
               </p>
-              <div className="option-row">
-                {possLemmas.map((l) => (
-                  <button
-                    key={l}
-                    className={
-                      "pill-btn small" +
-                      (selectedItems.includes(l) ? " selected" : "")
-                    }
-                    onClick={() => toggleItem(l)}
-                  >
-                    {l}
-                  </button>
-                ))}
-              </div>
-            </section>
+              {renderLemmaButtons(possLemmas)}
+            </div>
           )}
 
           {/* Anzahl Aufgaben */}
-          <section className="section">
+          <div className="section">
             <h2>Anzahl Aufgaben</h2>
             <div className="option-row">
               {[5, 10, 20].map((n) => (
                 <button
                   key={n}
                   className={
-                    "pill-btn" + (numQuestions === n ? " selected" : "")
+                    "option-btn" + (numQuestions === n ? " selected" : "")
                   }
                   onClick={() => setNumQuestions(n)}
                 >
@@ -670,16 +571,15 @@ export default function App() {
                 </button>
               ))}
             </div>
-          </section>
+          </div>
 
           <button
-            className="primary-btn"
+            className="start-btn"
             onClick={startFromMain}
             disabled={isStartDisabled()}
           >
             SPIELEN
           </button>
-
           {isStartDisabled() && (
             <p className="hint">
               Bitte zuerst mindestens ein Wort / Pronomen auswählen.
@@ -688,30 +588,12 @@ export default function App() {
         </main>
 
         <footer className="bottom-bar">
-          <span>v0.8 Beta</span>
-          <span>{category}</span>
+          <div>v0.8 Beta</div>
         </footer>
       </div>
     );
   }
 
   // ================== Quiz aktiv ==================
-
-  return (
-    <div className="app">
-      <header className="top-bar">
-        <div className="top-title">Lapicida Latinus</div>
-        <button className="top-back-btn" onClick={reset}>
-          Zurück
-        </button>
-      </header>
-      <main className="screen">
-        <Quiz round={round} onFinish={reset} />
-      </main>
-      <footer className="bottom-bar">
-        <span>v0.8 Beta</span>
-        <span>{round.category}</span>
-      </footer>
-    </div>
-  );
+  return <Quiz round={round} onFinish={reset} />;
 }

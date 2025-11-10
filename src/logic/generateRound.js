@@ -29,7 +29,7 @@ function shuffle(arr) {
     return a;
 }
 
-// erlaubt string, array, null
+// Normalisiert Eingaben: string | string[] | null -> string[]
 function asList(value) {
     if (Array.isArray(value)) {
         return value.filter(Boolean);
@@ -69,7 +69,7 @@ function labelForCombo(opt) {
 }
 
 // ---------------------------------------------------
-// Verb-Konfiguration
+// Verben – Konfiguration
 // ---------------------------------------------------
 
 const VERB_DATA_BY_TENSE = {
@@ -93,7 +93,7 @@ const ALL_VERB_TENSES = [
 const PERSONS = ["1", "2", "3"];
 const NUMBERS_VERB = ["Sg", "Pl"];
 
-// Muss zu App.jsx und den JSON-Keys passen
+// Muss zu App.jsx & JSON-Key-Namen passen
 function verbKey(tense, mood, voice) {
     const t = (tense || "").toLowerCase().replace(/\s+/g, "");
     const m = (mood || "").toLowerCase();
@@ -126,7 +126,7 @@ function verbKey(tense, mood, voice) {
 }
 
 // ---------------------------------------------------
-// 1) Substantive – ein oder mehrere Lemmata
+// 1) Substantive – Mehrdeutigkeit bleibt erhalten
 // ---------------------------------------------------
 
 function buildNounQuestions(lemma, numQuestions) {
@@ -144,7 +144,6 @@ function buildNounQuestions(lemma, numQuestions) {
     );
     if (!entries.length) return [];
 
-    // gleiche Form -> mehrere Deutungen (Mehrdeutigkeiten bleiben erhalten)
     const groupsByForm = new Map();
 
     for (const e of entries) {
@@ -161,7 +160,6 @@ function buildNounQuestions(lemma, numQuestions) {
             case: e.case,
             number: e.number,
             gender: e.gender,
-            // nur dt. Phrase; Kasus/Num/Genus kommt aus caseLabel()
             de: e.lemmaDe || ""
         });
     }
@@ -259,13 +257,14 @@ function buildAdjWithNounQuestions(adjLemma, numQuestions) {
 // ---------------------------------------------------
 
 function buildDemonstrativeQuestions(numQuestions, selectedDemos) {
-    const demos = Array.isArray(demonstratives) ? demonstratives : [];
-    if (!demos.length) return [];
+    const demosAll = Array.isArray(demonstratives) ? demonstratives : [];
+    if (!demosAll.length) return [];
 
     const chosen = asList(selectedDemos);
-    const activeDemos = chosen.length
-        ? demos.filter((d) => chosen.includes(d.lemma))
-        : demos;
+    const demos =
+        chosen.length > 0
+            ? demosAll.filter((d) => chosen.includes(d.lemma))
+            : demosAll;
 
     const nounEntries = nounsAdjectives.filter(
         (e) =>
@@ -284,44 +283,54 @@ function buildDemonstrativeQuestions(numQuestions, selectedDemos) {
 
     const groupsByPrompt = new Map();
 
-    for (const demo of activeDemos) {
+    for (const demo of demos) {
         for (const c of CASES) {
             for (const n of NUMBERS) {
                 for (const g of GENDERS) {
                     const key = `${c}_${n}_${g}`;
                     const pronForm = demo.forms?.[key];
-                    const ctx = demo.contextNouns?.[g];
-                    if (!pronForm || !ctx) continue;
+                    if (!pronForm) continue;
 
-                    const noun = nounEntries.find(
+                    const ctx = demo.contextNouns || {};
+                    const ctxNoun = ctx[g];
+
+                    let candidates = nounEntries.filter(
                         (nn) =>
-                            nn.lemma === ctx.la &&
                             nn.case === c &&
                             nn.number === n &&
                             nn.gender === g
                     );
-                    if (!noun) continue; // keine künstlichen Formen
 
-                    const prompt = `${pronForm} ${noun.form}`;
-                    const germanNoun = ctx.de || noun.lemmaDe || "";
-                    const dePhrase = `${demo.lemmaDe || ""} ${germanNoun}`.trim();
+                    if (ctxNoun?.la) {
+                        candidates = candidates.filter((nn) => nn.lemma === ctxNoun.la);
+                    }
+                    if (!candidates.length) continue;
 
-                    if (!groupsByPrompt.has(prompt)) {
-                        groupsByPrompt.set(prompt, {
-                            demo,
-                            prompt,
-                            usage: demo.usage,
-                            correctOptions: [],
-                            topics: ["demonstrative"]
+                    for (const noun of candidates) {
+                        const prompt = `${pronForm} ${noun.form}`;
+                        const germanNoun = noun.lemmaDe || ctxNoun?.de || "";
+                        const label = labelForCombo({ case: c, number: n, gender: g });
+
+                        if (!groupsByPrompt.has(prompt)) {
+                            groupsByPrompt.set(prompt, {
+                                demo,
+                                prompt,
+                                usage: demo.usage,
+                                correctOptions: [],
+                                topics: ["demonstrative"]
+                            });
+                        }
+
+                        groupsByPrompt.get(prompt).correctOptions.push({
+                            case: c,
+                            number: n,
+                            gender: g,
+                            de:
+                                (demo.lemmaDe || "").trim() +
+                                (germanNoun ? ` ${germanNoun}` : ""),
+                            label
                         });
                     }
-
-                    groupsByPrompt.get(prompt).correctOptions.push({
-                        case: c,
-                        number: n,
-                        gender: g,
-                        de: dePhrase
-                    });
                 }
             }
         }
@@ -347,13 +356,14 @@ function buildDemonstrativeQuestions(numQuestions, selectedDemos) {
 // ---------------------------------------------------
 
 function buildPossessiveQuestions(numQuestions, selectedPossessives) {
-    const possList = Array.isArray(possessives) ? possessives : [];
-    if (!possList.length) return [];
+    const possAll = Array.isArray(possessives) ? possessives : [];
+    if (!possAll.length) return [];
 
     const chosen = asList(selectedPossessives);
-    const activePoss = chosen.length
-        ? possList.filter((p) => chosen.includes(p.lemma))
-        : possList;
+    const possList =
+        chosen.length > 0
+            ? possAll.filter((p) => chosen.includes(p.lemma))
+            : possAll;
 
     const nounEntries = nounsAdjectives.filter(
         (e) =>
@@ -367,11 +377,10 @@ function buildPossessiveQuestions(numQuestions, selectedPossessives) {
 
     const groupsByPrompt = new Map();
 
-    for (const poss of activePoss) {
+    for (const poss of possList) {
         const ctx = poss.contextNouns || {};
 
         for (const [key, form] of Object.entries(poss.forms || {})) {
-            // key: "Nom_Sg_m"
             const [c, n, g] = key.split("_");
             if (!form || !c || !n || !g) continue;
 
@@ -437,7 +446,7 @@ function buildVerbQuestions(numQuestions, lemma, verbSettings = {}) {
         (t) => VERB_DATA_BY_TENSE[t]
     );
 
-    const lemmas = asList(lemma); // erlaubt später Multi-Verb-Auswahl
+    const lemmas = asList(lemma);
     const candidates = [];
 
     for (const tense of activeTenses) {
@@ -454,7 +463,7 @@ function buildVerbQuestions(numQuestions, lemma, verbSettings = {}) {
 
                     for (const p of PERSONS) {
                         for (const n of NUMBERS_VERB) {
-                            const cellKey = `${p}${n.toLowerCase()}`; // "1sg"
+                            const cellKey = `${p}${n.toLowerCase()}`; // 1sg, 2pl ...
                             const form = table[cellKey];
                             if (!form) continue;
 
@@ -492,8 +501,7 @@ function buildVerbQuestions(numQuestions, lemma, verbSettings = {}) {
                 number: c.number,
                 tense: c.tense,
                 mood: c.mood,
-                voice: c.voice,
-                de: c.de
+                voice: c.voice
             }
         ],
         topics: ["verb"]
@@ -501,7 +509,7 @@ function buildVerbQuestions(numQuestions, lemma, verbSettings = {}) {
 }
 
 // ---------------------------------------------------
-// 6) Konjunktionen
+// 6) Konjunktionen (optional)
 // ---------------------------------------------------
 
 function buildConjunctionQuestions(numQuestions) {
