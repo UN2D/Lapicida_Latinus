@@ -1,0 +1,569 @@
+[
+    {
+        "id": "amo",
+        "lemma": "amo",
+        "lemmaDe": "lieben",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "amabam",
+                "2sg": "amabas",
+                "3sg": "amabat",
+                "1pl": "amabamus",
+                "2pl": "amabatis",
+                "3pl": "amabant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "amabar",
+                "2sg": "amabaris",
+                "3sg": "amabatur",
+                "1pl": "amabamur",
+                "2pl": "amabamini",
+                "3pl": "amabantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "amarem",
+                "2sg": "amares",
+                "3sg": "amaret",
+                "1pl": "amaremus",
+                "2pl": "amaretis",
+                "3pl": "amarent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "amarer",
+                "2sg": "amareris",
+                "3sg": "amaretur",
+                "1pl": "amaremur",
+                "2pl": "amaremini",
+                "3pl": "amarentur"
+            }
+        }
+    },
+    {
+        "id": "laudo",
+        "lemma": "laudo",
+        "lemmaDe": "loben",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "laudabam",
+                "2sg": "laudabas",
+                "3sg": "laudabat",
+                "1pl": "laudabamus",
+                "2pl": "laudabatis",
+                "3pl": "laudabant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "laudabar",
+                "2sg": "laudabaris",
+                "3sg": "laudabatur",
+                "1pl": "laudabamur",
+                "2pl": "laudabamini",
+                "3pl": "laudabantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "laudarem",
+                "2sg": "laudares",
+                "3sg": "laudaret",
+                "1pl": "laudaremus",
+                "2pl": "laudaretis",
+                "3pl": "laudarent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "laudarer",
+                "2sg": "laudareris",
+                "3sg": "laudaretur",
+                "1pl": "laudaremur",
+                "2pl": "laudaremini",
+                "3pl": "laudarentur"
+            }
+        }
+    },
+    {
+        "id": "moneo",
+        "lemma": "moneo",
+        "lemmaDe": "ermahnen",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "monebam",
+                "2sg": "monebas",
+                "3sg": "monebat",
+                "1pl": "monebamus",
+                "2pl": "monebatis",
+                "3pl": "monebant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "monebar",
+                "2sg": "monebaris",
+                "3sg": "monebatur",
+                "1pl": "monebamur",
+                "2pl": "monebamini",
+                "3pl": "monebantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "monerem",
+                "2sg": "moneres",
+                "3sg": "moneret",
+                "1pl": "moneremus",
+                "2pl": "moneretis",
+                "3pl": "monerent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "monerer",
+                "2sg": "monereris",
+                "3sg": "moneretur",
+                "1pl": "moneremur",
+                "2pl": "moneremini",
+                "3pl": "monerentur"
+            }
+        }
+    },
+    {
+        "id": "video",
+        "lemma": "video",
+        "lemmaDe": "sehen",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "videbam",
+                "2sg": "videbas",
+                "3sg": "videbat",
+                "1pl": "videbamus",
+                "2pl": "videbatis",
+                "3pl": "videbant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "videbar",
+                "2sg": "videbaris",
+                "3sg": "videbatur",
+                "1pl": "videbamur",
+                "2pl": "videbamini",
+                "3pl": "videbantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "viderem",
+                "2sg": "videres",
+                "3sg": "videret",
+                "1pl": "videremus",
+                "2pl": "videretis",
+                "3pl": "viderent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "viderer",
+                "2sg": "videreris",
+                "3sg": "videretur",
+                "1pl": "videremur",
+                "2pl": "videremini",
+                "3pl": "viderentur"
+            }
+        }
+    },
+    {
+        "id": "ago",
+        "lemma": "ago",
+        "lemmaDe": "tun",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "agebam",
+                "2sg": "agebas",
+                "3sg": "agebat",
+                "1pl": "agebamus",
+                "2pl": "agebatis",
+                "3pl": "agebant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "agebar",
+                "2sg": "agebaris",
+                "3sg": "agebatur",
+                "1pl": "agebamur",
+                "2pl": "agebamini",
+                "3pl": "agebantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "agerem",
+                "2sg": "ageres",
+                "3sg": "ageret",
+                "1pl": "ageremus",
+                "2pl": "ageretis",
+                "3pl": "agerent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "agerer",
+                "2sg": "agereris",
+                "3sg": "ageretur",
+                "1pl": "ageremur",
+                "2pl": "ageremini",
+                "3pl": "agerentur"
+            }
+        }
+    },
+    {
+        "id": "rego",
+        "lemma": "rego",
+        "lemmaDe": "lenken",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "regebam",
+                "2sg": "regebas",
+                "3sg": "regebat",
+                "1pl": "regebamus",
+                "2pl": "regebatis",
+                "3pl": "regebant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "regebar",
+                "2sg": "regebaris",
+                "3sg": "regebatur",
+                "1pl": "regebamur",
+                "2pl": "regebamini",
+                "3pl": "regebantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "regerem",
+                "2sg": "regeres",
+                "3sg": "regeret",
+                "1pl": "regeremus",
+                "2pl": "regeretis",
+                "3pl": "regerent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "regerer",
+                "2sg": "regereris",
+                "3sg": "regeretur",
+                "1pl": "regeremur",
+                "2pl": "regeremini",
+                "3pl": "regerentur"
+            }
+        }
+    },
+    {
+        "id": "audio",
+        "lemma": "audio",
+        "lemmaDe": "hören",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "audiebam",
+                "2sg": "audiebas",
+                "3sg": "audiebat",
+                "1pl": "audiebamus",
+                "2pl": "audiebatis",
+                "3pl": "audiebant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "audiebar",
+                "2sg": "audiebaris",
+                "3sg": "audiebatur",
+                "1pl": "audiebamur",
+                "2pl": "audiebamini",
+                "3pl": "audiebantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "audirem",
+                "2sg": "audires",
+                "3sg": "audiret",
+                "1pl": "audiremus",
+                "2pl": "audiretis",
+                "3pl": "audirent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "audirer",
+                "2sg": "audireris",
+                "3sg": "audiretur",
+                "1pl": "audiremur",
+                "2pl": "audiremini",
+                "3pl": "audirentur"
+            }
+        }
+    },
+    {
+        "id": "sentio",
+        "lemma": "sentio",
+        "lemmaDe": "fühlen",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "sentiebam",
+                "2sg": "sentiebas",
+                "3sg": "sentiebat",
+                "1pl": "sentiebamus",
+                "2pl": "sentiebatis",
+                "3pl": "sentiebant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "sentiebar",
+                "2sg": "sentiebaris",
+                "3sg": "sentiebatur",
+                "1pl": "sentiebamur",
+                "2pl": "sentiebamini",
+                "3pl": "sentiebantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "sentirem",
+                "2sg": "sentires",
+                "3sg": "sentiret",
+                "1pl": "sentiremus",
+                "2pl": "sentiretis",
+                "3pl": "sentirent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "sentirer",
+                "2sg": "sentireris",
+                "3sg": "sentiretur",
+                "1pl": "sentiremur",
+                "2pl": "sentiremini",
+                "3pl": "sentirentur"
+            }
+        }
+    },
+    {
+        "id": "capio",
+        "lemma": "capio",
+        "lemmaDe": "fassen",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "capiebam",
+                "2sg": "capiebas",
+                "3sg": "capiebat",
+                "1pl": "capiebamus",
+                "2pl": "capiebatis",
+                "3pl": "capiebant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "capiebar",
+                "2sg": "capiebaris",
+                "3sg": "capiebatur",
+                "1pl": "capiebamur",
+                "2pl": "capiebamini",
+                "3pl": "capiebantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "caperem",
+                "2sg": "caperes",
+                "3sg": "caperet",
+                "1pl": "caperemus",
+                "2pl": "caperetis",
+                "3pl": "caperent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "caperer",
+                "2sg": "capereris",
+                "3sg": "caperetur",
+                "1pl": "caperemur",
+                "2pl": "caperemini",
+                "3pl": "caperentur"
+            }
+        }
+    },
+    {
+        "id": "iacio",
+        "lemma": "iacio",
+        "lemmaDe": "werfen",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "iaciebam",
+                "2sg": "iaciebas",
+                "3sg": "iaciebat",
+                "1pl": "iaciebamus",
+                "2pl": "iaciebatis",
+                "3pl": "iaciebant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "iaciebar",
+                "2sg": "iaciebaris",
+                "3sg": "iaciebatur",
+                "1pl": "iaciebamur",
+                "2pl": "iaciebamini",
+                "3pl": "iaciebantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "iacerem",
+                "2sg": "iaceres",
+                "3sg": "iaceret",
+                "1pl": "iaceremus",
+                "2pl": "iaceretis",
+                "3pl": "iacerent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "iacerer",
+                "2sg": "iacereris",
+                "3sg": "iaceretur",
+                "1pl": "iaceremur",
+                "2pl": "iaceremini",
+                "3pl": "iacerentur"
+            }
+        }
+    },
+    {
+        "id": "sum",
+        "lemma": "sum",
+        "lemmaDe": "sein",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "eram",
+                "2sg": "eras",
+                "3sg": "erat",
+                "1pl": "eramus",
+                "2pl": "eratis",
+                "3pl": "erant"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "essem",
+                "2sg": "esses",
+                "3sg": "esset",
+                "1pl": "essemus",
+                "2pl": "essetis",
+                "3pl": "essent"
+            }
+        }
+    },
+    {
+        "id": "fero",
+        "lemma": "fero",
+        "lemmaDe": "tragen",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "ferebam",
+                "2sg": "ferebas",
+                "3sg": "ferebat",
+                "1pl": "ferebamus",
+                "2pl": "ferebatis",
+                "3pl": "ferebant"
+            },
+            "imperfekt_ind_pass": {
+                "1sg": "ferebar",
+                "2sg": "ferebaris",
+                "3sg": "ferebatur",
+                "1pl": "ferebamur",
+                "2pl": "ferebamini",
+                "3pl": "ferebantur"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "ferrem",
+                "2sg": "ferres",
+                "3sg": "ferret",
+                "1pl": "ferremus",
+                "2pl": "ferretis",
+                "3pl": "ferrent"
+            },
+            "imperfekt_konj_pass": {
+                "1sg": "ferrer",
+                "2sg": "ferreris",
+                "3sg": "ferretur",
+                "1pl": "ferremur",
+                "2pl": "ferremini",
+                "3pl": "ferrentur"
+            }
+        }
+    },
+    {
+        "id": "eo",
+        "lemma": "eo",
+        "lemmaDe": "gehen",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "ibam",
+                "2sg": "ibas",
+                "3sg": "ibat",
+                "1pl": "ibamus",
+                "2pl": "ibatis",
+                "3pl": "ibant"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "irem",
+                "2sg": "ires",
+                "3sg": "iret",
+                "1pl": "iremus",
+                "2pl": "iretis",
+                "3pl": "irent"
+            }
+        }
+    },
+    {
+        "id": "malo",
+        "lemma": "malo",
+        "lemmaDe": "lieber wollen",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "malebam",
+                "2sg": "malebas",
+                "3sg": "malebat",
+                "1pl": "malebamus",
+                "2pl": "malebatis",
+                "3pl": "malebant"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "mallem",
+                "2sg": "malles",
+                "3sg": "mallet",
+                "1pl": "mallemus",
+                "2pl": "malletis",
+                "3pl": "mallent"
+            }
+        }
+    },
+    {
+        "id": "nolo",
+        "lemma": "nolo",
+        "lemmaDe": "nicht wollen",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "nolebam",
+                "2sg": "nolebas",
+                "3sg": "nolebat",
+                "1pl": "nolebamus",
+                "2pl": "nolebatis",
+                "3pl": "nolebant"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "nollem",
+                "2sg": "nolles",
+                "3sg": "nollet",
+                "1pl": "nollemus",
+                "2pl": "nolletis",
+                "3pl": "nollent"
+            }
+        }
+    },
+    {
+        "id": "possum",
+        "lemma": "possum",
+        "lemmaDe": "können",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "poteram",
+                "2sg": "poteras",
+                "3sg": "poterat",
+                "1pl": "poteramus",
+                "2pl": "poteratis",
+                "3pl": "poterant"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "possem",
+                "2sg": "posses",
+                "3sg": "posset",
+                "1pl": "possemus",
+                "2pl": "possetis",
+                "3pl": "possent"
+            }
+        }
+    },
+    {
+        "id": "volo",
+        "lemma": "volo",
+        "lemmaDe": "wollen",
+        "forms": {
+            "imperfekt_ind_akt": {
+                "1sg": "volebam",
+                "2sg": "volebas",
+                "3sg": "volebat",
+                "1pl": "volebamus",
+                "2pl": "volebatis",
+                "3pl": "volebant"
+            },
+            "imperfekt_konj_akt": {
+                "1sg": "vellem",
+                "2sg": "velles",
+                "3sg": "vellet",
+                "1pl": "vellemus",
+                "2pl": "velletis",
+                "3pl": "vellent"
+            }
+        }
+    }
+]

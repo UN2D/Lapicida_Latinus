@@ -1,0 +1,30 @@
+[
+    {
+        "id": "a_decl_fem",
+        "text": "Die Substantive der a-Deklination sind meist feminin.",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "o_decl_m_n",
+        "text": "Die o-Deklination hat oft maskuline -us und neutrale -um Formen.",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "adj_a_o",
+        "text": "Adjektive der a-/o-Deklination passen sich in Kasus, Numerus und Genus dem Nomen an.",
+        "topics": [
+            "adj_a-o"
+        ]
+    },
+    {
+        "id": "conj_kopulativ",
+        "text": "Kopulative Konjunktionen wie et, -que, atque verbinden Gleichrangiges.",
+        "topics": [
+            "conj_kopulativ"
+        ]
+    }
+]

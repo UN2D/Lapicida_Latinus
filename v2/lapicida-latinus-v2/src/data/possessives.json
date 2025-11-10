@@ -1,0 +1,277 @@
+[
+    {
+        "id": "meus",
+        "lemma": "meus",
+        "lemmaDe": "mein",
+        "type": "possessive",
+        "person": "1",
+        "possNumber": "Sg",
+        "usage": "Bezieht sich auf den Sprecher (1. Person Singular): mein/meine.",
+        "contextNouns": {
+            "m": {
+                "la": "amicus",
+                "de": "Freund"
+            },
+            "f": {
+                "la": "femina",
+                "de": "Frau"
+            },
+            "n": {
+                "la": "templum",
+                "de": "Haus"
+            }
+        },
+        "forms": {
+            "Nom_Sg_m": "meus",
+            "Gen_Sg_m": "mei",
+            "Dat_Sg_m": "meo",
+            "Akk_Sg_m": "meum",
+            "Abl_Sg_m": "meo",
+            "Nom_Pl_m": "mei",
+            "Gen_Pl_m": "meorum",
+            "Dat_Pl_m": "meis",
+            "Akk_Pl_m": "meos",
+            "Abl_Pl_m": "meis",
+            "Nom_Sg_f": "mea",
+            "Gen_Sg_f": "meae",
+            "Dat_Sg_f": "meae",
+            "Akk_Sg_f": "meam",
+            "Abl_Sg_f": "mea",
+            "Nom_Pl_f": "meae",
+            "Gen_Pl_f": "mearum",
+            "Dat_Pl_f": "meis",
+            "Akk_Pl_f": "meas",
+            "Abl_Pl_f": "meis",
+            "Nom_Sg_n": "meum",
+            "Gen_Sg_n": "mei",
+            "Dat_Sg_n": "meo",
+            "Akk_Sg_n": "meum",
+            "Abl_Sg_n": "meo",
+            "Nom_Pl_n": "mea",
+            "Gen_Pl_n": "meorum",
+            "Dat_Pl_n": "meis",
+            "Akk_Pl_n": "mea",
+            "Abl_Pl_n": "meis"
+        }
+    },
+    {
+        "id": "tuus",
+        "lemma": "tuus",
+        "lemmaDe": "dein",
+        "type": "possessive",
+        "person": "2",
+        "possNumber": "Sg",
+        "usage": "Bezieht sich auf den Angesprochenen (2. Person Singular): dein/deine.",
+        "contextNouns": {
+            "m": {
+                "la": "amicus",
+                "de": "Freund"
+            },
+            "f": {
+                "la": "femina",
+                "de": "Frau"
+            },
+            "n": {
+                "la": "templum",
+                "de": "Haus"
+            }
+        },
+        "forms": {
+            "Nom_Sg_m": "tuus",
+            "Gen_Sg_m": "tui",
+            "Dat_Sg_m": "tuo",
+            "Akk_Sg_m": "tuum",
+            "Abl_Sg_m": "tuo",
+            "Nom_Pl_m": "tui",
+            "Gen_Pl_m": "tuorum",
+            "Dat_Pl_m": "tuis",
+            "Akk_Pl_m": "tuos",
+            "Abl_Pl_m": "tuis",
+            "Nom_Sg_f": "tua",
+            "Gen_Sg_f": "tuae",
+            "Dat_Sg_f": "tuae",
+            "Akk_Sg_f": "tuam",
+            "Abl_Sg_f": "tua",
+            "Nom_Pl_f": "tuae",
+            "Gen_Pl_f": "tuarum",
+            "Dat_Pl_f": "tuis",
+            "Akk_Pl_f": "tuas",
+            "Abl_Pl_f": "tuis",
+            "Nom_Sg_n": "tuum",
+            "Gen_Sg_n": "tui",
+            "Dat_Sg_n": "tuo",
+            "Akk_Sg_n": "tuum",
+            "Abl_Sg_n": "tuo",
+            "Nom_Pl_n": "tua",
+            "Gen_Pl_n": "tuorum",
+            "Dat_Pl_n": "tuis",
+            "Akk_Pl_n": "tua",
+            "Abl_Pl_n": "tuis"
+        }
+    },
+    {
+        "id": "suus",
+        "lemma": "suus",
+        "lemmaDe": "sein/ihr (reflexiv)",
+        "type": "possessive",
+        "person": "3",
+        "possNumber": "Sg/Pl",
+        "usage": "Reflexiv: Bezieht sich auf das Subjekt (3. Person Singular oder Plural): sein/e, ihr/e.",
+        "contextNouns": {
+            "m": {
+                "la": "amicus",
+                "de": "Freund"
+            },
+            "f": {
+                "la": "femina",
+                "de": "Frau"
+            },
+            "n": {
+                "la": "templum",
+                "de": "Haus"
+            }
+        },
+        "forms": {
+            "Nom_Sg_m": "suus",
+            "Gen_Sg_m": "sui",
+            "Dat_Sg_m": "suo",
+            "Akk_Sg_m": "suum",
+            "Abl_Sg_m": "suo",
+            "Nom_Pl_m": "sui",
+            "Gen_Pl_m": "suorum",
+            "Dat_Pl_m": "suis",
+            "Akk_Pl_m": "suos",
+            "Abl_Pl_m": "suis",
+            "Nom_Sg_f": "sua",
+            "Gen_Sg_f": "suae",
+            "Dat_Sg_f": "suae",
+            "Akk_Sg_f": "suam",
+            "Abl_Sg_f": "sua",
+            "Nom_Pl_f": "suae",
+            "Gen_Pl_f": "suarum",
+            "Dat_Pl_f": "suis",
+            "Akk_Pl_f": "suas",
+            "Abl_Pl_f": "suis",
+            "Nom_Sg_n": "suum",
+            "Gen_Sg_n": "sui",
+            "Dat_Sg_n": "suo",
+            "Akk_Sg_n": "suum",
+            "Abl_Sg_n": "suo",
+            "Nom_Pl_n": "sua",
+            "Gen_Pl_n": "suorum",
+            "Dat_Pl_n": "suis",
+            "Akk_Pl_n": "sua",
+            "Abl_Pl_n": "suis"
+        }
+    },
+    {
+        "id": "noster",
+        "lemma": "noster",
+        "lemmaDe": "unser",
+        "type": "possessive",
+        "person": "1",
+        "possNumber": "Pl",
+        "usage": "Bezieht sich auf die 1. Person Plural: unser/e.",
+        "contextNouns": {
+            "m": {
+                "la": "amicus",
+                "de": "Freund"
+            },
+            "f": {
+                "la": "femina",
+                "de": "Frau"
+            },
+            "n": {
+                "la": "templum",
+                "de": "Haus"
+            }
+        },
+        "forms": {
+            "Nom_Sg_m": "noster",
+            "Gen_Sg_m": "nostri",
+            "Dat_Sg_m": "nostro",
+            "Akk_Sg_m": "nostrum",
+            "Abl_Sg_m": "nostro",
+            "Nom_Pl_m": "nostri",
+            "Gen_Pl_m": "nostrorum",
+            "Dat_Pl_m": "nostris",
+            "Akk_Pl_m": "nostros",
+            "Abl_Pl_m": "nostris",
+            "Nom_Sg_f": "nostra",
+            "Gen_Sg_f": "nostrae",
+            "Dat_Sg_f": "nostrae",
+            "Akk_Sg_f": "nostram",
+            "Abl_Sg_f": "nostra",
+            "Nom_Pl_f": "nostrae",
+            "Gen_Pl_f": "nostrarum",
+            "Dat_Pl_f": "nostris",
+            "Akk_Pl_f": "nostras",
+            "Abl_Pl_f": "nostris",
+            "Nom_Sg_n": "nostrum",
+            "Gen_Sg_n": "nostri",
+            "Dat_Sg_n": "nostro",
+            "Akk_Sg_n": "nostrum",
+            "Abl_Sg_n": "nostro",
+            "Nom_Pl_n": "nostra",
+            "Gen_Pl_n": "nostrorum",
+            "Dat_Pl_n": "nostris",
+            "Akk_Pl_n": "nostra",
+            "Abl_Pl_n": "nostris"
+        }
+    },
+    {
+        "id": "vester",
+        "lemma": "vester",
+        "lemmaDe": "euer",
+        "type": "possessive",
+        "person": "2",
+        "possNumber": "Pl",
+        "usage": "Bezieht sich auf die 2. Person Plural: euer/eure.",
+        "contextNouns": {
+            "m": {
+                "la": "amicus",
+                "de": "Freund"
+            },
+            "f": {
+                "la": "femina",
+                "de": "Frau"
+            },
+            "n": {
+                "la": "templum",
+                "de": "Haus"
+            }
+        },
+        "forms": {
+            "Nom_Sg_m": "vester",
+            "Gen_Sg_m": "vestri",
+            "Dat_Sg_m": "vestro",
+            "Akk_Sg_m": "vestrum",
+            "Abl_Sg_m": "vestro",
+            "Nom_Pl_m": "vestri",
+            "Gen_Pl_m": "vestrorum",
+            "Dat_Pl_m": "vestris",
+            "Akk_Pl_m": "vestros",
+            "Abl_Pl_m": "vestris",
+            "Nom_Sg_f": "vestra",
+            "Gen_Sg_f": "vestrae",
+            "Dat_Sg_f": "vestrae",
+            "Akk_Sg_f": "vestram",
+            "Abl_Sg_f": "vestra",
+            "Nom_Pl_f": "vestrae",
+            "Gen_Pl_f": "vestrarum",
+            "Dat_Pl_f": "vestris",
+            "Akk_Pl_f": "vestras",
+            "Abl_Pl_f": "vestris",
+            "Nom_Sg_n": "vestrum",
+            "Gen_Sg_n": "vestri",
+            "Dat_Sg_n": "vestro",
+            "Akk_Sg_n": "vestrum",
+            "Abl_Sg_n": "vestro",
+            "Nom_Pl_n": "vestra",
+            "Gen_Pl_n": "vestrorum",
+            "Dat_Pl_n": "vestris",
+            "Akk_Pl_n": "vestra",
+            "Abl_Pl_n": "vestris"
+        }
+    }
+]

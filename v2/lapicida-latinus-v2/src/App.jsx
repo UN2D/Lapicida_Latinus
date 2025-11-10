@@ -1,36 +1,37 @@
+// src/App.jsx
+
 import { useState } from "react";
-import { StartScreen } from "./components/start/StartScreen";
-import { Quiz } from "./components/quiz/Quiz";
 import { buildRound } from "./core/roundFactory";
+import { StartScreen } from "./components/StartScreen";
+import { Quiz } from "./components/Quiz";
+
+/**
+ * App:
+ * - zeigt entweder StartScreen oder Quiz
+ * - hält die aktuelle Runde
+ */
 
 export default function App() {
-  const [roundConfig, setRoundConfig] = useState(null);
   const [round, setRound] = useState(null);
 
   const handleStart = (config) => {
     const newRound = buildRound(config);
-    setRoundConfig(config);
+    if (!newRound || !newRound.questions || newRound.questions.length === 0) {
+      // Falls keine Fragen erzeugt wurden -> nicht in Quiz springen
+      console.warn("Keine Fragen für diese Auswahl gefunden.", newRound);
+      setRound(null);
+      return;
+    }
     setRound(newRound);
   };
 
-  const handleFinish = () => {
+  const handleExit = () => {
     setRound(null);
-    setRoundConfig(null);
   };
 
-  // Kein aktives Quiz → Startscreen
   if (!round) {
-    return (
-      <div className="app">
-        <StartScreen onStart={handleStart} />
-      </div>
-    );
+    return <StartScreen onStart={handleStart} />;
   }
 
-  // Aktives Quiz
-  return (
-    <div className="app">
-      <Quiz round={round} onFinish={handleFinish} />
-    </div>
-  );
+  return <Quiz round={round} onExit={handleExit} />;
 }

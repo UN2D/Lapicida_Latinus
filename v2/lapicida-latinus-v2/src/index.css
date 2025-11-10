@@ -1,68 +1,294 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+/* Vollflächenlayout */
+body,
+html,
+#root {
   margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f5f5f5;
+  color: #111;
+}
+
+.screen {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  height: 100%;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Obere feste Leiste */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #1b325f;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.app-title {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.top-bar-center {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.top-bar-btn {
+  padding: 4px 10px;
+  font-size: 13px;
+  border-radius: 10px;
+  border: none;
+  background: #ffcc00;
+  color: #1b325f;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  font-weight: 600;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Hauptbereich */
+.content {
+  flex: 1;
+  padding: 12px 10px 16px;
+  overflow-y: auto;
+}
+
+/* Startseite */
+.headline {
+  margin: 8px 0 12px;
+  font-size: 22px;
+}
+
+.section {
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.option-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.option-row.wrap {
+  flex-wrap: wrap;
+}
+
+.option-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+/* Buttons allgemein */
+.option-btn,
+.primary-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+  background: #ffffff;
+  color: #1b325f;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.option-btn.small {
+  font-size: 13px;
+  padding: 6px 10px;
+}
+
+.option-btn.selected {
+  background: #1b325f;
+  color: #fff;
+}
+
+.option-btn.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.primary-btn {
+  background: #ffcc00;
+  color: #1b325f;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.primary-btn.large {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+}
+
+.primary-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Fragekarte */
+.question-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 10px 10px 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
+}
+
+.question-lemma {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 2px;
+}
+
+.question-form {
+  font-size: 28px;
+  font-weight: 700;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  border: 2px solid #1b325f;
+  text-align: center;
+  background: #fdfdfd;
+}
+
+.choice-group {
+  margin-bottom: 6px;
+}
+
+.choice-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 2px;
+}
+
+.choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Buttons im Quiz */
+.choice-btn {
+  border-radius: 10px;
+  padding: 5px 9px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+  cursor: pointer;
+}
+
+.choice-btn.selected {
+  border-color: #1b325f;
+  background: #1b325f;
+  color: #fff;
+}
+
+/* Feedback nach Fehlversuch */
+.choice-btn.partial-correct.selected {
+  background: #1e7f3f;
+  border-color: #1e7f3f;
+  color: #fff;
+}
+
+.choice-btn.wrong.selected {
+  background: #b00020;
+  border-color: #b00020;
+  color: #fff;
+}
+
+.choice-btn.locked {
+  opacity: 0.9;
+  cursor: default;
+}
+
+/* Ergebnis-Karte */
+.result-card {
+  margin-top: 8px;
+  padding: 10px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+}
+
+.result-lemma {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 2px;
+}
+
+.result-form {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.result-status {
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.result-status.correct {
+  color: #1e7f3f;
+}
+
+.result-status.wrong {
+  color: #b00020;
+}
+
+.result-correct-title {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.result-correct-list,
+.result-correct-line {
+  font-size: 12px;
+}
+
+/* Summary */
+.summary-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.summary-lemma {
+  font-size: 11px;
+  color: #555;
+}
+
+.summary-form {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.summary-correct-title {
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.summary-correct-line {
+  font-size: 11px;
 }

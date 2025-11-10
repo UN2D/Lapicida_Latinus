@@ -1,0 +1,950 @@
+[
+    {
+        "id": "villa_nom_sg",
+        "lemma": "villa",
+        "lemmaDe": "Villa",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Nom",
+        "number": "Sg",
+        "gender": "f",
+        "form": "villa",
+        "de": "die Villa (Subjekt)",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "villa_gen_sg",
+        "lemma": "villa",
+        "lemmaDe": "Villa",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Gen",
+        "number": "Sg",
+        "gender": "f",
+        "form": "villae",
+        "de": "der Villa",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "villa_dat_sg",
+        "lemma": "villa",
+        "lemmaDe": "Villa",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Dat",
+        "number": "Sg",
+        "gender": "f",
+        "form": "villae",
+        "de": "der Villa",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "villa_akk_sg",
+        "lemma": "villa",
+        "lemmaDe": "Villa",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Akk",
+        "number": "Sg",
+        "gender": "f",
+        "form": "villam",
+        "de": "die Villa",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "villa_abl_sg",
+        "lemma": "villa",
+        "lemmaDe": "Villa",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Abl",
+        "number": "Sg",
+        "gender": "f",
+        "form": "villa",
+        "de": "mit/durch die Villa",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "villa_nom_pl",
+        "lemma": "villa",
+        "lemmaDe": "Villa",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Nom",
+        "number": "Pl",
+        "gender": "f",
+        "form": "villae",
+        "de": "die Villen (Subjekt)",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "villa_gen_pl",
+        "lemma": "villa",
+        "lemmaDe": "Villa",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Gen",
+        "number": "Pl",
+        "gender": "f",
+        "form": "villarum",
+        "de": "der Villen",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "villa_dat_pl",
+        "lemma": "villa",
+        "lemmaDe": "Villa",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Dat",
+        "number": "Pl",
+        "gender": "f",
+        "form": "villis",
+        "de": "den Villen",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "villa_akk_pl",
+        "lemma": "villa",
+        "lemmaDe": "Villa",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Akk",
+        "number": "Pl",
+        "gender": "f",
+        "form": "villas",
+        "de": "die Villen",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "villa_abl_pl",
+        "lemma": "villa",
+        "lemmaDe": "Villa",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Abl",
+        "number": "Pl",
+        "gender": "f",
+        "form": "villis",
+        "de": "mit/durch die Villen",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "amicus_nom_sg",
+        "lemma": "amicus",
+        "lemmaDe": "Freund",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Nom",
+        "number": "Sg",
+        "gender": "m",
+        "form": "amicus",
+        "de": "der Freund",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "amicus_gen_sg",
+        "lemma": "amicus",
+        "lemmaDe": "Freund",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Gen",
+        "number": "Sg",
+        "gender": "m",
+        "form": "amici",
+        "de": "des Freundes",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "amicus_dat_sg",
+        "lemma": "amicus",
+        "lemmaDe": "Freund",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Dat",
+        "number": "Sg",
+        "gender": "m",
+        "form": "amico",
+        "de": "dem Freund",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "amicus_akk_sg",
+        "lemma": "amicus",
+        "lemmaDe": "Freund",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Akk",
+        "number": "Sg",
+        "gender": "m",
+        "form": "amicum",
+        "de": "den Freund",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "amicus_abl_sg",
+        "lemma": "amicus",
+        "lemmaDe": "Freund",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Abl",
+        "number": "Sg",
+        "gender": "m",
+        "form": "amico",
+        "de": "mit/durch den Freund",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "amicus_nom_pl",
+        "lemma": "amicus",
+        "lemmaDe": "Freund",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Nom",
+        "number": "Pl",
+        "gender": "m",
+        "form": "amici",
+        "de": "die Freunde",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "amicus_gen_pl",
+        "lemma": "amicus",
+        "lemmaDe": "Freund",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Gen",
+        "number": "Pl",
+        "gender": "m",
+        "form": "amicorum",
+        "de": "der Freunde",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "amicus_dat_pl",
+        "lemma": "amicus",
+        "lemmaDe": "Freund",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Dat",
+        "number": "Pl",
+        "gender": "m",
+        "form": "amicis",
+        "de": "den Freunden",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "amicus_akk_pl",
+        "lemma": "amicus",
+        "lemmaDe": "Freund",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Akk",
+        "number": "Pl",
+        "gender": "m",
+        "form": "amicos",
+        "de": "die Freunde",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "amicus_abl_pl",
+        "lemma": "amicus",
+        "lemmaDe": "Freund",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Abl",
+        "number": "Pl",
+        "gender": "m",
+        "form": "amicis",
+        "de": "mit/durch die Freunde",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "oppidum_nom_sg",
+        "lemma": "oppidum",
+        "lemmaDe": "Stadt",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Nom",
+        "number": "Sg",
+        "gender": "n",
+        "form": "oppidum",
+        "de": "die Stadt (Subjekt)",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "oppidum_gen_sg",
+        "lemma": "oppidum",
+        "lemmaDe": "Stadt",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Gen",
+        "number": "Sg",
+        "gender": "n",
+        "form": "oppidi",
+        "de": "der Stadt",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "oppidum_dat_sg",
+        "lemma": "oppidum",
+        "lemmaDe": "Stadt",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Dat",
+        "number": "Sg",
+        "gender": "n",
+        "form": "oppido",
+        "de": "der Stadt",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "oppidum_akk_sg",
+        "lemma": "oppidum",
+        "lemmaDe": "Stadt",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Akk",
+        "number": "Sg",
+        "gender": "n",
+        "form": "oppidum",
+        "de": "die Stadt",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "oppidum_abl_sg",
+        "lemma": "oppidum",
+        "lemmaDe": "Stadt",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Abl",
+        "number": "Sg",
+        "gender": "n",
+        "form": "oppido",
+        "de": "mit/durch die Stadt",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "oppidum_nom_pl",
+        "lemma": "oppidum",
+        "lemmaDe": "Stadt",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Nom",
+        "number": "Pl",
+        "gender": "n",
+        "form": "oppida",
+        "de": "die Städte (Subjekt)",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "oppidum_gen_pl",
+        "lemma": "oppidum",
+        "lemmaDe": "Stadt",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Gen",
+        "number": "Pl",
+        "gender": "n",
+        "form": "oppidorum",
+        "de": "der Städte",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "oppidum_dat_pl",
+        "lemma": "oppidum",
+        "lemmaDe": "Stadt",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Dat",
+        "number": "Pl",
+        "gender": "n",
+        "form": "oppidis",
+        "de": "den Städten",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "oppidum_akk_pl",
+        "lemma": "oppidum",
+        "lemmaDe": "Stadt",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Akk",
+        "number": "Pl",
+        "gender": "n",
+        "form": "oppida",
+        "de": "die Städte",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "oppidum_abl_pl",
+        "lemma": "oppidum",
+        "lemmaDe": "Stadt",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Abl",
+        "number": "Pl",
+        "gender": "n",
+        "form": "oppidis",
+        "de": "mit/durch die Städte",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "locus_nom_sg",
+        "lemma": "locus",
+        "lemmaDe": "Ort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Nom",
+        "number": "Sg",
+        "gender": "m",
+        "form": "locus",
+        "de": "der Ort",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "locus_gen_sg",
+        "lemma": "locus",
+        "lemmaDe": "Ort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Gen",
+        "number": "Sg",
+        "gender": "m",
+        "form": "loci",
+        "de": "des Ortes",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "locus_dat_sg",
+        "lemma": "locus",
+        "lemmaDe": "Ort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Dat",
+        "number": "Sg",
+        "gender": "m",
+        "form": "loco",
+        "de": "dem Ort",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "locus_akk_sg",
+        "lemma": "locus",
+        "lemmaDe": "Ort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Akk",
+        "number": "Sg",
+        "gender": "m",
+        "form": "locum",
+        "de": "den Ort",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "locus_abl_sg",
+        "lemma": "locus",
+        "lemmaDe": "Ort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Abl",
+        "number": "Sg",
+        "gender": "m",
+        "form": "loco",
+        "de": "mit/durch den Ort",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "locus_nom_pl",
+        "lemma": "locus",
+        "lemmaDe": "Ort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Nom",
+        "number": "Pl",
+        "gender": "m",
+        "form": "loci",
+        "de": "die Orte",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "locus_gen_pl",
+        "lemma": "locus",
+        "lemmaDe": "Ort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Gen",
+        "number": "Pl",
+        "gender": "m",
+        "form": "locorum",
+        "de": "der Orte",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "locus_dat_pl",
+        "lemma": "locus",
+        "lemmaDe": "Ort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Dat",
+        "number": "Pl",
+        "gender": "m",
+        "form": "locis",
+        "de": "den Orten",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "locus_akk_pl",
+        "lemma": "locus",
+        "lemmaDe": "Ort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Akk",
+        "number": "Pl",
+        "gender": "m",
+        "form": "locos",
+        "de": "die Orte",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "locus_abl_pl",
+        "lemma": "locus",
+        "lemmaDe": "Ort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Abl",
+        "number": "Pl",
+        "gender": "m",
+        "form": "locis",
+        "de": "mit/durch die Orte",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "incola_nom_sg",
+        "lemma": "incola",
+        "lemmaDe": "Bewohner",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Nom",
+        "number": "Sg",
+        "gender": "m",
+        "form": "incola",
+        "de": "der Bewohner",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "incola_gen_sg",
+        "lemma": "incola",
+        "lemmaDe": "Bewohner",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Gen",
+        "number": "Sg",
+        "gender": "m",
+        "form": "incolae",
+        "de": "des Bewohners",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "incola_dat_sg",
+        "lemma": "incola",
+        "lemmaDe": "Bewohner",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Dat",
+        "number": "Sg",
+        "gender": "m",
+        "form": "incolae",
+        "de": "dem Bewohner",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "incola_akk_sg",
+        "lemma": "incola",
+        "lemmaDe": "Bewohner",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Akk",
+        "number": "Sg",
+        "gender": "m",
+        "form": "incolam",
+        "de": "den Bewohner",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "incola_abl_sg",
+        "lemma": "incola",
+        "lemmaDe": "Bewohner",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Abl",
+        "number": "Sg",
+        "gender": "m",
+        "form": "incola",
+        "de": "mit/durch den Bewohner",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "incola_nom_pl",
+        "lemma": "incola",
+        "lemmaDe": "Bewohner",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Nom",
+        "number": "Pl",
+        "gender": "m",
+        "form": "incolae",
+        "de": "die Bewohner",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "incola_gen_pl",
+        "lemma": "incola",
+        "lemmaDe": "Bewohner",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Gen",
+        "number": "Pl",
+        "gender": "m",
+        "form": "incolarum",
+        "de": "der Bewohner",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "incola_dat_pl",
+        "lemma": "incola",
+        "lemmaDe": "Bewohner",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Dat",
+        "number": "Pl",
+        "gender": "m",
+        "form": "incolis",
+        "de": "den Bewohnern",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "incola_akk_pl",
+        "lemma": "incola",
+        "lemmaDe": "Bewohner",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Akk",
+        "number": "Pl",
+        "gender": "m",
+        "form": "incolas",
+        "de": "die Bewohner",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "incola_abl_pl",
+        "lemma": "incola",
+        "lemmaDe": "Bewohner",
+        "pos": "noun",
+        "declension": "a",
+        "case": "Abl",
+        "number": "Pl",
+        "gender": "m",
+        "form": "incolis",
+        "de": "mit/durch die Bewohner",
+        "topics": [
+            "a-decl"
+        ]
+    },
+    {
+        "id": "verbum_nom_sg",
+        "lemma": "verbum",
+        "lemmaDe": "Wort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Nom",
+        "number": "Sg",
+        "gender": "n",
+        "form": "verbum",
+        "de": "das Wort",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "verbum_gen_sg",
+        "lemma": "verbum",
+        "lemmaDe": "Wort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Gen",
+        "number": "Sg",
+        "gender": "n",
+        "form": "verbi",
+        "de": "des Wortes",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "verbum_dat_sg",
+        "lemma": "verbum",
+        "lemmaDe": "Wort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Dat",
+        "number": "Sg",
+        "gender": "n",
+        "form": "verbo",
+        "de": "dem Wort",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "verbum_akk_sg",
+        "lemma": "verbum",
+        "lemmaDe": "Wort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Akk",
+        "number": "Sg",
+        "gender": "n",
+        "form": "verbum",
+        "de": "das Wort",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "verbum_abl_sg",
+        "lemma": "verbum",
+        "lemmaDe": "Wort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Abl",
+        "number": "Sg",
+        "gender": "n",
+        "form": "verbo",
+        "de": "mit/durch das Wort",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "verbum_nom_pl",
+        "lemma": "verbum",
+        "lemmaDe": "Wort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Nom",
+        "number": "Pl",
+        "gender": "n",
+        "form": "verba",
+        "de": "die Wörter",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "verbum_gen_pl",
+        "lemma": "verbum",
+        "lemmaDe": "Wort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Gen",
+        "number": "Pl",
+        "gender": "n",
+        "form": "verborum",
+        "de": "der Wörter",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "verbum_dat_pl",
+        "lemma": "verbum",
+        "lemmaDe": "Wort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Dat",
+        "number": "Pl",
+        "gender": "n",
+        "form": "verbis",
+        "de": "den Wörtern",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "verbum_akk_pl",
+        "lemma": "verbum",
+        "lemmaDe": "Wort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Akk",
+        "number": "Pl",
+        "gender": "n",
+        "form": "verba",
+        "de": "die Wörter",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "verbum_abl_pl",
+        "lemma": "verbum",
+        "lemmaDe": "Wort",
+        "pos": "noun",
+        "declension": "o",
+        "case": "Abl",
+        "number": "Pl",
+        "gender": "n",
+        "form": "verbis",
+        "de": "mit/durch die Wörter",
+        "topics": [
+            "o-decl"
+        ]
+    },
+    {
+        "id": "magnus_base",
+        "lemma": "magnus",
+        "lemmaDe": "groß",
+        "pos": "adj",
+        "declension": "a/o",
+        "pattern": "regular"
+    },
+    {
+        "id": "clarus_base",
+        "lemma": "clarus",
+        "lemmaDe": "berühmt",
+        "pos": "adj",
+        "declension": "a/o",
+        "pattern": "regular"
+    },
+    {
+        "id": "pulcher_base",
+        "lemma": "pulcher",
+        "lemmaDe": "schön",
+        "pos": "adj",
+        "declension": "a/o",
+        "pattern": "pulcher"
+    },
+    {
+        "id": "liber_base",
+        "lemma": "liber",
+        "lemmaDe": "frei",
+        "pos": "adj",
+        "declension": "a/o",
+        "pattern": "liber"
+    },
+    {
+        "id": "bonus_base",
+        "lemma": "bonus",
+        "lemmaDe": "gut",
+        "pos": "adj",
+        "declension": "a/o",
+        "pattern": "regular"
+    },
+    {
+        "id": "carus_base",
+        "lemma": "carus",
+        "lemmaDe": "lieb; teuer",
+        "pos": "adj",
+        "declension": "a/o",
+        "pattern": "regular"
+    }
+]
