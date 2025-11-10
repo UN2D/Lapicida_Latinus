@@ -1,0 +1,32 @@
+[
+    {
+        "id": "et",
+        "form": "et",
+        "type": "kopulativ",
+        "meaning": "und",
+        "explanation": "Einfache verbindende Konjunktion.",
+        "topics": [
+            "conj_kopulativ"
+        ]
+    },
+    {
+        "id": "-que",
+        "form": "-que",
+        "type": "kopulativ",
+        "meaning": "und (angehängt)",
+        "explanation": "Wird ans zweite Wort gehängt: pueri puellaeque.",
+        "topics": [
+            "conj_kopulativ"
+        ]
+    },
+    {
+        "id": "atque",
+        "form": "atque",
+        "type": "kopulativ",
+        "meaning": "und; und auch",
+        "explanation": "Verstärkend verbindend.",
+        "topics": [
+            "conj_kopulativ"
+        ]
+    }
+]

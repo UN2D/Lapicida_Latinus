@@ -1,0 +1,393 @@
+[
+    {
+        "id": "amo",
+        "lemma": "amo",
+        "lemmaDe": "lieben",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "amavi",
+                "2sg": "amavisti",
+                "3sg": "amavit",
+                "1pl": "amavimus",
+                "2pl": "amavistis",
+                "3pl": "amaverunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "amaverim",
+                "2sg": "amaveris",
+                "3sg": "amaverit",
+                "1pl": "amaverimus",
+                "2pl": "amaveritis",
+                "3pl": "amaverint"
+            }
+        }
+    },
+    {
+        "id": "laudo",
+        "lemma": "laudo",
+        "lemmaDe": "loben",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "laudavi",
+                "2sg": "laudavisti",
+                "3sg": "laudavit",
+                "1pl": "laudavimus",
+                "2pl": "laudavistis",
+                "3pl": "laudaverunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "laudaverim",
+                "2sg": "laudaveris",
+                "3sg": "laudaverit",
+                "1pl": "laudaverimus",
+                "2pl": "laudaveritis",
+                "3pl": "laudaverint"
+            }
+        }
+    },
+    {
+        "id": "moneo",
+        "lemma": "moneo",
+        "lemmaDe": "ermahnen",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "monui",
+                "2sg": "monuisti",
+                "3sg": "monuit",
+                "1pl": "monuimus",
+                "2pl": "monuistis",
+                "3pl": "monuerunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "monuerim",
+                "2sg": "monueris",
+                "3sg": "monuerit",
+                "1pl": "monuerimus",
+                "2pl": "monueritis",
+                "3pl": "monuerint"
+            }
+        }
+    },
+    {
+        "id": "video",
+        "lemma": "video",
+        "lemmaDe": "sehen",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "vidi",
+                "2sg": "vidisti",
+                "3sg": "vidit",
+                "1pl": "vidimus",
+                "2pl": "vidistis",
+                "3pl": "viderunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "viderim",
+                "2sg": "videris",
+                "3sg": "viderit",
+                "1pl": "viderimus",
+                "2pl": "videritis",
+                "3pl": "viderint"
+            }
+        }
+    },
+    {
+        "id": "ago",
+        "lemma": "ago",
+        "lemmaDe": "tun",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "egi",
+                "2sg": "egisti",
+                "3sg": "egit",
+                "1pl": "egimus",
+                "2pl": "egistis",
+                "3pl": "egerunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "egerim",
+                "2sg": "egeris",
+                "3sg": "egerit",
+                "1pl": "egerimus",
+                "2pl": "egeritis",
+                "3pl": "egerint"
+            }
+        }
+    },
+    {
+        "id": "rego",
+        "lemma": "rego",
+        "lemmaDe": "lenken",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "rexi",
+                "2sg": "rexisti",
+                "3sg": "rexit",
+                "1pl": "reximus",
+                "2pl": "rexistis",
+                "3pl": "rexerunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "rexerim",
+                "2sg": "rexeris",
+                "3sg": "rexerit",
+                "1pl": "rexerimus",
+                "2pl": "rexeritis",
+                "3pl": "rexerint"
+            }
+        }
+    },
+    {
+        "id": "audio",
+        "lemma": "audio",
+        "lemmaDe": "hören",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "audivi",
+                "2sg": "audivisti",
+                "3sg": "audivit",
+                "1pl": "audivimus",
+                "2pl": "audivistis",
+                "3pl": "audiverunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "audiverim",
+                "2sg": "audiveris",
+                "3sg": "audiverit",
+                "1pl": "audiverimus",
+                "2pl": "audiveritis",
+                "3pl": "audiverint"
+            }
+        }
+    },
+    {
+        "id": "sentio",
+        "lemma": "sentio",
+        "lemmaDe": "fühlen",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "sensi",
+                "2sg": "sensisti",
+                "3sg": "sensit",
+                "1pl": "sensimus",
+                "2pl": "sensistis",
+                "3pl": "senserunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "senserim",
+                "2sg": "senseris",
+                "3sg": "senserit",
+                "1pl": "senserimus",
+                "2pl": "senseritis",
+                "3pl": "senserint"
+            }
+        }
+    },
+    {
+        "id": "capio",
+        "lemma": "capio",
+        "lemmaDe": "fassen",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "cepi",
+                "2sg": "cepisti",
+                "3sg": "cepit",
+                "1pl": "cepimus",
+                "2pl": "cepistis",
+                "3pl": "ceperunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "ceperim",
+                "2sg": "ceperis",
+                "3sg": "ceperit",
+                "1pl": "ceperimus",
+                "2pl": "ceperitis",
+                "3pl": "ceperint"
+            }
+        }
+    },
+    {
+        "id": "iacio",
+        "lemma": "iacio",
+        "lemmaDe": "werfen",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "ieci",
+                "2sg": "iecisti",
+                "3sg": "iecit",
+                "1pl": "iecimus",
+                "2pl": "iecistis",
+                "3pl": "iecerunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "iecerim",
+                "2sg": "ieceris",
+                "3sg": "iecerit",
+                "1pl": "iecerimus",
+                "2pl": "ieceritis",
+                "3pl": "iecerint"
+            }
+        }
+    },
+    {
+        "id": "sum",
+        "lemma": "sum",
+        "lemmaDe": "sein",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "fui",
+                "2sg": "fuisti",
+                "3sg": "fuit",
+                "1pl": "fuimus",
+                "2pl": "fuistis",
+                "3pl": "fuerunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "fuerim",
+                "2sg": "fueris",
+                "3sg": "fuerit",
+                "1pl": "fuerimus",
+                "2pl": "fueritis",
+                "3pl": "fuerint"
+            }
+        }
+    },
+    {
+        "id": "fero",
+        "lemma": "fero",
+        "lemmaDe": "tragen",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "tuli",
+                "2sg": "tulisti",
+                "3sg": "tulit",
+                "1pl": "tulimus",
+                "2pl": "tulistis",
+                "3pl": "tulerunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "tulerim",
+                "2sg": "tuleris",
+                "3sg": "tulerit",
+                "1pl": "tulerimus",
+                "2pl": "tuleritis",
+                "3pl": "tulerint"
+            }
+        }
+    },
+    {
+        "id": "eo",
+        "lemma": "eo",
+        "lemmaDe": "gehen",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "ii",
+                "2sg": "iisti",
+                "3sg": "iit",
+                "1pl": "iimus",
+                "2pl": "iistis",
+                "3pl": "ierunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "ierim",
+                "2sg": "ieris",
+                "3sg": "ierit",
+                "1pl": "ierimus",
+                "2pl": "ieritis",
+                "3pl": "ierint"
+            }
+        }
+    },
+    {
+        "id": "malo",
+        "lemma": "malo",
+        "lemmaDe": "lieber wollen",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "malui",
+                "2sg": "maluisti",
+                "3sg": "maluit",
+                "1pl": "maluimus",
+                "2pl": "maluistis",
+                "3pl": "maluerunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "maluerim",
+                "2sg": "malueris",
+                "3sg": "maluerit",
+                "1pl": "maluerimus",
+                "2pl": "malueritis",
+                "3pl": "maluerint"
+            }
+        }
+    },
+    {
+        "id": "nolo",
+        "lemma": "nolo",
+        "lemmaDe": "nicht wollen",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "nolui",
+                "2sg": "noluisti",
+                "3sg": "noluit",
+                "1pl": "noluimus",
+                "2pl": "noluistis",
+                "3pl": "noluerunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "noluerim",
+                "2sg": "nolueris",
+                "3sg": "noluerit",
+                "1pl": "noluerimus",
+                "2pl": "nolueritis",
+                "3pl": "noluerint"
+            }
+        }
+    },
+    {
+        "id": "possum",
+        "lemma": "possum",
+        "lemmaDe": "können",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "potui",
+                "2sg": "potuisti",
+                "3sg": "potuit",
+                "1pl": "potuimus",
+                "2pl": "potuistis",
+                "3pl": "potuerunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "potuerim",
+                "2sg": "potueris",
+                "3sg": "potuerit",
+                "1pl": "potuerimus",
+                "2pl": "potueritis",
+                "3pl": "potuerint"
+            }
+        }
+    },
+    {
+        "id": "volo",
+        "lemma": "volo",
+        "lemmaDe": "wollen",
+        "forms": {
+            "perfekt_ind_akt": {
+                "1sg": "volui",
+                "2sg": "voluisti",
+                "3sg": "voluit",
+                "1pl": "voluimus",
+                "2pl": "voluistis",
+                "3pl": "voluerunt"
+            },
+            "perfekt_konj_akt": {
+                "1sg": "voluerim",
+                "2sg": "volueris",
+                "3sg": "voluerit",
+                "1pl": "voluerimus",
+                "2pl": "volueritis",
+                "3pl": "voluerint"
+            }
+        }
+    }
+]

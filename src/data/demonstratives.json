@@ -1,0 +1,214 @@
+[
+    {
+        "id": "hic",
+        "lemma": "hic",
+        "lemmaDe": "dieser (hier)",
+        "type": "demonstrative",
+        "usage": "Nähe zum Sprecher: 'dieser hier'.",
+        "contextNouns": {
+            "m": {
+                "la": "vir",
+                "de": "Mann"
+            },
+            "f": {
+                "la": "femina",
+                "de": "Frau"
+            },
+            "n": {
+                "la": "templum",
+                "de": "Tempel/Haus"
+            }
+        },
+        "forms": {
+            "Nom_Sg_m": "hic",
+            "Gen_Sg_m": "huius",
+            "Dat_Sg_m": "huic",
+            "Akk_Sg_m": "hunc",
+            "Abl_Sg_m": "hoc",
+            "Nom_Pl_m": "hi",
+            "Gen_Pl_m": "horum",
+            "Dat_Pl_m": "his",
+            "Akk_Pl_m": "hos",
+            "Abl_Pl_m": "his",
+            "Nom_Sg_f": "haec",
+            "Gen_Sg_f": "huius",
+            "Dat_Sg_f": "huic",
+            "Akk_Sg_f": "hanc",
+            "Abl_Sg_f": "hac",
+            "Nom_Pl_f": "hae",
+            "Gen_Pl_f": "harum",
+            "Dat_Pl_f": "his",
+            "Akk_Pl_f": "has",
+            "Abl_Pl_f": "his",
+            "Nom_Sg_n": "hoc",
+            "Gen_Sg_n": "huius",
+            "Dat_Sg_n": "huic",
+            "Akk_Sg_n": "hoc",
+            "Abl_Sg_n": "hoc",
+            "Nom_Pl_n": "haec",
+            "Gen_Pl_n": "horum",
+            "Dat_Pl_n": "his",
+            "Akk_Pl_n": "haec",
+            "Abl_Pl_n": "his"
+        }
+    },
+    {
+        "id": "ille",
+        "lemma": "ille",
+        "lemmaDe": "jener / der dort",
+        "type": "demonstrative",
+        "usage": "Entfernung, oft auch 'berühmt/berüchtigt'.",
+        "contextNouns": {
+            "m": {
+                "la": "vir",
+                "de": "Mann"
+            },
+            "f": {
+                "la": "femina",
+                "de": "Frau"
+            },
+            "n": {
+                "la": "templum",
+                "de": "Tempel/Haus"
+            }
+        },
+        "forms": {
+            "Nom_Sg_m": "ille",
+            "Gen_Sg_m": "illius",
+            "Dat_Sg_m": "illi",
+            "Akk_Sg_m": "illum",
+            "Abl_Sg_m": "illo",
+            "Nom_Pl_m": "illi",
+            "Gen_Pl_m": "illorum",
+            "Dat_Pl_m": "illis",
+            "Akk_Pl_m": "illos",
+            "Abl_Pl_m": "illis",
+            "Nom_Sg_f": "illa",
+            "Gen_Sg_f": "illius",
+            "Dat_Sg_f": "illi",
+            "Akk_Sg_f": "illam",
+            "Abl_Sg_f": "illa",
+            "Nom_Pl_f": "illae",
+            "Gen_Pl_f": "illarum",
+            "Dat_Pl_f": "illis",
+            "Akk_Pl_f": "illas",
+            "Abl_Pl_f": "illis",
+            "Nom_Sg_n": "illud",
+            "Gen_Sg_n": "illius",
+            "Dat_Sg_n": "illi",
+            "Akk_Sg_n": "illud",
+            "Abl_Sg_n": "illo",
+            "Nom_Pl_n": "illa",
+            "Gen_Pl_n": "illorum",
+            "Dat_Pl_n": "illis",
+            "Akk_Pl_n": "illa",
+            "Abl_Pl_n": "illis"
+        }
+    },
+    {
+        "id": "iste",
+        "lemma": "iste",
+        "lemmaDe": "dieser da (bei dir)",
+        "type": "demonstrative",
+        "usage": "Nähe zum Angesprochenen, oft leicht abwertend.",
+        "contextNouns": {
+            "m": {
+                "la": "vir",
+                "de": "Mann"
+            },
+            "f": {
+                "la": "femina",
+                "de": "Frau"
+            },
+            "n": {
+                "la": "templum",
+                "de": "Tempel/Haus"
+            }
+        },
+        "forms": {
+            "Nom_Sg_m": "iste",
+            "Gen_Sg_m": "istius",
+            "Dat_Sg_m": "isti",
+            "Akk_Sg_m": "istum",
+            "Abl_Sg_m": "isto",
+            "Nom_Pl_m": "isti",
+            "Gen_Pl_m": "istorum",
+            "Dat_Pl_m": "istis",
+            "Akk_Pl_m": "istos",
+            "Abl_Pl_m": "istis",
+            "Nom_Sg_f": "ista",
+            "Gen_Sg_f": "istius",
+            "Dat_Sg_f": "isti",
+            "Akk_Sg_f": "istam",
+            "Abl_Sg_f": "ista",
+            "Nom_Pl_f": "istae",
+            "Gen_Pl_f": "istarum",
+            "Dat_Pl_f": "istis",
+            "Akk_Pl_f": "istas",
+            "Abl_Pl_f": "istis",
+            "Nom_Sg_n": "istud",
+            "Gen_Sg_n": "istius",
+            "Dat_Sg_n": "isti",
+            "Akk_Sg_n": "istud",
+            "Abl_Sg_n": "isto",
+            "Nom_Pl_n": "ista",
+            "Gen_Pl_n": "istorum",
+            "Dat_Pl_n": "istis",
+            "Akk_Pl_n": "ista",
+            "Abl_Pl_n": "istis"
+        }
+    },
+    {
+        "id": "ipse",
+        "lemma": "ipse",
+        "lemmaDe": "selbst",
+        "type": "demonstrative",
+        "usage": "Betonung: die Person/Sache selbst.",
+        "contextNouns": {
+            "m": {
+                "la": "vir",
+                "de": "Mann"
+            },
+            "f": {
+                "la": "femina",
+                "de": "Frau"
+            },
+            "n": {
+                "la": "templum",
+                "de": "Tempel/Haus"
+            }
+        },
+        "forms": {
+            "Nom_Sg_m": "ipse",
+            "Gen_Sg_m": "ipsius",
+            "Dat_Sg_m": "ipsi",
+            "Akk_Sg_m": "ipsum",
+            "Abl_Sg_m": "ipso",
+            "Nom_Pl_m": "ipsi",
+            "Gen_Pl_m": "ipsorum",
+            "Dat_Pl_m": "ipsis",
+            "Akk_Pl_m": "ipsos",
+            "Abl_Pl_m": "ipsis",
+            "Nom_Sg_f": "ipsa",
+            "Gen_Sg_f": "ipsius",
+            "Dat_Sg_f": "ipsi",
+            "Akk_Sg_f": "ipsam",
+            "Abl_Sg_f": "ipsa",
+            "Nom_Pl_f": "ipsae",
+            "Gen_Pl_f": "ipsarum",
+            "Dat_Pl_f": "ipsis",
+            "Akk_Pl_f": "ipsas",
+            "Abl_Pl_f": "ipsis",
+            "Nom_Sg_n": "ipsum",
+            "Gen_Sg_n": "ipsius",
+            "Dat_Sg_n": "ipsi",
+            "Akk_Sg_n": "ipsum",
+            "Abl_Sg_n": "ipso",
+            "Nom_Pl_n": "ipsa",
+            "Gen_Pl_n": "ipsorum",
+            "Dat_Pl_n": "ipsis",
+            "Akk_Pl_n": "ipsa",
+            "Abl_Pl_n": "ipsis"
+        }
+    }
+]
