@@ -1,8 +1,6 @@
 // src/logic/generateRound.js
 
-// ---------------------------------------------------
-// Datenimporte
-// ---------------------------------------------------
+// ================== Imports ==================
 import nounsAdjectives from "../data/nounsAdjectives.json";
 
 import verbsPraesens from "../data/verbs_praesens.json";
@@ -16,9 +14,9 @@ import demonstratives from "../data/demonstratives.json";
 import possessives from "../data/possessives.json";
 import conjunctions from "../data/conjunctions.json";
 
-// ---------------------------------------------------
-// Helfer
-// ---------------------------------------------------
+// ===================================================
+// Helper: Allgemein
+// ===================================================
 
 function shuffle(arr) {
     const a = [...arr];
@@ -27,17 +25,6 @@ function shuffle(arr) {
         [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
-}
-
-// Normalisiert Eingaben: string | string[] | null -> string[]
-function asList(value) {
-    if (Array.isArray(value)) {
-        return value.filter(Boolean);
-    }
-    if (typeof value === "string" && value.trim()) {
-        return [value.trim()];
-    }
-    return [];
 }
 
 const CASE_LABELS = {
@@ -60,17 +47,16 @@ const GENDER_LABELS = {
     n: "neutrum"
 };
 
-function labelForCombo(opt) {
-    if (!opt) return "";
-    const c = CASE_LABELS[opt.case] || "";
-    const n = NUMBER_LABELS[opt.number] || "";
-    const g = GENDER_LABELS[opt.gender] || "";
-    return [c, n, g].filter(Boolean).join(" ");
+function labelForCombo({ case: c, number: n, gender: g }) {
+    const cc = CASE_LABELS[c] || c || "";
+    const nn = NUMBER_LABELS[n] || n || "";
+    const gg = GENDER_LABELS[g] || g || "";
+    return [cc, nn, gg].filter(Boolean).join(" ");
 }
 
-// ---------------------------------------------------
-// Verben – Konfiguration
-// ---------------------------------------------------
+// ===================================================
+// Verben: Konfiguration + verbKey (muss zu App.jsx & Daten passen)
+// ===================================================
 
 const VERB_DATA_BY_TENSE = {
     Praesens: verbsPraesens,
@@ -93,7 +79,6 @@ const ALL_VERB_TENSES = [
 const PERSONS = ["1", "2", "3"];
 const NUMBERS_VERB = ["Sg", "Pl"];
 
-// Muss zu App.jsx & JSON-Key-Namen passen
 function verbKey(tense, mood, voice) {
     const t = (tense || "").toLowerCase().replace(/\s+/g, "");
     const m = (mood || "").toLowerCase();
@@ -125,18 +110,15 @@ function verbKey(tense, mood, voice) {
     return null;
 }
 
-// ---------------------------------------------------
-// 1) Substantive – Mehrdeutigkeit bleibt erhalten
-// ---------------------------------------------------
+// ===================================================
+// Nomen – ein Lemma, Mehrdeutigkeiten bleiben erhalten
+// ===================================================
 
 function buildNounQuestions(lemma, numQuestions) {
-    const lemmas = asList(lemma);
-    if (!lemmas.length) return [];
-
     const entries = nounsAdjectives.filter(
         (e) =>
             e.pos === "noun" &&
-            lemmas.includes(e.lemma) &&
+            e.lemma === lemma &&
             e.form &&
             e.case &&
             e.number &&
@@ -144,6 +126,7 @@ function buildNounQuestions(lemma, numQuestions) {
     );
     if (!entries.length) return [];
 
+    // gleiche Form -> mehrere Analysen
     const groupsByForm = new Map();
 
     for (const e of entries) {
@@ -160,14 +143,14 @@ function buildNounQuestions(lemma, numQuestions) {
             case: e.case,
             number: e.number,
             gender: e.gender,
-            de: e.lemmaDe || ""
+            de: e.de || labelForCombo(e)
         });
     }
 
-    const all = shuffle(Array.from(groupsByForm.values()));
-    const take = Math.min(numQuestions, all.length);
+    const grouped = shuffle(Array.from(groupsByForm.values()));
+    const take = Math.min(numQuestions, grouped.length);
 
-    return all.slice(0, take).map((g, i) => ({
+    return grouped.slice(0, take).map((g, i) => ({
         id: `noun_${g.lemma}_${i}`,
         type: "noun_adj_analyze",
         prompt: g.prompt,
@@ -178,13 +161,68 @@ function buildNounQuestions(lemma, numQuestions) {
     }));
 }
 
-// ---------------------------------------------------
-// 2) Adjektiv im Kontext – Kongruenz mit Nomen
-// ---------------------------------------------------
+// ===================================================
+// Adjektiv im Kontext – wir BILDEN die Adjektivform passend zum Substantiv
+// (robust, unabhängig von voll ausdeklinierten Adj-Daten)
+// ===================================================
+
+function buildAdjForm(lemma, pattern, case_, number, gender) {
+    // sehr vereinfachtes Schema für a-/o-Adjektive + typische Sonderfälle
+    const endings = {
+        m: {
+            Sg: { Nom: "us", Gen: "i", Dat: "o", Akk: "um", Abl: "o" },
+            Pl: { Nom: "i", Gen: "orum", Dat: "is", Akk: "os", Abl: "is" }
+        },
+        f: {
+            Sg: { Nom: "a", Gen: "ae", Dat: "ae", Akk: "am", Abl: "a" },
+            Pl: { Nom: "ae", Gen: "arum", Dat: "is", Akk: "as", Abl: "is" }
+        },
+        n: {
+            Sg: { Nom: "um", Gen: "i", Dat: "o", Akk: "um", Abl: "o" },
+            Pl: { Nom: "a", Gen: "orum", Dat: "is", Akk: "a", Abl: "is" }
+        }
+    };
+
+    const end = endings[gender]?.[number]?.[case_];
+    if (!end) return null;
+
+    // Standard: -us, -a, -um
+    if (!pattern || pattern === "regular") {
+        if (lemma.endsWith("us")) {
+            return lemma.replace(/us$/, "") + end;
+        }
+        if (lemma.endsWith("er")) {
+            // z.B. miser, tener -> Stamm ohne -er? hier minimal:
+            return lemma.replace(/er$/, "") + end;
+        }
+        return lemma + end;
+    }
+
+    if (pattern === "pulcher") {
+        const stem = "pulchr";
+        if (gender === "m" && number === "Sg" && case_ === "Nom") return "pulcher";
+        return stem + end;
+    }
+
+    if (pattern === "liber") {
+        const stem = "libr";
+        if (gender === "m" && number === "Sg" && case_ === "Nom") return "liber";
+        return stem + end;
+    }
+
+    return null;
+}
 
 function buildAdjWithNounQuestions(adjLemma, numQuestions) {
-    const lemmas = asList(adjLemma);
-    if (!lemmas.length) return [];
+    if (!adjLemma) return [];
+
+    const adjEntry =
+        nounsAdjectives.find(
+            (e) => e.pos === "adj" && e.lemma === adjLemma
+        ) || null;
+    if (!adjEntry) return [];
+
+    const pattern = adjEntry.pattern || "regular";
 
     const nouns = nounsAdjectives.filter(
         (e) =>
@@ -195,56 +233,44 @@ function buildAdjWithNounQuestions(adjLemma, numQuestions) {
             e.gender &&
             e.lemmaDe
     );
-    const adjs = nounsAdjectives.filter(
-        (e) =>
-            e.pos === "adj" &&
-            lemmas.includes(e.lemma) &&
-            e.form &&
-            e.case &&
-            e.number &&
-            e.gender
-    );
+    if (!nouns.length) return [];
 
-    if (!nouns.length || !adjs.length) return [];
-
-    const groupsByPhrase = new Map();
+    const groupsByPrompt = new Map();
 
     for (const n of nouns) {
-        for (const a of adjs) {
-            if (
-                a.case === n.case &&
-                a.number === n.number &&
-                a.gender === n.gender
-            ) {
-                const phrase = `${a.form} ${n.form}`;
-                if (!groupsByPhrase.has(phrase)) {
-                    groupsByPhrase.set(phrase, {
-                        promptNoun: n.form,
-                        promptAdj: a.form,
-                        lemma: a.lemma,
-                        lemmaDe: a.lemmaDe,
-                        correctOptions: []
-                    });
-                }
-                groupsByPhrase.get(phrase).correctOptions.push({
-                    case: a.case,
-                    number: a.number,
-                    gender: a.gender,
-                    de: `${a.lemmaDe || ""} ${n.lemmaDe || ""}`.trim()
-                });
-            }
+        const adjForm = buildAdjForm(adjEntry.lemma, pattern, n.case, n.number, n.gender);
+        if (!adjForm) continue;
+
+        const phrase = `${adjForm} ${n.form}`;
+
+        if (!groupsByPrompt.has(phrase)) {
+            groupsByPrompt.set(phrase, {
+                prompt: phrase,
+                promptAdj: adjForm,
+                promptNoun: n.form,
+                lemma: adjEntry.lemma,
+                lemmaDe: adjEntry.lemmaDe,
+                correctOptions: []
+            });
         }
+
+        groupsByPrompt.get(phrase).correctOptions.push({
+            case: n.case,
+            number: n.number,
+            gender: n.gender,
+            de: `${labelForCombo(n)} – ${adjEntry.lemmaDe || ""} ${n.lemmaDe || ""}`.trim()
+        });
     }
 
-    const all = shuffle(Array.from(groupsByPhrase.values()));
-    const take = Math.min(numQuestions, all.length);
+    const grouped = shuffle(Array.from(groupsByPrompt.values()));
+    const take = Math.min(numQuestions, grouped.length);
 
-    return all.slice(0, take).map((g, i) => ({
-        id: `adjctx_${g.lemma}_${i}`,
+    return grouped.slice(0, take).map((g, i) => ({
+        id: `adjctx_${adjLemma}_${i}`,
         type: "adj_with_noun",
-        promptNoun: g.promptNoun,
+        prompt: g.prompt,
         promptAdj: g.promptAdj,
-        prompt: `${g.promptAdj} ${g.promptNoun}`,
+        promptNoun: g.promptNoun,
         lemma: g.lemma,
         lemmaDe: g.lemmaDe,
         correctOptions: g.correctOptions,
@@ -252,30 +278,43 @@ function buildAdjWithNounQuestions(adjLemma, numQuestions) {
     }));
 }
 
-// ---------------------------------------------------
-// 3) Demonstrativpronomen – Pronomen + flektiertes Nomen
-// ---------------------------------------------------
+// ===================================================
+// Mini-Nomen-Flexer für Demonstrativa/Possessiva-Kontext
+// (damit wir nicht von nounsAdjectives abhängig sind)
+// Unterstützt: femina (a-Dekl.), vir (o-Dekl. mask., vir-Typ), templum (o-Dekl. neutrum)
+// ===================================================
 
-function buildDemonstrativeQuestions(numQuestions, selectedDemos) {
-    const demosAll = Array.isArray(demonstratives) ? demonstratives : [];
-    if (!demosAll.length) return [];
+function flexSimpleNoun(lemma, gender, case_, number) {
+    // sehr gezielt für unsere Kontext-Nomen
+    if (lemma === "femina" && gender === "f") {
+        const sg = { Nom: "femina", Gen: "feminae", Dat: "feminae", Akk: "feminam", Abl: "femina" };
+        const pl = { Nom: "feminae", Gen: "feminarum", Dat: "feminis", Akk: "feminas", Abl: "feminis" };
+        return (number === "Sg" ? sg[case_] : pl[case_]) || null;
+    }
 
-    const chosen = asList(selectedDemos);
-    const demos =
-        chosen.length > 0
-            ? demosAll.filter((d) => chosen.includes(d.lemma))
-            : demosAll;
+    if (lemma === "vir" && gender === "m") {
+        const sg = { Nom: "vir", Gen: "viri", Dat: "viro", Akk: "virum", Abl: "viro" };
+        const pl = { Nom: "viri", Gen: "virorum", Dat: "viris", Akk: "viros", Abl: "viris" };
+        return (number === "Sg" ? sg[case_] : pl[case_]) || null;
+    }
 
-    const nounEntries = nounsAdjectives.filter(
-        (e) =>
-            e.pos === "noun" &&
-            e.lemma &&
-            e.form &&
-            e.case &&
-            e.number &&
-            e.gender &&
-            e.lemmaDe
-    );
+    if (lemma === "templum" && gender === "n") {
+        const sg = { Nom: "templum", Gen: "templi", Dat: "templo", Akk: "templum", Abl: "templo" };
+        const pl = { Nom: "templa", Gen: "templorum", Dat: "templis", Akk: "templa", Abl: "templis" };
+        return (number === "Sg" ? sg[case_] : pl[case_]) || null;
+    }
+
+    // fallback: nichts
+    return null;
+}
+
+// ===================================================
+// Demonstrativa – mit korrekt flektiertem Kontextnomen + Mehrdeutigkeiten
+// ===================================================
+
+function buildDemonstrativeQuestions(numQuestions) {
+    const demos = Array.isArray(demonstratives) ? demonstratives : [];
+    if (!demos.length) return [];
 
     const CASES = ["Nom", "Gen", "Dat", "Akk", "Abl"];
     const NUMBERS = ["Sg", "Pl"];
@@ -284,63 +323,50 @@ function buildDemonstrativeQuestions(numQuestions, selectedDemos) {
     const groupsByPrompt = new Map();
 
     for (const demo of demos) {
+        const ctx = demo.contextNouns || {};
+
         for (const c of CASES) {
             for (const n of NUMBERS) {
                 for (const g of GENDERS) {
                     const key = `${c}_${n}_${g}`;
                     const pronForm = demo.forms?.[key];
-                    if (!pronForm) continue;
-
-                    const ctx = demo.contextNouns || {};
                     const ctxNoun = ctx[g];
+                    if (!pronForm || !ctxNoun) continue;
 
-                    let candidates = nounEntries.filter(
-                        (nn) =>
-                            nn.case === c &&
-                            nn.number === n &&
-                            nn.gender === g
-                    );
+                    const nounForm =
+                        flexSimpleNoun(ctxNoun.la, g, c, n) || null;
+                    if (!nounForm) continue;
 
-                    if (ctxNoun?.la) {
-                        candidates = candidates.filter((nn) => nn.lemma === ctxNoun.la);
-                    }
-                    if (!candidates.length) continue;
+                    const prompt = `${pronForm} ${nounForm}`;
 
-                    for (const noun of candidates) {
-                        const prompt = `${pronForm} ${noun.form}`;
-                        const germanNoun = noun.lemmaDe || ctxNoun?.de || "";
-                        const label = labelForCombo({ case: c, number: n, gender: g });
-
-                        if (!groupsByPrompt.has(prompt)) {
-                            groupsByPrompt.set(prompt, {
-                                demo,
-                                prompt,
-                                usage: demo.usage,
-                                correctOptions: [],
-                                topics: ["demonstrative"]
-                            });
-                        }
-
-                        groupsByPrompt.get(prompt).correctOptions.push({
-                            case: c,
-                            number: n,
-                            gender: g,
-                            de:
-                                (demo.lemmaDe || "").trim() +
-                                (germanNoun ? ` ${germanNoun}` : ""),
-                            label
+                    if (!groupsByPrompt.has(prompt)) {
+                        groupsByPrompt.set(prompt, {
+                            demo,
+                            prompt,
+                            usage: demo.usage,
+                            correctOptions: [],
+                            topics: ["demonstrative"]
                         });
                     }
+
+                    groupsByPrompt.get(prompt).correctOptions.push({
+                        case: c,
+                        number: n,
+                        gender: g,
+                        de: `${labelForCombo({ case: c, number: n, gender: g })} – ${demo.lemmaDe || ""} ${ctxNoun.de || ""}`.trim()
+                    });
                 }
             }
         }
     }
 
-    const all = shuffle(Array.from(groupsByPrompt.values()));
-    const take = Math.min(numQuestions, all.length);
+    const grouped = shuffle(Array.from(groupsByPrompt.values()));
+    if (!grouped.length) return [];
 
-    return all.slice(0, take).map((g, i) => ({
-        id: `demo_${g.demo.id || g.demo.lemma}_${i}`,
+    const take = Math.min(numQuestions, grouped.length);
+
+    return grouped.slice(0, take).map((g, i) => ({
+        id: `demo_${g.demo.id}_${i}`,
         type: "demonstrative",
         prompt: g.prompt,
         lemma: g.demo.lemma,
@@ -351,29 +377,14 @@ function buildDemonstrativeQuestions(numQuestions, selectedDemos) {
     }));
 }
 
-// ---------------------------------------------------
-// 4) Possessivpronomen – Possessiv + flektiertes Nomen
-// ---------------------------------------------------
+// ===================================================
+// Possessiva – mit flektiertem Kontextnomen, Mehrdeutigkeiten erlaubt
+// (bisher lief bei dir gut; hier nur vorsichtig bereinigt)
+// ===================================================
 
-function buildPossessiveQuestions(numQuestions, selectedPossessives) {
-    const possAll = Array.isArray(possessives) ? possessives : [];
-    if (!possAll.length) return [];
-
-    const chosen = asList(selectedPossessives);
-    const possList =
-        chosen.length > 0
-            ? possAll.filter((p) => chosen.includes(p.lemma))
-            : possAll;
-
-    const nounEntries = nounsAdjectives.filter(
-        (e) =>
-            e.pos === "noun" &&
-            e.form &&
-            e.case &&
-            e.number &&
-            e.gender &&
-            e.lemmaDe
-    );
+function buildPossessiveQuestions(numQuestions) {
+    const possList = Array.isArray(possessives) ? possessives : [];
+    if (!possList.length) return [];
 
     const groupsByPrompt = new Map();
 
@@ -381,23 +392,19 @@ function buildPossessiveQuestions(numQuestions, selectedPossessives) {
         const ctx = poss.contextNouns || {};
 
         for (const [key, form] of Object.entries(poss.forms || {})) {
+            // key z.B. "Nom_Sg_m"
             const [c, n, g] = key.split("_");
             if (!form || !c || !n || !g) continue;
 
             const ctxNoun = ctx[g];
             if (!ctxNoun) continue;
 
-            const noun = nounEntries.find(
-                (nn) =>
-                    nn.lemma === ctxNoun.la &&
-                    nn.case === c &&
-                    nn.number === n &&
-                    nn.gender === g
-            );
-            if (!noun) continue;
+            const nounForm =
+                flexSimpleNoun(ctxNoun.la, g, c, n) || null;
+            if (!nounForm) continue;
 
-            const prompt = `${form} ${noun.form}`;
-            const dePhrase = `${poss.lemmaDe || ""} ${ctxNoun.de || noun.lemmaDe || ""}`.trim();
+            const prompt = `${form} ${nounForm}`;
+            const dePhrase = `${poss.lemmaDe || ""} ${ctxNoun.de || ""}`.trim();
 
             if (!groupsByPrompt.has(prompt)) {
                 groupsByPrompt.set(prompt, {
@@ -412,16 +419,18 @@ function buildPossessiveQuestions(numQuestions, selectedPossessives) {
                 case: c,
                 number: n,
                 gender: g,
-                de: dePhrase
+                de: `${labelForCombo({ case: c, number: n, gender: g })} – ${dePhrase}`
             });
         }
     }
 
-    const all = shuffle(Array.from(groupsByPrompt.values()));
-    const take = Math.min(numQuestions, all.length);
+    const grouped = shuffle(Array.from(groupsByPrompt.values()));
+    if (!grouped.length) return [];
 
-    return all.slice(0, take).map((g, i) => ({
-        id: `poss_${g.poss.id || g.poss.lemma}_${i}`,
+    const take = Math.min(numQuestions, grouped.length);
+
+    return grouped.slice(0, take).map((g, i) => ({
+        id: `poss_${g.poss.id}_${i}`,
         type: "possessive",
         prompt: g.prompt,
         lemma: g.poss.lemma,
@@ -431,9 +440,9 @@ function buildPossessiveQuestions(numQuestions, selectedPossessives) {
     }));
 }
 
-// ---------------------------------------------------
-// 5) Verben
-// ---------------------------------------------------
+// ===================================================
+// Verben
+// ===================================================
 
 function buildVerbQuestions(numQuestions, lemma, verbSettings = {}) {
     const {
@@ -443,16 +452,17 @@ function buildVerbQuestions(numQuestions, lemma, verbSettings = {}) {
     } = verbSettings;
 
     const activeTenses = (tenses.length ? tenses : ALL_VERB_TENSES).filter(
-        (t) => VERB_DATA_BY_TENSE[t]
+        (t) => VERB_DATA_BY_TENSE[t] && VERB_DATA_BY_TENSE[t].length
     );
+    if (!activeTenses.length) return [];
 
-    const lemmas = asList(lemma);
     const candidates = [];
 
     for (const tense of activeTenses) {
         const list = VERB_DATA_BY_TENSE[tense] || [];
         for (const verb of list) {
-            if (lemmas.length && !lemmas.includes(verb.lemma)) continue;
+            // lemma kann in Daten als lemma ODER id stehen – beides zulassen
+            if (lemma && !(verb.lemma === lemma || verb.id === lemma)) continue;
 
             for (const mood of moods) {
                 for (const voice of voices) {
@@ -463,7 +473,7 @@ function buildVerbQuestions(numQuestions, lemma, verbSettings = {}) {
 
                     for (const p of PERSONS) {
                         for (const n of NUMBERS_VERB) {
-                            const cellKey = `${p}${n.toLowerCase()}`; // 1sg, 2pl ...
+                            const cellKey = `${p}${n.toLowerCase()}`; // "1sg", "2pl"
                             const form = table[cellKey];
                             if (!form) continue;
 
@@ -508,9 +518,9 @@ function buildVerbQuestions(numQuestions, lemma, verbSettings = {}) {
     }));
 }
 
-// ---------------------------------------------------
-// 6) Konjunktionen (optional)
-// ---------------------------------------------------
+// ===================================================
+// Konjunktionen (optional)
+// ===================================================
 
 function buildConjunctionQuestions(numQuestions) {
     const list = Array.isArray(conjunctions) ? conjunctions : [];
@@ -532,17 +542,15 @@ function buildConjunctionQuestions(numQuestions) {
     }));
 }
 
-// ---------------------------------------------------
-// 7) generateRound – Haupteinstieg
-// ---------------------------------------------------
+// ===================================================
+// generateRound – Hauptexport
+// ===================================================
 
 export function generateRound({
     category,
     numQuestions,
     lemma = null,
-    verbSettings = {},
-    selectedDemos = null,
-    selectedPossessives = null
+    verbSettings = {}
 }) {
     const safeNum =
         typeof numQuestions === "number" && numQuestions > 0
@@ -553,23 +561,25 @@ export function generateRound({
 
     switch (category) {
         case "nouns":
-            questions = buildNounQuestions(lemma, safeNum);
+            if (lemma) questions = buildNounQuestions(lemma, safeNum);
             break;
 
         case "adj_with_noun":
-            questions = buildAdjWithNounQuestions(lemma, safeNum);
+            if (lemma) questions = buildAdjWithNounQuestions(lemma, safeNum);
             break;
 
         case "demonstratives":
-            questions = buildDemonstrativeQuestions(safeNum, selectedDemos);
+            questions = buildDemonstrativeQuestions(safeNum);
             break;
 
         case "possessives":
-            questions = buildPossessiveQuestions(safeNum, selectedPossessives);
+            questions = buildPossessiveQuestions(safeNum);
             break;
 
         case "verbs":
-            questions = buildVerbQuestions(safeNum, lemma, verbSettings);
+            if (lemma) {
+                questions = buildVerbQuestions(safeNum, lemma, verbSettings);
+            }
             break;
 
         case "conjunctions":
