@@ -5,15 +5,14 @@ import { formatCaseNumberGender } from "../core/labels";
 
 /**
  * Rundengesteuertes Quiz:
- * - zeigt immer eine Frage
- * - erhält von der Frage-Komponente das Ergebnis
- * - zeigt eine klare Richtig/Falsch-Karte
- * - am Ende: Zusammenfassung
+ * - Zeigt eine Frage aus `round.questions`
+ * - Frage-Komponente ruft `onAnswer(isCorrect, detail)` auf
+ * - Danach: klare Richtig/Falsch-Karte
+ * - Am Ende: Zusammenfassung mit Feedback
  */
 
 export function Quiz({ round, onExit }) {
-    const { questions } = round || { questions: [] };
-
+    const { questions = [], showHelpTables = false } = round || {};
     const [index, setIndex] = useState(0);
     const [currentResult, setCurrentResult] = useState(null);
     const [history, setHistory] = useState([]);
@@ -21,7 +20,7 @@ export function Quiz({ round, onExit }) {
     const total = questions.length;
     const current = questions[index] || null;
 
-    // Keine Fragen -> zurück
+    // ===== Kein Material gefunden =====
     if (!total) {
         return (
             <div className="screen">
@@ -41,31 +40,37 @@ export function Quiz({ round, onExit }) {
         );
     }
 
-    // Callback von Question-Component
+    // ===== Antwort von Frage-Komponente =====
     const handleAnswer = (isCorrect, detail) => {
-        const q = current;
-        const correctOptions = q.correctOptions || [];
+        if (!current) return;
+
+        const correctOptions = current.correctOptions || [];
 
         const result = {
-            question: q,
+            question: current,
             isCorrect,
             userAnswer: detail?.userAnswer || null,
-            correctOptions
+            correctOptions,
+            // wichtig: Paradigma und Metadaten direkt an das Result hängen
+            paradigm: current.paradigm || null,
+            type: current.type,
+            lemma: current.lemma,
+            lemmaDe: current.lemmaDe,
         };
 
         setHistory((prev) => [...prev, result]);
         setCurrentResult(result);
     };
 
+    // ===== Weiter / nächste Frage =====
     const handleNext = () => {
         if (!currentResult) return;
 
         const nextIndex = index + 1;
 
         if (nextIndex >= total) {
-            // Summary triggern
-            const doneResult = { done: true };
-            setCurrentResult(doneResult);
+            // Markiere "fertig" -> Summary-Ansicht
+            setCurrentResult({ done: true });
             return;
         }
 
@@ -73,7 +78,7 @@ export function Quiz({ round, onExit }) {
         setCurrentResult(null);
     };
 
-    // ===== Summary-Seite =====
+    // ===== Summary-Seite am Ende =====
     if (currentResult && currentResult.done) {
         const correctCount = history.filter((h) => h.isCorrect).length;
         const totalCount = history.length || total;
@@ -87,7 +92,8 @@ export function Quiz({ round, onExit }) {
         } else if (ratio >= 0.6) {
             feedback = "Gut! Einige Formen solltest du wiederholen.";
         } else if (ratio >= 0.4) {
-            feedback = "Du bist auf dem Weg – wiederhole die markierten Formen.";
+            feedback =
+                "Du bist auf dem Weg – wiederhole die markierten Formen in Ruhe.";
         } else {
             feedback = "Guter Start. Übung macht den Lapicida. 💪";
         }
@@ -112,7 +118,7 @@ export function Quiz({ round, onExit }) {
 
                     {mistakes.length > 0 && (
                         <>
-                            <h3>Diese Formen solltest du dir ansehen:</h3>
+                            <h3>Diese Formen solltest du dir noch einmal ansehen:</h3>
                             {mistakes.map((m, i) => (
                                 <div key={i} className="summary-card">
                                     {m.question.lemma && (
@@ -147,8 +153,7 @@ export function Quiz({ round, onExit }) {
         );
     }
 
-    // ===== Aktive Frage & Ergebnis =====
-
+    // ===== Laufende Frage + Result-Karte =====
     return (
         <div className="screen">
             <header className="top-bar">
@@ -162,17 +167,17 @@ export function Quiz({ round, onExit }) {
             </header>
 
             <main className="content">
-                {/* Eingabe-Ansicht */}
+                {/* Aktive Frage */}
                 {!currentResult && current && current.type === "noun" && (
                     <QuestionNoun question={current} onAnswer={handleAnswer} />
                 )}
 
-                {/* Ergebnis-Karte */}
+                {/* Ergebnis-Karte nach Klick auf "Überprüfen" */}
                 {currentResult && !currentResult.done && (
                     <div className="result-card">
-                        {currentResult.question.lemma && (
+                        {currentResult.lemma && (
                             <div className="result-lemma">
-                                {currentResult.question.lemma} – {currentResult.question.lemmaDe}
+                                {currentResult.lemma} – {currentResult.lemmaDe}
                             </div>
                         )}
 
@@ -201,21 +206,22 @@ export function Quiz({ round, onExit }) {
                             ))}
                         </div>
 
-                        {/* Formenübersicht (Paradigma) für Nomen */}
-                        {currentResult.question.type === "noun" &&
-                            Array.isArray(currentResult.question.paradigm) &&
-                            currentResult.question.paradigm.length > 0 && (
+                        {/* Formenübersicht (Hilfetabelle) – z.B. vollständige Deklination */}
+                        {showHelpTables &&
+                            currentResult.paradigm &&
+                            Array.isArray(currentResult.paradigm) &&
+                            currentResult.paradigm.length > 0 && (
                                 <div className="paradigm-box">
                                     <div className="paradigm-title">
-                                        Formenübersicht zu {currentResult.question.lemma} –{" "}
-                                        {currentResult.question.lemmaDe}
+                                        Formenübersicht zu {currentResult.lemma} –{" "}
+                                        {currentResult.lemmaDe}
                                     </div>
                                     <div className="paradigm-header-row">
                                         <div className="paradigm-cell head">Kasus</div>
                                         <div className="paradigm-cell head">Singular</div>
                                         <div className="paradigm-cell head">Plural</div>
                                     </div>
-                                    {currentResult.question.paradigm.map((row, i) => (
+                                    {currentResult.paradigm.map((row, i) => (
                                         <div key={i} className="paradigm-row">
                                             <div className="paradigm-cell case">
                                                 {row.case}
