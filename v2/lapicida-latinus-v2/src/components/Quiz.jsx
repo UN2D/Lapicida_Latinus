@@ -21,7 +21,7 @@ export function Quiz({ round, onExit }) {
     const total = questions.length;
     const current = questions[index] || null;
 
-    // Wenn keine Fragen -> zurück
+    // Keine Fragen -> zurück
     if (!total) {
         return (
             <div className="screen">
@@ -41,6 +41,7 @@ export function Quiz({ round, onExit }) {
         );
     }
 
+    // Callback von Question-Component
     const handleAnswer = (isCorrect, detail) => {
         const q = current;
         const correctOptions = q.correctOptions || [];
@@ -62,9 +63,9 @@ export function Quiz({ round, onExit }) {
         const nextIndex = index + 1;
 
         if (nextIndex >= total) {
-            // -> Summary
-            setIndex(total); // außerhalb des Bereichs
-            setCurrentResult({ done: true });
+            // Summary triggern
+            const doneResult = { done: true };
+            setCurrentResult(doneResult);
             return;
         }
 
@@ -146,7 +147,7 @@ export function Quiz({ round, onExit }) {
         );
     }
 
-    // ===== Aktive Frage + Ergebnis-Karte =====
+    // ===== Aktive Frage & Ergebnis =====
 
     return (
         <div className="screen">
@@ -161,11 +162,13 @@ export function Quiz({ round, onExit }) {
             </header>
 
             <main className="content">
+                {/* Eingabe-Ansicht */}
                 {!currentResult && current && current.type === "noun" && (
                     <QuestionNoun question={current} onAnswer={handleAnswer} />
                 )}
 
-                {currentResult && (
+                {/* Ergebnis-Karte */}
+                {currentResult && !currentResult.done && (
                     <div className="result-card">
                         {currentResult.question.lemma && (
                             <div className="result-lemma">
@@ -177,10 +180,12 @@ export function Quiz({ round, onExit }) {
                             {currentResult.question.prompt}
                         </div>
 
-                        <div className={
-                            "result-status " +
-                            (currentResult.isCorrect ? "correct" : "wrong")
-                        }>
+                        <div
+                            className={
+                                "result-status " +
+                                (currentResult.isCorrect ? "correct" : "wrong")
+                            }
+                        >
                             {currentResult.isCorrect ? "Richtig!" : "Falsch!"}
                         </div>
 
@@ -195,6 +200,36 @@ export function Quiz({ round, onExit }) {
                                 </div>
                             ))}
                         </div>
+
+                        {/* Formenübersicht (Paradigma) für Nomen */}
+                        {currentResult.question.type === "noun" &&
+                            Array.isArray(currentResult.question.paradigm) &&
+                            currentResult.question.paradigm.length > 0 && (
+                                <div className="paradigm-box">
+                                    <div className="paradigm-title">
+                                        Formenübersicht zu {currentResult.question.lemma} –{" "}
+                                        {currentResult.question.lemmaDe}
+                                    </div>
+                                    <div className="paradigm-header-row">
+                                        <div className="paradigm-cell head">Kasus</div>
+                                        <div className="paradigm-cell head">Singular</div>
+                                        <div className="paradigm-cell head">Plural</div>
+                                    </div>
+                                    {currentResult.question.paradigm.map((row, i) => (
+                                        <div key={i} className="paradigm-row">
+                                            <div className="paradigm-cell case">
+                                                {row.case}
+                                            </div>
+                                            <div className="paradigm-cell form">
+                                                {row.singular || "–"}
+                                            </div>
+                                            <div className="paradigm-cell form">
+                                                {row.plural || "–"}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
 
                         <button className="primary-btn" onClick={handleNext}>
                             Weiter

@@ -292,3 +292,40 @@ html,
 .summary-correct-line {
   font-size: 11px;
 }
+
+.paradigm-box {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid #004d40;
+  background-color: #e0f7fa;
+  text-align: left;
+  font-size: 14px;
+}
+
+.paradigm-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #004d40;
+}
+
+.paradigm-header-row,
+.paradigm-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 1fr;
+  column-gap: 8px;
+  align-items: baseline;
+}
+
+.paradigm-cell.head {
+  font-weight: 600;
+}
+
+.paradigm-cell.case {
+  font-weight: 600;
+}
+
+.paradigm-cell.form {
+  font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
