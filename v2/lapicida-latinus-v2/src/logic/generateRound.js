@@ -1,11 +1,11 @@
-// src/core/generateRound.js
+// src/logic/generateRound.js
 
 import nounsAdjectives from "../data/nounsAdjectives.json";
-// hier später: weitere Importe für Verben, Adjektive usw.
 
-/**
- * Simple Shuffle
- */
+// --------------------------------------------------
+// Helpers
+// --------------------------------------------------
+
 function shuffle(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
@@ -15,31 +15,27 @@ function shuffle(arr) {
     return a;
 }
 
-/**
- * Labels für Kasus/Num/Genus
- * (voll ausgeschrieben, wie gewünscht)
- */
 const CASE_LABELS = {
     Nom: "Nominativ",
     Gen: "Genitiv",
     Dat: "Dativ",
     Akk: "Akkusativ",
     Abl: "Ablativ",
-    Vok: "Vokativ"
+    Vok: "Vokativ",
 };
 
 const NUMBER_LABELS = {
     Sg: "Singular",
-    Pl: "Plural"
+    Pl: "Plural",
 };
 
 const GENDER_LABELS = {
     m: "maskulin",
     f: "feminin",
-    n: "neutrum"
+    n: "neutrum",
 };
 
-export function formatCaseNumberGender(opt) {
+function formatCaseNumberGender(opt) {
     if (!opt) return "";
     const c = CASE_LABELS[opt.case] || opt.case || "";
     const n = NUMBER_LABELS[opt.number] || opt.number || "";
@@ -47,130 +43,140 @@ export function formatCaseNumberGender(opt) {
     return [c, n, g].filter(Boolean).join(" ");
 }
 
+// --------------------------------------------------
+// Nomen: Paradigma aus den Daten bauen
+// --------------------------------------------------
+
 /**
- * Paradigma für ein Substantiv (eine Deklination) erzeugen.
- * Nutzt die Einträge aus nounsAdjectives.json.
+ * Baut aus nounsAdjectives eine einfache Deklinationstabelle
+ * für ein Lemma (nur dieses Lemma, pos === "noun").
  *
  * Rückgabe: Array von Zeilen:
- * [{ case: "Nominativ", singular: "villa", plural: "villae" }, ...]
+ * [{ caseLabel, singular, plural }]
  */
 function buildNounParadigm(lemma) {
-    const entries = nounsAdjectives.filter(
+    if (!lemma) return null;
+
+    const relevant = nounsAdjectives.filter(
         (e) =>
             e.pos === "noun" &&
             e.lemma === lemma &&
-            e.form &&
-            e.case &&
-            e.number
-    );
-
-    if (!entries.length) return [];
-
-    const byCase = {};
-
-    for (const e of entries) {
-        if (!byCase[e.case]) {
-            byCase[e.case] = {
-                case: CASE_LABELS[e.case] || e.case,
-                singular: "",
-                plural: ""
-            };
-        }
-        if (e.number === "Sg") byCase[e.case].singular = e.form;
-        if (e.number === "Pl") byCase[e.case].plural = e.form;
-    }
-
-    // Nur Zeilen, wo es überhaupt Formen gibt
-    return Object.values(byCase).filter(
-        (row) => row.singular || row.plural
-    );
-}
-
-/**
- * Fragen für Substantive:
- * - Mehrdeutigkeiten bleiben erhalten (eine Form -> mehrere korrekte Bestimmungen)
- * - Jede Frage trägt ihr Paradigma am Question-Objekt
- */
-function buildNounQuestions({ lemmas, numQuestions }) {
-    const selected = Array.isArray(lemmas)
-        ? lemmas.filter(Boolean)
-        : lemmas
-            ? [lemmas]
-            : [];
-
-    if (!selected.length) return [];
-
-    const entries = nounsAdjectives.filter(
-        (e) =>
-            e.pos === "noun" &&
-            selected.includes(e.lemma) &&
-            e.form &&
             e.case &&
             e.number &&
-            e.gender
+            e.form
     );
+    if (!relevant.length) return null;
 
-    if (!entries.length) return [];
+    const rows = [];
+    const order = ["Nom", "Gen", "Dat", "Akk", "Abl"];
 
-    // Für jedes Lemma einmal das Paradigma vorbereiten
-    const paradigmByLemma = {};
-    for (const lemma of selected) {
-        paradigmByLemma[lemma] = buildNounParadigm(lemma);
-    }
+    for (const c of order) {
+        const singular = relevant.find(
+            (e) => e.case === c && e.number === "Sg"
+        )?.form;
+        const plural = relevant.find(
+            (e) => e.case === c && e.number === "Pl"
+        )?.form;
 
-    // Gruppen nach (Lemma + Form), damit z.B. "villae" für "villa" alle Deutungen zeigt
-    const groups = new Map();
-
-    for (const e of entries) {
-        const key = `${e.lemma}::${e.form}`;
-        if (!groups.has(key)) {
-            groups.set(key, {
-                lemma: e.lemma,
-                lemmaDe: e.lemmaDe,
-                prompt: e.form,
-                correctOptions: []
+        if (singular || plural) {
+            rows.push({
+                caseCode: c,
+                caseLabel: CASE_LABELS[c] || c,
+                singular: singular || "",
+                plural: plural || "",
             });
         }
-        const g = groups.get(key);
-        g.correctOptions.push({
+    }
+
+    return rows.length ? rows : null;
+}
+
+// --------------------------------------------------
+// Nomen: Fragen erzeugen (Mehrdeutigkeiten bleiben erhalten)
+// --------------------------------------------------
+
+/**
+ * lemmas: string[]
+ * numQuestions: Anzahl
+ * includeParadigm: bool -> Paradigma pro Frage anhängen
+ */
+function buildNounQuestions({ lemmas, numQuestions, includeParadigm }) {
+    const activeLemmas =
+        Array.isArray(lemmas) && lemmas.length ? lemmas : [];
+
+    if (!activeLemmas.length) return [];
+
+    // gruppiere nach Form (villae -> alle möglichen Analysen)
+    const groupsByForm = new Map();
+
+    for (const e of nounsAdjectives) {
+        if (
+            e.pos !== "noun" ||
+            !activeLemmas.includes(e.lemma) ||
+            !e.form ||
+            !e.case ||
+            !e.number ||
+            !e.gender
+        ) {
+            continue;
+        }
+
+        const form = e.form;
+
+        if (!groupsByForm.has(form)) {
+            groupsByForm.set(form, {
+                prompt: form,
+                lemma: e.lemma,
+                lemmaDe: e.lemmaDe || "",
+                correctOptions: [],
+            });
+        }
+
+        groupsByForm.get(form).correctOptions.push({
             case: e.case,
             number: e.number,
             gender: e.gender,
-            de: `${formatCaseNumberGender(e)} – ${e.lemmaDe || ""}`.trim()
+            de: `${formatCaseNumberGender(e)}${e.lemmaDe ? ` – ${e.lemmaDe}` : ""
+                }`,
         });
     }
 
-    const allGroups = shuffle(Array.from(groups.values()));
-    const take = Math.min(numQuestions, allGroups.length);
+    const grouped = shuffle(Array.from(groupsByForm.values()));
+    const take = Math.min(numQuestions, grouped.length);
 
-    return allGroups.slice(0, take).map((g, i) => ({
-        id: `noun_${g.lemma}_${g.prompt}_${i}`,
-        type: "noun",
-        prompt: g.prompt,
-        lemma: g.lemma,
-        lemmaDe: g.lemmaDe,
-        correctOptions: g.correctOptions,
-        paradigm: paradigmByLemma[g.lemma] || [],
-        topics: ["noun"]
-    }));
+    return grouped.slice(0, take).map((g, i) => {
+        const paradigm = includeParadigm
+            ? buildNounParadigm(g.lemma)
+            : null;
+
+        return {
+            id: `noun_${g.lemma}_${i}`,
+            type: "noun",
+            prompt: g.prompt,
+            lemma: g.lemma,
+            lemmaDe: g.lemmaDe,
+            correctOptions: g.correctOptions,
+            paradigm, // <- komplette Deklination (oder null)
+            topics: ["noun"],
+        };
+    });
 }
 
+// --------------------------------------------------
+// generateRound: zentrale Schnittstelle
+// --------------------------------------------------
+
 /**
- * Zentrale Runden-Factory
- *
- * category:
- *  - "nouns" (bisher implementiert)
- *  - weitere Kategorien folgen
- *
- * lemmas: Array der ausgewählten Lemmata
- * numQuestions: 5/10/20 etc.
- * showHelp: ob Hilfetabellen etc. angezeigt werden dürfen
+ * category: "nouns" | ...
+ * lemmas: ausgewählte Lemmata (Array)
+ * numQuestions: 5/10/20...
+ * showHelp: ob Hilfetabellen angezeigt werden sollen
  */
 export function generateRound({
     category,
     lemmas = [],
     numQuestions = 5,
-    showHelp = false
+    showHelp = false,
 }) {
     const safeNum =
         typeof numQuestions === "number" && numQuestions > 0
@@ -183,13 +189,15 @@ export function generateRound({
         case "nouns":
             questions = buildNounQuestions({
                 lemmas,
-                numQuestions: safeNum
+                numQuestions: safeNum,
+                includeParadigm: showHelp,
             });
             break;
 
-        // Platzhalter: andere Kategorien folgen
+        // weitere Kategorien folgen hier
         default:
             questions = [];
+            break;
     }
 
     return {
@@ -197,6 +205,6 @@ export function generateRound({
         lemmas,
         numQuestions: safeNum,
         questions,
-        showHelp
+        showHelp,
     };
 }

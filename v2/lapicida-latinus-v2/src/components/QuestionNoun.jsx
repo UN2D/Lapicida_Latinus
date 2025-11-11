@@ -1,14 +1,22 @@
 // src/components/QuestionNoun.jsx
 import { useState } from "react";
-import { CASE_LABELS, NUMBER_LABELS, GENDER_LABELS } from "../core/labels";
+import {
+    CASE_LABELS,
+    NUMBER_LABELS,
+    GENDER_LABELS,
+} from "../core/labels";
 
 /**
- * Frage-Komponente für Nomen-Formbestimmung.
- *
- * Props:
- * - question: { prompt, lemma, lemmaDe, correctOptions: [...] }
- * - onAnswer(isCorrect, detail)
+ * Frage-Komponente für Substantive:
+ * - 1. Prüfen:
+ *      - wenn korrekt: direkt Ergebnis (onAnswer(true,...))
+ *      - wenn falsch: Teil-Feedback (rot/grün auf gewählten Buttons), aber
+ *        wir BLEIBEN in der Frage und rufen onAnswer noch NICHT auf
+ * - 2. Prüfen (wenn schon Feedback sichtbar war):
+ *      - endgültige Auswertung → onAnswer(...)
+ * - Feedback verschwindet, sobald der User eine Auswahl ändert
  */
+
 export function QuestionNoun({ question, onAnswer }) {
     const correctOptions = question.correctOptions || [];
 
@@ -16,14 +24,16 @@ export function QuestionNoun({ question, onAnswer }) {
     const [selectedNumber, setSelectedNumber] = useState(null);
     const [selectedGender, setSelectedGender] = useState(null);
 
-    const [attempt, setAttempt] = useState(0);    // 0 = noch kein Check, 1 = ein Fehlversuch
-    const [locked, setLocked] = useState(false);  // true = Ergebnis an Quiz gemeldet
+    // null = noch kein Fehlversuch
+    // { caseOk, numberOk, genderOk } = Feedback nach 1. Fehlversuch
+    const [feedback, setFeedback] = useState(null);
 
     const canCheck =
-        !!selectedCase && !!selectedNumber && !!selectedGender && !locked;
+        selectedCase !== null &&
+        selectedNumber !== null &&
+        selectedGender !== null;
 
-    // Prüft, ob eine (c,n,g)-Kombi eine der korrekten Lösungen ist
-    const isCorrectCombo = (c, n, g) =>
+    const isFullCorrect = (c, n, g) =>
         correctOptions.some(
             (opt) =>
                 opt.case === c &&
@@ -31,53 +41,73 @@ export function QuestionNoun({ question, onAnswer }) {
                 opt.gender === g
         );
 
-    // Hilfsfunktionen für das visuelle Feedback nach einem Fehlversuch
-    const valueIsPossibleInAnyCorrect = (dimension, value) => {
-        if (!correctOptions.length) return false;
-        if (dimension === "case") {
-            return correctOptions.some((opt) => opt.case === value);
-        }
-        if (dimension === "number") {
-            return correctOptions.some((opt) => opt.number === value);
-        }
-        if (dimension === "gender") {
-            return correctOptions.some((opt) => opt.gender === value);
-        }
-        return false;
-    };
-
     const handleCheck = () => {
         if (!canCheck) return;
 
-        const comboCorrect = isCorrectCombo(
-            selectedCase,
-            selectedNumber,
-            selectedGender
-        );
+        // Wenn wir schon Feedback gezeigt haben:
+        // -> dieser Klick ist jetzt der ENDGÜLTIGE Versuch
+        if (feedback) {
+            const finalCorrect = isFullCorrect(
+                selectedCase,
+                selectedNumber,
+                selectedGender
+            );
 
-        // Wenn direkt korrekt oder bereits ein Fehlversuch hinter uns:
-        // -> final werten und sperren
-        if (comboCorrect || attempt >= 1) {
-            setLocked(true);
-            onAnswer(comboCorrect, {
+            onAnswer(finalCorrect, {
                 userAnswer: {
                     case: selectedCase,
                     number: selectedNumber,
-                    gender: selectedGender
-                }
+                    gender: selectedGender,
+                },
+                correctOptions,
+                // optional: Feedback mitschicken
+                feedback,
+            });
+
+            return;
+        }
+
+        // Noch kein Feedback gezeigt -> erster Prüfen-Klick
+
+        // Falls direkt korrekt: sofort Ergebnis
+        if (isFullCorrect(selectedCase, selectedNumber, selectedGender)) {
+            onAnswer(true, {
+                userAnswer: {
+                    case: selectedCase,
+                    number: selectedNumber,
+                    gender: selectedGender,
+                },
+                correctOptions,
             });
             return;
         }
 
-        // Erster Fehlversuch: nur Feedback, noch kein onAnswer
-        setAttempt(1);
+        // Falsch -> Teil-Feedback berechnen, aber noch KEIN onAnswer
+        const caseOk = correctOptions.some(
+            (opt) => opt.case === selectedCase
+        );
+        const numberOk = correctOptions.some(
+            (opt) => opt.number === selectedNumber
+        );
+        const genderOk = correctOptions.some(
+            (opt) => opt.gender === selectedGender
+        );
+
+        setFeedback({ caseOk, numberOk, genderOk });
     };
 
-    /**
-     * Liefert die CSS-Klasse für einen Button (Case/Number/Gender),
-     * basierend auf Auswahl + Fehlversuch.
-     */
-    const btnClass = (dimension, value) => {
+    // Auswahl ändern: Feedback zurücksetzen, sonst könnte man
+    // die Lösung „herumklicken“.
+    const resetFeedbackAndSelect = (dimension, value) => {
+        if (feedback) {
+            setFeedback(null);
+        }
+        if (dimension === "case") setSelectedCase(value);
+        if (dimension === "number") setSelectedNumber(value);
+        if (dimension === "gender") setSelectedGender(value);
+    };
+
+    const getButtonClass = (dimension, value) => {
         const classes = ["choice-btn"];
 
         const isSelected =
@@ -89,52 +119,50 @@ export function QuestionNoun({ question, onAnswer }) {
             classes.push("selected");
         }
 
-        // Nach finalem Lock keine zusätzlichen Farben setzen
-        if (locked) {
-            if (isSelected) classes.push("locked");
-            return classes.join(" ");
-        }
-
-        // Nach einem Fehlversuch: gezieltes Feedback
-        if (attempt === 1 && isSelected) {
-            const possible = valueIsPossibleInAnyCorrect(dimension, value);
-            if (possible) {
-                classes.push("partial-correct"); // z.B. grünlicher Rand
-            } else {
-                classes.push("wrong");           // rot
+        // Feedback NUR auf den aktuell gewählten Buttons anzeigen
+        if (feedback && isSelected) {
+            if (dimension === "case") {
+                classes.push(feedback.caseOk ? "correct" : "wrong");
+            }
+            if (dimension === "number") {
+                classes.push(feedback.numberOk ? "correct" : "wrong");
+            }
+            if (dimension === "gender") {
+                classes.push(feedback.genderOk ? "correct" : "wrong");
             }
         }
 
         return classes.join(" ");
     };
 
-    const displayForm = question.prompt;
+    const lemmaLine =
+        question.lemma && question.lemmaDe
+            ? `${question.lemma} – ${question.lemmaDe}`
+            : question.lemma || "";
 
     return (
         <div className="question-card">
-            {/* Lemma klein über der Form */}
-            {question.lemma && (
+            {lemmaLine && (
                 <div className="question-lemma">
-                    {question.lemma} – {question.lemmaDe}
+                    {lemmaLine}
                 </div>
             )}
 
-            {/* große Form */}
-            <div className="question-form">
-                {displayForm}
+            <div className="question-form-main">
+                {question.prompt}
             </div>
 
             {/* Kasus */}
             <div className="choice-group">
                 <div className="choice-label">Kasus</div>
                 <div className="choice-row">
-                    {["Nom", "Gen", "Dat", "Akk", "Abl"].map((c) => (
+                    {Object.entries(CASE_LABELS).map(([key, label]) => (
                         <button
-                            key={c}
-                            className={btnClass("case", c)}
-                            onClick={() => !locked && setSelectedCase(c)}
+                            key={key}
+                            className={getButtonClass("case", key)}
+                            onClick={() => resetFeedbackAndSelect("case", key)}
                         >
-                            {CASE_LABELS[c]}
+                            {label}
                         </button>
                     ))}
                 </div>
@@ -144,13 +172,13 @@ export function QuestionNoun({ question, onAnswer }) {
             <div className="choice-group">
                 <div className="choice-label">Numerus</div>
                 <div className="choice-row">
-                    {["Sg", "Pl"].map((n) => (
+                    {Object.entries(NUMBER_LABELS).map(([key, label]) => (
                         <button
-                            key={n}
-                            className={btnClass("number", n)}
-                            onClick={() => !locked && setSelectedNumber(n)}
+                            key={key}
+                            className={getButtonClass("number", key)}
+                            onClick={() => resetFeedbackAndSelect("number", key)}
                         >
-                            {NUMBER_LABELS[n]}
+                            {label}
                         </button>
                     ))}
                 </div>
@@ -160,13 +188,13 @@ export function QuestionNoun({ question, onAnswer }) {
             <div className="choice-group">
                 <div className="choice-label">Genus</div>
                 <div className="choice-row">
-                    {["m", "f", "n"].map((g) => (
+                    {Object.entries(GENDER_LABELS).map(([key, label]) => (
                         <button
-                            key={g}
-                            className={btnClass("gender", g)}
-                            onClick={() => !locked && setSelectedGender(g)}
+                            key={key}
+                            className={getButtonClass("gender", key)}
+                            onClick={() => resetFeedbackAndSelect("gender", key)}
                         >
-                            {GENDER_LABELS[g]}
+                            {label}
                         </button>
                     ))}
                 </div>
@@ -176,8 +204,8 @@ export function QuestionNoun({ question, onAnswer }) {
                 className={
                     "primary-btn" + (!canCheck ? " disabled" : "")
                 }
-                onClick={handleCheck}
                 disabled={!canCheck}
+                onClick={handleCheck}
             >
                 Prüfen
             </button>
