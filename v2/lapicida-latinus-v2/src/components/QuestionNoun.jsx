@@ -1,113 +1,195 @@
 // src/components/QuestionNoun.jsx
 import { useState } from "react";
-import {
-    CASE_LABELS,
-    NUMBER_LABELS,
-    GENDER_LABELS,
-} from "../core/labels";
 
-/**
- * Frage-Komponente für Substantive:
- * - 1. Prüfen:
- *      - wenn korrekt: direkt Ergebnis (onAnswer(true,...))
- *      - wenn falsch: Teil-Feedback (rot/grün auf gewählten Buttons), aber
- *        wir BLEIBEN in der Frage und rufen onAnswer noch NICHT auf
- * - 2. Prüfen (wenn schon Feedback sichtbar war):
- *      - endgültige Auswertung → onAnswer(...)
- * - Feedback verschwindet, sobald der User eine Auswahl ändert
- */
+const CASES = ["Nom", "Gen", "Dat", "Akk", "Abl"];
+const NUMBERS = ["Sg", "Pl"];
+const GENDERS = ["m", "f", "n"];
 
-export function QuestionNoun({ question, onAnswer }) {
+const CASE_LABELS = {
+    Nom: "Nominativ",
+    Gen: "Genitiv",
+    Dat: "Dativ",
+    Akk: "Akkusativ",
+    Abl: "Ablativ",
+};
+
+const NUMBER_LABELS = {
+    Sg: "Singular",
+    Pl: "Plural",
+};
+
+const GENDER_LABELS = {
+    m: "maskulin",
+    f: "feminin",
+    n: "neutrum",
+};
+
+export function QuestionNoun({ question, onAnswer, showHelp }) {
     const correctOptions = question.correctOptions || [];
 
     const [selectedCase, setSelectedCase] = useState(null);
     const [selectedNumber, setSelectedNumber] = useState(null);
     const [selectedGender, setSelectedGender] = useState(null);
 
-    // null = noch kein Fehlversuch
-    // { caseOk, numberOk, genderOk } = Feedback nach 1. Fehlversuch
-    const [feedback, setFeedback] = useState(null);
+    // Wurde bereits einmal "Prüfen" gedrückt?
+    const [hintActive, setHintActive] = useState(false);
+    // Auswahl beim ersten Prüfen (nur für Hilfe AUS relevant)
+    const [hintSelection, setHintSelection] = useState(null);
+    // Ist die Frage final gewertet? (danach keine Interaktion mehr)
+    const [finalized, setFinalized] = useState(false);
 
     const canCheck =
-        selectedCase !== null &&
-        selectedNumber !== null &&
-        selectedGender !== null;
+        !!selectedCase && !!selectedNumber && !!selectedGender;
 
-    const isFullCorrect = (c, n, g) =>
-        correctOptions.some(
+    // Prüft, ob eine vollständige Auswahl exakt zu einer korrekten Option passt
+    const isFullCorrect = (sel) =>
+        !!correctOptions.find(
             (opt) =>
-                opt.case === c &&
-                opt.number === n &&
-                opt.gender === g
+                opt.case === sel.case &&
+                opt.number === sel.number &&
+                opt.gender === sel.gender
         );
+
+    // ---- Dimensionen-Bewertung nach deiner Priorität ----
+    // Gibt "correct" | "wrong" | "neutral" zurück
+
+    const evalCase = (selCase) => {
+        if (!selCase) return "neutral";
+        const has = correctOptions.some((opt) => opt.case === selCase);
+        return has ? "correct" : "wrong";
+    };
+
+    const evalNumber = (selCase, selNumber) => {
+        if (!selNumber) return "neutral";
+        if (!selCase) return "neutral";
+
+        const optionsWithCase = correctOptions.filter(
+            (opt) => opt.case === selCase
+        );
+        if (optionsWithCase.length === 0) {
+            // Kasus ist offenbar falsch → Numerus hier nicht bestrafen
+            return "neutral";
+        }
+        const has = optionsWithCase.some(
+            (opt) => opt.number === selNumber
+        );
+        return has ? "correct" : "wrong";
+    };
+
+    const evalGender = (selGender) => {
+        if (!selGender) return "neutral";
+        const has = correctOptions.some(
+            (opt) => opt.gender === selGender
+        );
+        return has ? "correct" : "wrong";
+    };
+
+    // Liefert den Status ("correct"/"wrong"/"neutral") für eine Dimension,
+    // abhängig vom Modus und davon, ob wir im Hinweis-Modus sind.
+    const getDimensionStatus = (dimension, value) => {
+        // Noch kein Prüfen -> keine Farben
+        if (!hintActive) return "neutral";
+
+        // Hilfe AN: immer aktuelle Auswahl live auswerten
+        if (showHelp) {
+            const sel = {
+                case: selectedCase,
+                number: selectedNumber,
+                gender: selectedGender,
+            };
+
+            if (
+                !sel.case ||
+                !sel.number ||
+                !sel.gender
+            ) {
+                // unvollständig -> nur markieren, wenn dieser Button gerade Teil der Auswahl ist
+                if (
+                    (dimension === "case" && value === sel.case) ||
+                    (dimension === "number" && value === sel.number) ||
+                    (dimension === "gender" && value === sel.gender)
+                ) {
+                    // aber ohne vollständige Auswahl keine "richtig/falsch"-Aussage
+                    return "neutral";
+                }
+                return "neutral";
+            }
+
+            // Vollständige aktuelle Auswahl vorhanden:
+            if (dimension === "case" && value === sel.case) {
+                return evalCase(sel.case);
+            }
+            if (dimension === "number" && value === sel.number) {
+                return evalNumber(sel.case, sel.number);
+            }
+            if (dimension === "gender" && value === sel.gender) {
+                return evalGender(sel.gender);
+            }
+            return "neutral";
+        }
+
+        // Hilfe AUS: wir zeigen Feedback nur für die ERSTE geprüfte Auswahl.
+        // Danach werden geänderte Buttons neutral.
+        if (!hintSelection) return "neutral";
+
+        const sel = hintSelection;
+
+        if (dimension === "case") {
+            if (value !== sel.case) return "neutral";
+            return evalCase(sel.case);
+        }
+        if (dimension === "number") {
+            if (value !== sel.number) return "neutral";
+            return evalNumber(sel.case, sel.number);
+        }
+        if (dimension === "gender") {
+            if (value !== sel.gender) return "neutral";
+            return evalGender(sel.gender);
+        }
+        return "neutral";
+    };
 
     const handleCheck = () => {
-        if (!canCheck) return;
+        if (!canCheck || finalized) return;
 
-        // Wenn wir schon Feedback gezeigt haben:
-        // -> dieser Klick ist jetzt der ENDGÜLTIGE Versuch
-        if (feedback) {
-            const finalCorrect = isFullCorrect(
-                selectedCase,
-                selectedNumber,
-                selectedGender
-            );
+        const currentSel = {
+            case: selectedCase,
+            number: selectedNumber,
+            gender: selectedGender,
+        };
 
-            onAnswer(finalCorrect, {
-                userAnswer: {
-                    case: selectedCase,
-                    number: selectedNumber,
-                    gender: selectedGender,
-                },
-                correctOptions,
-                // optional: Feedback mitschicken
-                feedback,
-            });
+        const fullCorrect = isFullCorrect(currentSel);
 
+        // Erster Klick auf "Prüfen"
+        if (!hintActive) {
+            setHintActive(true);
+            setHintSelection(currentSel);
+
+            if (fullCorrect) {
+                // Direkt richtig -> fertig
+                setFinalized(true);
+                onAnswer(true, {
+                    userAnswer: currentSel,
+                    attempts: 1,
+                });
+            }
+            // Wenn falsch:
+            // Hilfe AN: Hinweismodus aktiv, Live-Farben über getDimensionStatus (aktuelle Auswahl)
+            // Hilfe AUS: einmalige Farben basierend auf hintSelection,
+            //            User darf umwählen, neue Buttons werden neutral.
             return;
         }
 
-        // Noch kein Feedback gezeigt -> erster Prüfen-Klick
-
-        // Falls direkt korrekt: sofort Ergebnis
-        if (isFullCorrect(selectedCase, selectedNumber, selectedGender)) {
-            onAnswer(true, {
-                userAnswer: {
-                    case: selectedCase,
-                    number: selectedNumber,
-                    gender: selectedGender,
-                },
-                correctOptions,
-            });
-            return;
-        }
-
-        // Falsch -> Teil-Feedback berechnen, aber noch KEIN onAnswer
-        const caseOk = correctOptions.some(
-            (opt) => opt.case === selectedCase
-        );
-        const numberOk = correctOptions.some(
-            (opt) => opt.number === selectedNumber
-        );
-        const genderOk = correctOptions.some(
-            (opt) => opt.gender === selectedGender
-        );
-
-        setFeedback({ caseOk, numberOk, genderOk });
+        // Zweiter Klick auf "Prüfen" -> finale Wertung mit aktueller Auswahl
+        const finalCorrect = isFullCorrect(currentSel);
+        setFinalized(true);
+        onAnswer(finalCorrect, {
+            userAnswer: currentSel,
+            attempts: 2,
+        });
     };
 
-    // Auswahl ändern: Feedback zurücksetzen, sonst könnte man
-    // die Lösung „herumklicken“.
-    const resetFeedbackAndSelect = (dimension, value) => {
-        if (feedback) {
-            setFeedback(null);
-        }
-        if (dimension === "case") setSelectedCase(value);
-        if (dimension === "number") setSelectedNumber(value);
-        if (dimension === "gender") setSelectedGender(value);
-    };
-
-    const getButtonClass = (dimension, value) => {
+    const getBtnClass = (dimension, value) => {
         const classes = ["choice-btn"];
 
         const isSelected =
@@ -119,17 +201,21 @@ export function QuestionNoun({ question, onAnswer }) {
             classes.push("selected");
         }
 
-        // Feedback NUR auf den aktuell gewählten Buttons anzeigen
-        if (feedback && isSelected) {
-            if (dimension === "case") {
-                classes.push(feedback.caseOk ? "correct" : "wrong");
+        // Nach dem ersten Prüfen -> ggf. korrekt/falsch einfärben
+        if (hintActive) {
+            const status = getDimensionStatus(dimension, value);
+
+            if (isSelected && status === "correct") {
+                classes.push("correct");
             }
-            if (dimension === "number") {
-                classes.push(feedback.numberOk ? "correct" : "wrong");
+            if (isSelected && status === "wrong") {
+                classes.push("wrong");
             }
-            if (dimension === "gender") {
-                classes.push(feedback.genderOk ? "correct" : "wrong");
-            }
+        }
+
+        // Nach finaler Wertung -> Buttons nicht mehr bedienbar (Styling optional)
+        if (finalized) {
+            classes.push("locked");
         }
 
         return classes.join(" ");
@@ -148,21 +234,25 @@ export function QuestionNoun({ question, onAnswer }) {
                 </div>
             )}
 
-            <div className="question-form-main">
-                {question.prompt}
+            <div className="question-form-box">
+                <div className="question-form">
+                    {question.prompt}
+                </div>
             </div>
 
             {/* Kasus */}
             <div className="choice-group">
                 <div className="choice-label">Kasus</div>
                 <div className="choice-row">
-                    {Object.entries(CASE_LABELS).map(([key, label]) => (
+                    {CASES.map((c) => (
                         <button
-                            key={key}
-                            className={getButtonClass("case", key)}
-                            onClick={() => resetFeedbackAndSelect("case", key)}
+                            key={c}
+                            className={getBtnClass("case", c)}
+                            onClick={() =>
+                                !finalized && setSelectedCase(c)
+                            }
                         >
-                            {label}
+                            {CASE_LABELS[c]}
                         </button>
                     ))}
                 </div>
@@ -172,13 +262,15 @@ export function QuestionNoun({ question, onAnswer }) {
             <div className="choice-group">
                 <div className="choice-label">Numerus</div>
                 <div className="choice-row">
-                    {Object.entries(NUMBER_LABELS).map(([key, label]) => (
+                    {NUMBERS.map((n) => (
                         <button
-                            key={key}
-                            className={getButtonClass("number", key)}
-                            onClick={() => resetFeedbackAndSelect("number", key)}
+                            key={n}
+                            className={getBtnClass("number", n)}
+                            onClick={() =>
+                                !finalized && setSelectedNumber(n)
+                            }
                         >
-                            {label}
+                            {NUMBER_LABELS[n]}
                         </button>
                     ))}
                 </div>
@@ -188,13 +280,15 @@ export function QuestionNoun({ question, onAnswer }) {
             <div className="choice-group">
                 <div className="choice-label">Genus</div>
                 <div className="choice-row">
-                    {Object.entries(GENDER_LABELS).map(([key, label]) => (
+                    {GENDERS.map((g) => (
                         <button
-                            key={key}
-                            className={getButtonClass("gender", key)}
-                            onClick={() => resetFeedbackAndSelect("gender", key)}
+                            key={g}
+                            className={getBtnClass("gender", g)}
+                            onClick={() =>
+                                !finalized && setSelectedGender(g)
+                            }
                         >
-                            {label}
+                            {GENDER_LABELS[g]}
                         </button>
                     ))}
                 </div>
@@ -202,9 +296,10 @@ export function QuestionNoun({ question, onAnswer }) {
 
             <button
                 className={
-                    "primary-btn" + (!canCheck ? " disabled" : "")
+                    "primary-btn" +
+                    (!canCheck || finalized ? " disabled" : "")
                 }
-                disabled={!canCheck}
+                disabled={!canCheck || finalized}
                 onClick={handleCheck}
             >
                 Prüfen

@@ -304,10 +304,25 @@ body {
 }
 
 /* Feedback nach Fehlversuch */
+
+.choice-btn.correct {
+  background-color: #1b8533;
+  /* grün */
+  border-color: #1b8533;
+  color: #ffffff;
+}
+
 .choice-btn.partial-correct.selected {
   background: #1e7f3f;
   border-color: #1e7f3f;
   color: #fff;
+}
+
+.choice-btn.wrong {
+  background-color: #c8102e;
+  /* rot */
+  border-color: #c8102e;
+  color: #ffffff;
 }
 
 .choice-btn.wrong.selected {
