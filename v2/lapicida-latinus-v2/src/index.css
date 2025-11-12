@@ -11,6 +11,7 @@
   --red: #c8102e;
   --bg-light: #f5f7fb;
   --card-radius: 28px;
+  --card-max: 760px;
   --transition-fast: 0.15s ease-in-out;
   --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     -system-ui, -ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -95,11 +96,14 @@ body {
 
 .content {
   flex: 1;
-  padding: 24px 16px 32px;
+  padding: 24px 16px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 24px;
+  max-width: 960px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* Alle "Seiten-Inhalte" bekommen die gleiche Max-Breite */
@@ -113,6 +117,21 @@ body {
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
+}
+
+.question-card,
+.result-card,
+.summary-card {
+  width: 100%;
+  max-width: 960px;
+  width: min(92vw, var(--card-max));
+  /* einheitliche Breite */
+  margin: 24px auto;
+  margin-inline: auto;
+  padding: 24px 24px 28px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
 /* ========================================
@@ -169,53 +188,59 @@ body {
 
 /* Lemma-Buttons */
 
+
+/* Gemeinsames Layout für Lemma-Auswahl-Buttons (Startscreen) */
+
 .lemma-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
 }
 
 .lemma-btn {
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  background-color: white;
-  cursor: pointer;
-  font-size: 15px;
-  transition: all var(--transition-fast);
+  flex: 0 1 calc(33.333% - 0.75rem);
+  padding: 0.6rem 0.75rem;
+  border-radius: 999px;
+  border: 2px solid #dde3ea;
+  background-color: #ffffff;
+  font-size: 1rem;
+  text-align: center;
 }
 
 .lemma-btn.selected {
-  background-color: var(--blue);
-  border-color: var(--blue);
-  color: white;
-  font-weight: 600;
+  background-color: #003b7a;
+  color: #ffffff;
+  border-color: #003b7a;
 }
-
-/* Anzahl Aufgaben + Hilfetabellen */
 
 .pill-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 4px;
+  margin-top: 8px;
+  max-width: 640px;
 }
 
 .pill-btn {
-  padding: 10px 16px;
+  flex: 1 1 calc(33.333% - 8px);
+  /* ~3 pro Zeile */
+  min-width: 90px;
+  padding: 10px 14px;
   border-radius: 999px;
-  border: 1px solid #d1d5db;
-  background-color: white;
-  font-size: 16px;
+  border: 2px solid #dde3ee;
+  background: #ffffff;
+  font-size: 1.05rem;
+  text-align: center;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  box-sizing: border-box;
 }
 
 .pill-btn.selected {
-  background-color: var(--yellow);
-  border-color: var(--yellow-dark);
-  color: #111827;
-  font-weight: 700;
+  background: #ffc800;
+  border-color: #0b2f6a;
+  color: #0b2f6a;
+  font-weight: 600;
 }
 
 /* Startscreen unten: Hinweis + disabled Button */
@@ -302,6 +327,25 @@ body {
   margin-bottom: 6px;
 }
 
+
+.choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.choice-btn {
+  flex: 0 1 calc(33.333% - 0.75rem);
+  padding: 0.6rem 0.75rem;
+  border-radius: 999px;
+  border: 2px solid #dde3ea;
+  background-color: #ffffff;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/**
 .choice-row {
   display: flex;
   flex-wrap: wrap;
@@ -318,7 +362,7 @@ body {
   cursor: pointer;
   transition: all var(--transition-fast);
 }
-
+**/
 .choice-btn.selected {
   border-color: var(--blue);
   background-color: var(--blue);
@@ -348,6 +392,7 @@ body {
   border-radius: var(--card-radius);
   padding: 24px 24px 28px;
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+  text-align: center;
 }
 
 .result-lemma {
@@ -358,17 +403,17 @@ body {
 }
 
 .result-form {
-  font-size: 40px;
+  font-size: 2.4rem;
   font-weight: 700;
   text-align: center;
   margin-bottom: 4px;
 }
 
 .result-status {
-  font-size: 26px;
+  font-size: 1.8rem;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .result-status.correct {
@@ -392,6 +437,11 @@ body {
   text-align: center;
 }
 
+.result-correct-title,
+.result-correct-list {
+  text-align: center;
+}
+
 .result-correct-line+.result-correct-line {
   margin-top: 2px;
 }
@@ -399,18 +449,19 @@ body {
 /* Formenübersicht (Hilfetabelle) */
 
 .paradigm-box {
-  margin-top: 18px;
-  padding: 16px 18px 14px;
-  background-color: #e6f7fb;
-  border-radius: 24px;
-  border: 3px solid #066d6d;
+  margin-top: 1.25rem;
+  padding: 1rem 1rem 1.25rem;
+  border: 3px solid #0b6b5f;
+  border-radius: 20px;
+  background: #e8f8f4;
 }
 
 .paradigm-title {
-  font-size: 20px;
   font-weight: 700;
-  color: #065f5f;
-  margin-bottom: 10px;
+  color: #0b6b5f;
+  font-size: 1.05rem;
+  text-align: center;
+  margin-bottom: .75rem;
 }
 
 .paradigm-header-row,
@@ -431,6 +482,32 @@ body {
   font-weight: 600;
 }
 
+/* Kopfzeile */
+.paradigm-th {
+  font-weight: 700;
+}
+
+/* Spaltenausrichtung */
+.paradigm-case {
+  font-weight: 700;
+}
+
+/* engere Innenabstände links/rechts */
+.paradigm-table>* {
+  padding-inline: .1rem;
+}
+
+/* Tabelle als Grid (3 Spalten) */
+.paradigm-table {
+  display: grid;
+  grid-template-columns: 9.5rem 1fr 1fr;
+  /* Kasus | Singular | Plural */
+  gap: .4rem .9rem;
+  align-items: start;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: .92rem;
+}
+
 /* ========================================
    Zusammenfassung (Rundenende)
 ======================================== */
@@ -442,7 +519,12 @@ body {
 .summary-header {
   width: 100%;
   max-width: 960px;
-  margin: 0 auto 12px;
+  margin: 24px auto 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+  align-items: baseline;
 }
 
 .summary-title {
@@ -464,7 +546,7 @@ body {
 .summary-card {
   background-color: #ffffff;
   border-radius: 22px;
-  padding: 16px 18px 14px;
+  padding: 24px 24px 28px;
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
   margin-top: 10px;
 }
@@ -479,10 +561,29 @@ body {
   font-weight: 700;
 }
 
+.summary-card .summary-form {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 4px 0 8px;
+}
+
 .summary-correct-title {
   font-size: 16px;
   font-weight: 600;
   margin-top: 4px;
+}
+
+.summary-header h2,
+.summary-header p {
+  margin: 0 0 8px;
+}
+
+.summary-actions {
+  width: 100%;
+  max-width: 960px;
+  margin: 24px auto 0;
+  display: flex;
+  justify-content: center;
 }
 
 /* ========================================
@@ -491,4 +592,215 @@ body {
 
 .text-center {
   text-align: center;
+}
+
+/* --- Kartenbreiten final fixen (am Dateiende) --- */
+.question-card,
+.result-card,
+.summary-card {
+  max-width: 720px !important;
+  width: calc(100% - 32px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* falls Buttons in der Ergebnis-Karte mal flexen: */
+.result-card .actions,
+.question-card .actions {
+  display: flex;
+  justify-content: center;
+}
+
+/* Einheitliche Kartenbreite überall */
+.question-card,
+.result-card,
+.summary-card {
+  max-width: 720px !important;
+  width: min(92vw, 720px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Kompaktere Paradigmen-Tabelle + Zeilentrenner */
+.paradigm-box {
+  padding: .9rem 1rem 1.1rem;
+}
+
+.paradigm-title {
+  margin-bottom: .6rem;
+}
+
+.paradigm-table {
+  display: grid;
+  grid-template-columns: 9rem 1fr 1fr;
+  /* Kasus | Singular | Plural */
+  column-gap: .8rem;
+  row-gap: .35rem;
+  font: .92rem/1.25 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.paradigm-th {
+  font-weight: 700;
+}
+
+.paradigm-row {
+  display: contents;
+  /* jede Zeile belegt die Grid-Spalten */
+}
+
+.paradigm-sep {
+  grid-column: 1 / -1;
+  height: 1px;
+  background: rgba(0, 0, 0, .08);
+  margin: .2rem 0 .1rem;
+}
+
+/* Einheitliche Breite für Frage- und Ergebniskarten */
+.question-card,
+.result-card {
+  width: 100%;
+  max-width: 760px;
+  /* gleiche Breite überall */
+  margin: 0 auto;
+}
+
+/* Kompaktere Hilfetabelle (alle Hilfetabellen, auch Nomen) */
+.paradigm-box {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 3px solid #0f5a52;
+  /* dunkler Rand */
+  background: #e9f7f6;
+  /* dezent hell */
+}
+
+.paradigm-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #0f5a52;
+  text-align: left;
+}
+
+.paradigm-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  /* bricht sauber um */
+}
+
+.paradigm-table th,
+.paradigm-table td {
+  padding: 6px 8px;
+  vertical-align: top;
+  white-space: normal;
+  /* Zeilenumbruch erlaubt */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.96rem;
+  /* etwas kleiner */
+}
+
+.paradigm-table th {
+  text-align: left;
+  color: #0b3c38;
+}
+
+.paradigm-table tr+tr {
+  border-top: 1px solid rgba(0, 0, 0, .08);
+  /* horizontale Linie */
+}
+
+.paradigm-table .col-case {
+  width: 28%;
+}
+
+/* engerer Case-Spalte */
+.paradigm-table .col-sing {
+  width: 36%;
+}
+
+.paradigm-table .col-plur {
+  width: 36%;
+}
+
+/* === Hilfetabellen – stabiler Header & Spaltenbreiten === */
+
+.paradigm-box {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 3px solid #0f5a52;
+  background: #e9f7f6;
+}
+
+.paradigm-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #0f5a52;
+  text-align: left;
+}
+
+/* WICHTIG: fixed layout + keine Header-Umbrüche */
+.paradigm-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  /* Spaltenbreiten werden respektiert */
+}
+
+/* Header: nicht umbrechen, normaler UI-Font */
+.paradigm-table thead th {
+  white-space: nowrap;
+  /* "Kasus", "Singular", "Plural" bleiben in einer Zeile */
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-weight: 700;
+  font-size: 0.98rem;
+  text-align: left;
+  padding: 6px 8px;
+  color: #0b3c38;
+}
+
+/* Zellen: Monospace für Formen, sauberes Umbrechen */
+.paradigm-table tbody td {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.96rem;
+  line-height: 1.28;
+  vertical-align: top;
+  white-space: normal;
+  /* Formen dürfen umbrechen */
+  word-break: break-word;
+  /* keine überstehenden Strings */
+  padding: 6px 8px;
+}
+
+/* Spaltenbreiten (Header + Body) */
+.paradigm-table .col-case {
+  width: 26%;
+}
+
+.paradigm-table .col-sing {
+  width: 37%;
+}
+
+.paradigm-table .col-plur {
+  width: 37%;
+}
+
+/* Dezente Zeilenlinien nur zwischen Body-Zeilen */
+.paradigm-table tbody tr+tr {
+  border-top: 1px solid rgba(0, 0, 0, .08);
+}
+
+/* Auf sehr schmalen Geräten die Kasus-Spalte etwas schmaler machen */
+@media (max-width: 420px) {
+  .paradigm-table .col-case {
+    width: 30%;
+  }
+
+  .paradigm-table .col-sing,
+  .paradigm-table .col-plur {
+    width: 35%;
+  }
 }

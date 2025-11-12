@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +24,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -39,4 +42,76 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* --- Startseite: einheitliches Grid für Lemma-Auswahl --- */
+.lemma-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* 3 pro Zeile */
+  gap: 12px 14px;
+  /* vertikal, horizontal */
+  align-items: stretch;
+}
+
+.pill-btn.lemma-btn {
+  width: 100%;
+  justify-content: center;
+  font-size: 18px;
+  padding: 14px 16px;
+  border-radius: 28px;
+}
+
+/* Sektionen auf der Startseite etwas luftiger, aber konsistent */
+.section {
+  margin: 18px 0;
+}
+
+/* Ergebnis-Layout bleibt bei schmalen Karten konsistent */
+.result-card {
+  max-width: var(--card-max, 780px);
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Paradigmen-Tabelle: sanfte Spaltenabstände */
+.paradigm-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.paradigm-table thead th {
+  text-align: left;
+  font-weight: 700;
+  padding: 8px 10px;
+}
+
+.paradigm-table tbody td {
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  vertical-align: top;
+}
+
+.paradigm-table .col-case {
+  width: 32%;
+}
+
+.paradigm-table .col-sing {
+  width: 34%;
+}
+
+.paradigm-table .col-plur {
+  width: 34%;
+}
+
+/* Buttons: Zustände aus der Logik */
+.choice-btn.correct.selected {
+  background: #0e7a46;
+  color: #fff;
+}
+
+.choice-btn.wrong.selected {
+  background: #b11226;
+  color: #fff;
 }

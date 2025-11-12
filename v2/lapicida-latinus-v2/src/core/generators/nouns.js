@@ -1,86 +1,130 @@
 // src/core/generators/nouns.js
 
 import nounsAdjectives from "../../data/nounsAdjectives.json";
-import { shuffle, buildNounDeLabel } from "../morphUtils";
 
-/**
- * Sammelt alle Nomen-Einträge für die gewünschten Lemmata.
- * - Wenn lemmas leer ist: alle Nomen im Datensatz.
- */
-function collectNounEntries(lemmas) {
-    const hasFilter = Array.isArray(lemmas) && lemmas.length > 0;
-    const lemmaSet = hasFilter ? new Set(lemmas) : null;
+const CASES = ["Nom", "Gen", "Dat", "Akk", "Abl"];
+const NUMBERS = ["Sg", "Pl"];
+const GENDERS = ["m", "f", "n"];
 
-    return nounsAdjectives.filter((e) => {
-        if (e.pos !== "noun") return false;
-        if (!e.form || !e.case || !e.number || !e.gender) return false;
-        if (lemmaSet && !lemmaSet.has(e.lemma)) return false;
-        return true;
-    });
+function asLemmaList(lemmas) {
+    if (!lemmas) return [];
+    if (Array.isArray(lemmas)) return lemmas.filter(Boolean);
+    if (typeof lemmas === "string" && lemmas.trim()) return [lemmas.trim()];
+    return [];
 }
 
-/**
- * Erzeugt eine Nomen-Runde:
- * - Jede lateinische Form (prompt) fasst alle möglichen Analysen zusammen.
- * - correctOptions: Array aller gültigen (Kasus/Num/Genus)-Kombis.
- */
-export function generateNounRound({
-    lemmas = [],
-    numQuestions = 5
-}) {
-    const entries = collectNounEntries(lemmas);
+function isNounEntry(e) {
+    const pos = (e.pos || e.wordType || "").toLowerCase();
+    return (
+        pos === "noun" &&
+        e.lemma &&
+        e.lemmaDe &&
+        e.form &&
+        CASES.includes(e.case) &&
+        NUMBERS.includes(e.number) &&
+        GENDERS.includes(e.gender)
+    );
+}
 
-    if (!entries.length) {
-        return {
-            category: "nouns",
-            lemmas,
-            numQuestions: 0,
-            questions: []
-        };
+export function buildNounQuestions({ lemmas, numQuestions }) {
+    const lemmaList = asLemmaList(lemmas);
+    const allNouns = nounsAdjectives.filter(isNounEntry);
+
+    const pool =
+        lemmaList.length > 0
+            ? allNouns.filter((e) => lemmaList.includes(e.lemma))
+            : allNouns;
+
+    if (!pool.length) return [];
+
+    const byForm = new Map();
+    for (const e of pool) {
+        if (!byForm.has(e.form)) byForm.set(e.form, []);
+        byForm.get(e.form).push(e);
     }
 
-    // form -> Gruppe
-    const groups = new Map();
-
-    for (const e of entries) {
-        const { form } = e;
-        if (!groups.has(form)) {
-            groups.set(form, {
-                prompt: form,
-                lemma: e.lemma,
-                lemmaDe: e.lemmaDe,
-                correctOptions: []
-            });
-        }
-
-        const group = groups.get(form);
-
-        group.correctOptions.push({
+    let questions = [];
+    for (const [form, entries] of byForm.entries()) {
+        const first = entries[0];
+        const correctOptions = entries.map((e) => ({
             case: e.case,
             number: e.number,
             gender: e.gender,
-            // nur deutsche Bedeutung; Kasus/Num/Genus macht später die UI
-            de: buildNounDeLabel({ lemmaDe: e.lemmaDe })
+            // Nur die deutsche Bedeutung – KEINE Bestimmungsangabe hier!
+            de: first.lemmaDe
+        }));
+
+        questions.push({
+            id: `noun_${form}`,
+            type: "noun",
+            prompt: form,
+            lemma: first.lemma,
+            lemmaDe: first.lemmaDe,
+            correctOptions,
+            paradigmSource: first.lemma,
         });
     }
 
-    const allGroups = shuffle(Array.from(groups.values()));
-    const take = Math.min(numQuestions, allGroups.length);
+    questions = shuffle(questions).slice(0, numQuestions);
+    attachParadigms(questions, allNouns);
 
-    const questions = allGroups.slice(0, take).map((g, index) => ({
-        id: `noun_${g.prompt}_${index}`,
-        type: "noun",
-        prompt: g.prompt,
-        lemma: g.lemma,
-        lemmaDe: g.lemmaDe,
-        correctOptions: g.correctOptions,
-        topics: ["noun"]
-    }));
+    return questions;
+}
 
+// ---------- Helfer ----------
+
+function mapCase(c) {
     return {
-        category: "nouns",
-        lemmas,
-        numQuestions: questions.length,
-        questions
-    };
+        Nom: "Nominativ",
+        Gen: "Genitiv",
+        Dat: "Dativ",
+        Akk: "Akkusativ",
+        Abl: "Ablativ",
+    }[c] || c;
+}
+
+function mapNumber(n) {
+    return { Sg: "Singular", Pl: "Plural" }[n] || n;
+}
+
+function mapGender(g) {
+    return {
+        m: "maskulin",
+        f: "feminin",
+        n: "neutrum",
+    }[g] || g;
+}
+
+function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function attachParadigms(questions, allNouns) {
+    const byLemma = new Map();
+    for (const e of allNouns) {
+        if (!byLemma.has(e.lemma)) byLemma.set(e.lemma, []);
+        byLemma.get(e.lemma).push(e);
+    }
+
+    for (const q of questions) {
+        const forms = byLemma.get(q.paradigmSource || q.lemma);
+        if (!forms) continue;
+
+        const rows = CASES.map((c) => {
+            const sg = forms.find((f) => f.case === c && f.number === "Sg");
+            const pl = forms.find((f) => f.case === c && f.number === "Pl");
+            return {
+                case: mapCase(c),
+                singular: sg ? sg.form : "",
+                plural: pl ? pl.form : "",
+            };
+        });
+
+        q.paradigm = rows;
+    }
 }

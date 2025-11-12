@@ -1,7 +1,8 @@
 // src/Quiz.jsx
-import { useState } from "react";
+import React, { useState } from "react";
 import { QuestionNoun } from "./QuestionNoun";
 import { formatCaseNumberGender } from "../core/labels";
+import { QuestionAdjContext } from "./QuestionAdjContext";
 
 /**
  * Rundengesteuertes Quiz:
@@ -51,7 +52,12 @@ export function Quiz({ round, onExit }) {
             isCorrect,
             userAnswer: detail?.userAnswer || null,
             attempts: detail?.attempts || 1,
-            correctOptions
+            correctOptions,
+            // WICHTIG: für Ergebnis-Karte & Hilfetabelle
+            type: q?.type,
+            lemma: q?.lemma,
+            lemmaDe: q?.lemmaDe,
+            paradigm: q?.paradigm || null,
         };
 
         setHistory((prev) => [...prev, result]);
@@ -70,6 +76,9 @@ export function Quiz({ round, onExit }) {
         setIndex(next);
         setCurrentResult(null);
     };
+
+
+
 
     // ===== Summary =====
     if (currentResult && currentResult.done) {
@@ -165,16 +174,21 @@ export function Quiz({ round, onExit }) {
                 {/* Eingabe-Ansicht */}
                 {!currentResult && current && (
                     <>
-                        {(current.type === "noun" ||
-                            current.type === "adj_context") && (
-                                <QuestionNoun
-                                    question={current}
-                                    onAnswer={handleAnswer}
-                                    showHelp={
-                                        showHelp && current.type === "noun"
-                                    }
-                                />
-                            )}
+                        {!currentResult && current && current.type === "noun" && (
+                            <QuestionNoun
+                                question={current}
+                                onAnswer={handleAnswer}
+                                showHelp={showHelp}
+                            />
+                        )}
+
+                        {!currentResult && current && current.type === "adj_context" && (
+                            <QuestionAdjContext
+                                question={current}
+                                onAnswer={handleAnswer}
+                                showHelp={showHelp}
+                            />
+                        )}
                     </>
                 )}
 
@@ -209,62 +223,50 @@ export function Quiz({ round, onExit }) {
                         <div className="result-correct-title">
                             Richtige Bestimmung(en)
                         </div>
+                        {/* Ergebnis-Karte: richtige Formen */}
                         <div className="result-correct-list">
                             {currentResult.correctOptions.map((opt, i) => (
-                                <div
-                                    key={i}
-                                    className="result-correct-line"
-                                >
-                                    {formatCaseNumberGender(opt)}
-                                    {opt.de && ` – ${opt.de}`}
+                                <div key={i} className="result-correct-line">
+                                    {currentResult.question.type === "adj_context" && opt.de
+                                        ? opt.de
+                                        : <>
+                                            {formatCaseNumberGender(opt)}
+                                            {opt.de ? ` – ${opt.de}` : ""}
+                                        </>
+                                    }
                                 </div>
                             ))}
                         </div>
-
-                        {/* Paradigma nur für Nomen + Hilfe */}
-                        {showHelp &&
-                            currentResult.question.type === "noun" &&
-                            currentResult.question.paradigm &&
-                            currentResult.question.paradigm.length > 0 && (
+                        {/* Paradigma nur für Hilfe */}
+                        {currentResult.paradigm &&
+                            Array.isArray(currentResult.paradigm) &&
+                            currentResult.paradigm.length > 0 &&
+                            showHelp && (
                                 <div className="paradigm-box">
                                     <div className="paradigm-title">
-                                        Formenübersicht zu{" "}
-                                        {currentResult.question.lemma}
-                                        {currentResult.question.lemmaDe &&
-                                            ` – ${currentResult.question.lemmaDe}`}
+                                        Formenübersicht zu {currentResult.lemma} – {currentResult.lemmaDe}
                                     </div>
-                                    <div className="paradigm-header-row">
-                                        <div className="paradigm-cell head">
-                                            Kasus
-                                        </div>
-                                        <div className="paradigm-cell head">
-                                            Singular
-                                        </div>
-                                        <div className="paradigm-cell head">
-                                            Plural
-                                        </div>
-                                    </div>
-                                    {currentResult.question.paradigm.map(
-                                        (row, i) => (
-                                            <div
-                                                key={i}
-                                                className="paradigm-row"
-                                            >
-                                                <div className="paradigm-cell case">
-                                                    {row.case}
-                                                </div>
-                                                <div className="paradigm-cell form">
-                                                    {row.singular || "–"}
-                                                </div>
-                                                <div className="paradigm-cell form">
-                                                    {row.plural || "–"}
-                                                </div>
-                                            </div>
-                                        )
-                                    )}
+
+                                    <table className="paradigm-table">
+                                        <thead>
+                                            <tr>
+                                                <th className="col-case">Kasus</th>
+                                                <th className="col-sing">Singular</th>
+                                                <th className="col-plur">Plural</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {currentResult.paradigm.map((row, i) => (
+                                                <tr key={i}>
+                                                    <td className="col-case">{row.case}</td>
+                                                    <td className="col-sing">{row.singular}</td>
+                                                    <td className="col-plur">{row.plural}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
                             )}
-
                         <button
                             className="primary-btn"
                             onClick={handleNext}
