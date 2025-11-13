@@ -4,6 +4,8 @@ import { QuestionNoun } from "./QuestionNoun";
 import { formatCaseNumberGender } from "../core/labels";
 import { QuestionAdjContext } from "./QuestionAdjContext";
 
+
+const GEND_DE = { m: "maskulin", f: "feminin", n: "neutrum" };
 /**
  * Rundengesteuertes Quiz:
  * - zeigt jeweils eine Frage
@@ -244,7 +246,10 @@ export function Quiz({ round, onExit }) {
                             showHelp && (
                                 <div className="paradigm-box">
                                     <div className="paradigm-title">
-                                        Formenübersicht zu {currentResult.lemma} – {currentResult.lemmaDe}
+                                        Formenübersicht zu {currentResult.lemma}
+                                        {currentResult.paradigmGender
+                                            ? ` (${GENDER_DE[currentResult.paradigmGender]})`
+                                            : ""} – {currentResult.lemmaDe}
                                     </div>
 
                                     <table className="paradigm-table">

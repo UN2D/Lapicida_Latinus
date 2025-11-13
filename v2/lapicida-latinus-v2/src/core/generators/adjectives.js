@@ -1,80 +1,209 @@
 // src/core/generators/adjectives.js
+// Erzeugt "Adjektive im Kontext"-Fragen: Adjektiv + Nomen müssen kongruent sein.
+// Berücksichtigt Mehrdeutigkeiten eines Nomen-Formstrings (z.B. "villae").
+// Liefert pro Frage: prompt, correctOptions[], paradigm (nur gewähltes Genus), paradigmGender.
+
 import data from "../../data/nounsAdjectives.json";
 
-/* ===== Konstanten ===== */
+/* =========================
+   Konstanten / Basismaps
+   ========================= */
 const CASES = ["Nom", "Gen", "Dat", "Akk", "Abl"];
 const NUMBERS = ["Sg", "Pl"];
 const GENDERS = ["m", "f", "n"];
 
-/* ===== Utilities ===== */
-const isNounEntry = (e) => {
+const CASE_DE = { Nom: "Nominativ", Gen: "Genitiv", Dat: "Dativ", Akk: "Akkusativ", Abl: "Ablativ" };
+const NUM_DE = { Sg: "Singular", Pl: "Plural" };
+const GEN_DE = { m: "maskulin", f: "feminin", n: "neutrum" };
+
+const DE_GENDER = GEN_DE; // Alias für kompakte Verwendungen
+
+/* =========================
+   Utilities: Datensatzprüfer
+   ========================= */
+function isNounEntry(e) {
     const pos = (e.pos || e.wordType || "").toLowerCase();
     return (
         pos === "noun" &&
-        e.lemma &&
-        e.lemmaDe &&
+        e.lemma && e.lemmaDe &&
         e.form &&
         CASES.includes(e.case) &&
         NUMBERS.includes(e.number) &&
         GENDERS.includes(e.gender)
     );
+}
+
+// Adjektiv-"Basen": keine K/N/G-Felder – nur Lemma/De/Pattern/Declension
+function isAdjBase(e) {
+    return (e.pos || "").toLowerCase() === "adj" && !!e.lemma && !!e.lemmaDe;
+}
+
+/* =========================
+   Deutsch: Artikel & Endungen
+   ========================= */
+
+// bestimmter Artikel (vereinfacht; Ablativ ~ Dativ)
+function germanDefArticle(c, n, g) {
+    const m = {
+        Nom: { Sg: "der", Pl: "die" },
+        Akk: { Sg: "den", Pl: "die" },
+        Dat: { Sg: (g === "f" ? "der" : "dem"), Pl: "den" },
+        Gen: { Sg: (g === "f" ? "der" : "des"), Pl: "der" },
+        Abl: { Sg: (g === "f" ? "der" : "dem"), Pl: "den" } // Abl ~ Dat
+    };
+    return (m[c] && m[c][n]) || (n === "Sg" ? (g === "n" ? "das" : "der") : "die");
+}
+
+// schwache Adjektivendung nach bestimmtem Artikel (Anfänger-freundlich, Abl ~ Dat)
+function germanAdjEndingAfterDefArticle(c, n, g) {
+    if (n === "Pl") return "en";
+    if (c === "Nom") return "e";
+    if (c === "Akk") return g === "m" ? "en" : "e";
+    // Dat/Gen/Abl
+    return "en";
+}
+
+// Zusatzhinweis für Ablativ
+function ablHint(c) {
+    return c === "Abl" ? " (mit/bei/von …)" : "";
+}
+
+/* =========================
+   Deutsch: Nomen beugen (sehr kleine Heuristik + Ausnahmen)
+   ========================= */
+
+// Kleine Ausnahmeliste für Pluralformen in unserem Datensatz.
+// (Passe an, wenn du weitere deutsche Lemmata hinzufügst.)
+const PLURAL_OVERRIDES = {
+    "Freund": "Freunde",
+    "Bewohner": "Bewohner",
+    "Ort": "Orte",
+    "Stadt": "Städte",
+    "Villa": "Villen",
+    // Für „Wort“ kann man „Wörter“ (zählig) oder „Worte“ (Kollektiv) wählen.
+    // Der Nutzer wünschte „Worte“:
+    "Wort": "Worte"
 };
 
-const isAdjBase = (e) => {
-    // Adjektiv-Basen sind im Datensatz ohne Kasus/Num/Genus – nur Grundinfos
-    return (e.pos || "").toLowerCase() === "adj" && e.lemma && e.lemmaDe;
-};
+// sehr einfache Regel für Genitiv Sg. Mask./Neutr.
+function addGenitiveSEnding(noun) {
+    const lower = noun.toLowerCase();
+    const needsEs = (
+        lower.length <= 2 ||                       // sehr kurz
+        /[sßxz]$/.test(lower) ||                   // endet auf s/ß/x/z
+        /[bcdfghjklmnpqrstvwxz]$/.test(lower) &&  // endet auf „harter“ Konsonant → meist „-es“
+        !/[aeiou]$/.test(lower)
+    );
+    return needsEs ? noun + "es" : noun + "s";
+}
 
-const mapCaseDe = (c) =>
-    ({ Nom: "Nominativ", Gen: "Genitiv", Dat: "Dativ", Akk: "Akkusativ", Abl: "Ablativ" }[c] || c);
-const mapNumDe = (n) => ({ Sg: "Singular", Pl: "Plural" }[n] || n);
-const mapGenDe = (g) => ({ m: "maskulin", f: "feminin", n: "neutrum" }[g] || g);
-
-/* Deutscher Artikel passend zu Kasus/Num/Genus */
-function germanArticle(k, n, g) {
+function germanNounDisplay(c, n, g, base) {
+    if (!base) return "";
+    // Plural:
     if (n === "Pl") {
-        return { Nom: "die", Akk: "die", Dat: "den", Gen: "der", Abl: "den" }[k] || "die";
+        return PLURAL_OVERRIDES[base] || (base + " (Plural)");
     }
-    // Singular
-    if (g === "m") {
-        return { Nom: "der", Akk: "den", Dat: "dem", Gen: "des", Abl: "dem" }[k] || "der";
+    // Genitiv Singular maskulin/neutrum:
+    if (c === "Gen" && (g === "m" || g === "n")) {
+        return addGenitiveSEnding(base);
     }
-    if (g === "f") {
-        return { Nom: "die", Akk: "die", Dat: "der", Gen: "der", Abl: "der" }[k] || "die";
+    // sonst unverändert
+    return base;
+}
+
+
+/* =========================
+   Latin: simple Anzeigeform
+   ========================= */
+
+// sehr einfache a/o-Endungen für Anzeige (reicht, da Bewertung über noun-Merkmale läuft)
+function latinAdjFormForNoun(adjectiveStem, noun) {
+    const { case: c, number: n, gender: g } = noun;
+    const end = {
+        m: { Sg: { Nom: "us", Gen: "i", Dat: "o", Akk: "um", Abl: "o" }, Pl: { Nom: "i", Gen: "orum", Dat: "is", Akk: "os", Abl: "is" } },
+        f: { Sg: { Nom: "a", Gen: "ae", Dat: "ae", Akk: "am", Abl: "a" }, Pl: { Nom: "ae", Gen: "arum", Dat: "is", Akk: "as", Abl: "is" } },
+        n: { Sg: { Nom: "um", Gen: "i", Dat: "o", Akk: "um", Abl: "o" }, Pl: { Nom: "a", Gen: "orum", Dat: "is", Akk: "a", Abl: "is" } },
+    };
+    const suffix = end[g]?.[n]?.[c] || "";
+    return adjectiveStem + suffix;
+}
+
+/* =========================
+   Paradigma für Hilfetabelle
+   (nur das Genus der aktuellen Frage)
+   ========================= */
+
+function mapCase(c) { return CASE_DE[c] || c; }
+function mapNumber(n) { return NUM_DE[n] || n; }
+
+function buildAdjParadigmForBaseFiltered(base, gender /* 'm'|'f'|'n' */) {
+    // Stamm grob aus Lemma ableiten: bonus → bon | pulcher → pulchr | fortis → fort
+    const raw = base.lemma || "";
+    const stemFromAO = raw.replace(/(us|a|um)$/i, "");      // a/o
+    const stemFrom3 = raw.replace(/(is|e)$/i, "");         // 3. Dekl.
+    const stem = (base.declension === "a/o" || base.pattern === "regular") ? stemFromAO : stemFrom3;
+
+    // a/o-Deklination
+    if (base.declension === "a/o" || base.pattern === "regular") {
+        const end = {
+            m: { Nom: ["us", "i"], Gen: ["i", "orum"], Dat: ["o", "is"], Akk: ["um", "os"], Abl: ["o", "is"] },
+            f: { Nom: ["a", "ae"], Gen: ["ae", "arum"], Dat: ["ae", "is"], Akk: ["am", "as"], Abl: ["a", "is"] },
+            n: { Nom: ["um", "a"], Gen: ["i", "orum"], Dat: ["o", "is"], Akk: ["um", "a"], Abl: ["o", "is"] },
+        }[gender];
+
+        const row = (c) => ({
+            case: mapCase(c),
+            singular: `${stem}${end[c][0]}`,
+            plural: `${stem}${end[c][1]}`
+        });
+
+        return ["Nom", "Gen", "Dat", "Akk", "Abl"].map(row);
     }
-    // neutrum
-    return { Nom: "das", Akk: "das", Dat: "dem", Gen: "des", Abl: "dem" }[k] || "das";
+
+    // stark vereinfacht: 3. Deklination
+    if (base.declension === "3rd" || base.pattern === "third") {
+        const endMF = { Nom: ["is", "es"], Gen: ["is", "ium"], Dat: ["i", "ibus"], Akk: ["em", "es"], Abl: ["i", "ibus"] };
+        const endN = { Nom: ["e", "ia"], Gen: ["is", "ium"], Dat: ["i", "ibus"], Akk: ["e", "ia"], Abl: ["i", "ibus"] };
+        const end = (gender === "n") ? endN : endMF;
+
+        const lemmaNom = raw; // Lemma als Nom. Sg. Anker
+
+        const row = (c) => ({
+            case: mapCase(c),
+            singular: c === "Nom" ? lemmaNom : `${stem}${end[c][0]}`,
+            plural: `${stem}${end[c][1]}`
+        });
+
+        return ["Nom", "Gen", "Dat", "Akk", "Abl"].map(row);
+    }
+
+    // Fallback: keine Tabelle
+    return [];
 }
 
-/* Ablativ Zusatz-Hinweis */
-function ablHint(k) {
-    return k === "Abl" ? " (mit/bei/von)" : "";
+/* =========================
+   Deutsch-Zeile für "Richtige Bestimmung(en)"
+   ========================= */
+
+function formatAdjContextDe(c, n, g, adjDe, nounDe) {
+    const kase = CASE_DE[c] || c;
+    const num = NUM_DE[n] || n;
+    const gen = GEN_DE[g] || g;
+
+    const art = germanDefArticle(c, n, g);
+    const end = germanAdjEndingAfterDefArticle(c, n, g);
+    const adjW = (adjDe || "").trim() + end;
+
+    const nounWord = germanNounDisplay(c, n, g, nounDe);
+    const ablTag = ablHint(c);
+
+    // z.B. "Genitiv Plural neutrum – der schönen Worte"
+    return `${kase} ${num} ${gen} – ${art} ${adjW} ${nounWord}${ablTag}`.replace(/\s+/g, " ").trim();
 }
 
-/* Deutsche Ausgabe für die „Richtige Bestimmung(en)“-Zeile */
-function formatAdjContextDe(k, n, g, adjDe, nounDe) {
-    const art = germanArticle(k, n, g);
-    const kase = mapCaseDe(k);
-    const num = mapNumDe(n);
-    const gen = mapGenDe(g);
-    const pluralTag = n === "Pl" ? " (Plural)" : "";
-    // „Genitiv Plural maskulin – der gut(e) Bewohner (Plural)“
-    // Adjektiv bleibt Grundform als Bedeutung (nicht flektiert), ok für Anfänger.
-    return `${kase} ${num} ${gen} – ${art} ${adjDe} ${nounDe}${pluralTag}${ablHint(k)}`;
-}
-
-/* a/o-Deklination – kompakte Paradigma-Zeilen für die Hilfetabelle */
-function aoParadigmRows(stem = "bon") {
-    return [
-        { case: "Nominativ", singular: `${stem}us, ${stem}a, ${stem}um`, plural: `${stem}i, ${stem}ae, ${stem}a` },
-        { case: "Genitiv", singular: `${stem}i, ${stem}ae, ${stem}i`, plural: `${stem}orum, ${stem}arum, ${stem}orum` },
-        { case: "Dativ", singular: `${stem}o, ${stem}ae, ${stem}o`, plural: `${stem}is, ${stem}is, ${stem}is` },
-        { case: "Akkusativ", singular: `${stem}um, ${stem}am, ${stem}um`, plural: `${stem}os, ${stem}as, ${stem}a` },
-        { case: "Ablativ", singular: `${stem}o, ${stem}a, ${stem}o`, plural: `${stem}is, ${stem}is, ${stem}is` },
-    ];
-}
-
-/* Hilfs-Shuffle */
+/* =========================
+   Hilfen
+   ========================= */
 function shuffle(arr) {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -84,28 +213,42 @@ function shuffle(arr) {
     return a;
 }
 
-/* ===== Generator: Adjektive im Kontext ===== */
+/* =========================
+   Generator
+   ========================= */
+
+// Haupt-Export: baut eine Runde "Adjektiv im Kontext"
 export function generateAdjWithNounRound({ lemmas = [], numQuestions = 5 }) {
     const adjBasesAll = data.filter(isAdjBase);
     const nounFormsAll = data.filter(isNounEntry);
 
+    // Filter auf gewünschte Adjektive (oder alle, wenn nichts gewählt)
     const lemmaSet = new Set(lemmas);
-    const adjBases =
-        lemmaSet.size === 0 ? adjBasesAll : adjBasesAll.filter((a) => lemmaSet.has(a.lemma));
+    const adjBases = lemmaSet.size ? adjBasesAll.filter(a => lemmaSet.has(a.lemma)) : adjBasesAll;
 
-    // Pool bilden: für jedes Nomen gibt es u. U. mehrere richtige Optionen
+    // pro Prompt genau eine Karte, aber mehrere gültige korrekte Optionen (Ambiguitäten)
     const questionsByPrompt = new Map();
 
+    // harte Kappe, damit es nicht explodiert
+    const nounPool = shuffle(nounFormsAll).slice(0, 400);
+
     for (const adj of adjBases) {
-        // einfacher Stamm aus bonus → bon
-        const stem = adj.lemma.replace(/us$/i, "");
-        const possiblePairs = shuffle(nounFormsAll).slice(0, 200); // Deckel drauf
+        // Stamm für einfache a/o-Anzeige (bonus -> bon | pulcher -> pulchr | fortis -> fort)
+        const stemAO = (adj.lemma || "").replace(/(us|a|um)$/i, "");
+        const stem3 = (adj.lemma || "").replace(/(is|e)$/i, "");
+        const stem = (adj.declension === "a/o" || adj.pattern === "regular") ? stemAO : stem3;
 
-        for (const noun of possiblePairs) {
-            // Erzeuge eine lateinische Phrase (grob, ohne Sonderfälle)
-            const prompt = `${latinAdjForm(stem, noun)} ${noun.form}`.trim();
+        for (const noun of nounPool) {
+            // Alle NOUN-Einträge mit gleicher sichtbarer Form und gleichem Genus liefern die Ambiguitäten
+            const ambiguous = nounFormsAll.filter(
+                n => n.form === noun.form && n.gender === noun.gender && n.lemmaDe === noun.lemmaDe
+            );
+            if (!ambiguous.length) continue;
 
-            // Karte zum Prompt anlegen (ein Prompt kann mehrere richtige Bestimmungen besitzen)
+            // Per Konvention bauen wir die Adjektivform nach einer (irgendeiner) der Ambiguitäten – a/o deckt Ambis ab
+            const adjForm = latinAdjFormForNoun(stem, noun);
+            const prompt = `${adjForm} ${noun.form}`.trim();
+
             if (!questionsByPrompt.has(prompt)) {
                 questionsByPrompt.set(prompt, {
                     id: `adjctx_${adj.lemma}_${noun.form}`,
@@ -113,40 +256,39 @@ export function generateAdjWithNounRound({ lemmas = [], numQuestions = 5 }) {
                     prompt,
                     lemma: adj.lemma,
                     lemmaDe: adj.lemmaDe,
-                    // für Hilfetabelle:
-                    paradigm: aoParadigmRows(stem),
                     correctOptions: [],
+                    // Hilfetabelle: nur das Genus dieses Substantivs
+                    paradigm: buildAdjParadigmForBaseFiltered(adj, noun.gender),
+                    paradigmGender: noun.gender
                 });
             }
 
-            const q = questionsByPrompt.get(prompt);
-            q.correctOptions.push({
-                case: noun.case,
-                number: noun.number,
-                gender: noun.gender,
-                de: formatAdjContextDe(noun.case, noun.number, noun.gender, adj.lemmaDe, noun.lemmaDe),
-            });
+            const card = questionsByPrompt.get(prompt);
+
+            // Für jede gültige Ambiguität eine korrekte Option + natürliche DE-Zeile
+            for (const e of ambiguous) {
+                const deLine = formatAdjContextDe(e.case, e.number, e.gender, adj.lemmaDe, e.lemmaDe || "");
+                const key = `${e.case}_${e.number}_${e.gender}_${deLine}`;
+
+                // Duplikate vermeiden
+                if (!card._seen) card._seen = new Set();
+                if (card._seen.has(key)) continue;
+
+                card._seen.add(key);
+                card.correctOptions.push({
+                    case: e.case,
+                    number: e.number,
+                    gender: e.gender,
+                    de: deLine
+                });
+            }
         }
     }
 
-    // finaler Satz Fragen:
-    const allQs = Array.from(questionsByPrompt.values());
-    return shuffle(allQs).slice(0, numQuestions);
-}
+    const all = Array.from(questionsByPrompt.values()).map(q => {
+        delete q._seen;
+        return q;
+    });
 
-/* sehr grobe Flektionsanzeige für die Anzeige (kein echter Morph-Parser) */
-function latinAdjForm(stem, noun) {
-    // Wir zeigen einfach den Stamm + grobe Endung je nach Genus/Num/Kasus des Nomens.
-    // Für die Anzeige reicht das (richtige Lösung wird über noun-Merkmale bewertet).
-    const { case: k, number: n, gender: g } = noun;
-
-    // Endungen (a/o-Deklination)
-    const endings = {
-        m: { Sg: { Nom: "us", Gen: "i", Dat: "o", Akk: "um", Abl: "o" }, Pl: { Nom: "i", Gen: "orum", Dat: "is", Akk: "os", Abl: "is" } },
-        f: { Sg: { Nom: "a", Gen: "ae", Dat: "ae", Akk: "am", Abl: "a" }, Pl: { Nom: "ae", Gen: "arum", Dat: "is", Akk: "as", Abl: "is" } },
-        n: { Sg: { Nom: "um", Gen: "i", Dat: "o", Akk: "um", Abl: "o" }, Pl: { Nom: "a", Gen: "orum", Dat: "is", Akk: "a", Abl: "is" } },
-    };
-
-    const end = (endings[g] && endings[g][n] && endings[g][n][k]) || "";
-    return `${stem}${end}`;
+    return shuffle(all).slice(0, numQuestions);
 }
