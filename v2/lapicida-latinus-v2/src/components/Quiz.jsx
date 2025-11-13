@@ -248,19 +248,24 @@ export function Quiz({ round, onExit }) {
                                     </div>
 
                                     <table className="paradigm-table">
+                                        <colgroup>
+                                            <col className="col-case" />
+                                            <col className="col-sing" />
+                                            <col className="col-plur" />
+                                        </colgroup>
                                         <thead>
                                             <tr>
-                                                <th className="col-case">Kasus</th>
-                                                <th className="col-sing">Singular</th>
-                                                <th className="col-plur">Plural</th>
+                                                <th>Kasus</th>
+                                                <th>Singular</th>
+                                                <th>Plural</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {currentResult.paradigm.map((row, i) => (
                                                 <tr key={i}>
                                                     <td className="col-case">{row.case}</td>
-                                                    <td className="col-sing">{row.singular}</td>
-                                                    <td className="col-plur">{row.plural}</td>
+                                                    <td className="cell-form">{row.singular}</td>
+                                                    <td className="cell-form">{row.plural}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
