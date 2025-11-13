@@ -2,6 +2,7 @@
 
 import { buildNounQuestions } from "../core/generators/nouns";
 import { generateAdjWithNounRound } from "../core/generators/adjectives";
+import { buildVerbQuestions } from "./generators/verbs";
 
 /**
  * Erzeugt eine Trainingsrunde für die gewählte Kategorie.
@@ -35,6 +36,13 @@ export function generateRound({
             });
             break;
 
+        case "verbs":
+            questions = buildVerbQuestions({
+                lemmas,
+                numQuestions: safeNum,
+                filters: settings?.filters || {}
+            });
+            break;
         // weitere Kategorien (verbs, demonstratives, possessives, ...)
         // kommen hier später sauber getrennt dazu
 

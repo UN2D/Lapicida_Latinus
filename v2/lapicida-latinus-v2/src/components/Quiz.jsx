@@ -277,6 +277,33 @@ export function Quiz({ round, onExit }) {
                                     </table>
                                 </div>
                             )}
+
+                        {currentResult?.type === "verb" && currentResult.helper && (
+                            <div className="paradigm-box">
+                                <div className="paradigm-title">{currentResult.helper.title}</div>
+                                <table className="paradigm-table">
+                                    <colgroup>
+                                        <col className="col-case" />
+                                        <col className="col-sing" />
+                                        <col className="col-plur" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr><th>Person</th><th>Singular</th><th>Plural</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        {currentResult.helper.rows.map((r, i) => (
+                                            <tr key={i}>
+                                                <td className="col-case">{r.person}</td>
+                                                <td className="cell-form">{r.singular}</td>
+                                                <td className="cell-form">{r.plural}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+
                         <button
                             className="primary-btn"
                             onClick={handleNext}

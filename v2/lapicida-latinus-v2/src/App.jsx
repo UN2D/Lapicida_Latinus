@@ -5,14 +5,17 @@ import { Quiz } from "./components/Quiz";
 import nounsAdjectives from "./data/nounsAdjectives.json";
 import "./index.css";
 
-const CATEGORIES = {
-  nouns: "Substantive",
-  adj_context: "Adjektive im Kontext",
-};
-
 const QUESTION_COUNTS = [5, 10, 20];
 
+const CATEGORIES = {
+  nouns: "Substantive",
+  adj_context: "Adjektive",
+  verbs: "Verben",
+};
+
+
 export default function App() {
+
   const [category, setCategory] = useState("nouns");
   const [selectedLemmas, setSelectedLemmas] = useState([]);
   const [numQuestions, setNumQuestions] = useState(5);
@@ -37,6 +40,11 @@ export default function App() {
     return Array.from(set).sort();
   }, []);
 
+  const verbLemmas = useMemo(() => [
+    "laudare", "videre", "capere", "mittere", "audire",
+    "esse", "posse", "ire", "ferre", "velle", "nolle", "malle", "fieri"
+  ], []);
+
   const toggleLemma = (lemma) => {
     setSelectedLemmas((prev) =>
       prev.includes(lemma)
@@ -52,7 +60,7 @@ export default function App() {
   };
 
   const isStartDisabled = () => {
-    if (category === "nouns" || category === "adj_context") {
+    if (category === "nouns" || category === "adj_context" || category === "verbs") {
       return selectedLemmas.length === 0;
     }
     return true;
@@ -117,6 +125,18 @@ export default function App() {
             >
               {CATEGORIES.adj_context}
             </button>
+            <button
+              className={
+                "pill-btn" +
+                (category === "verbs" ? " selected" : "")
+              }
+              onClick={() => {
+                setCategory("verbs");
+                setSelectedLemmas([]);
+              }}
+            >
+              {CATEGORIES.verbs}
+            </button>
           </div>
         </section>
 
@@ -148,7 +168,7 @@ export default function App() {
         {category === "adj_context" && (
           <section className="section">
             <div className="section-title">
-              Adjektive im Kontext wählen
+              Adjektive wählen
             </div>
             <div className="pill-row lemma-row">
               {adjLemmas.map((lemma) => (
@@ -159,6 +179,26 @@ export default function App() {
                     (selectedLemmas.includes(lemma)
                       ? " selected"
                       : "")
+                  }
+                  onClick={() => toggleLemma(lemma)}
+                >
+                  {lemma}
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {category === "verbs" && (
+          <section className="section">
+            <div className="section-title">Verben wählen</div>
+            <div className="pill-row lemma-row">
+              {verbLemmas.map((lemma) => (
+                <button
+                  key={lemma}
+                  className={
+                    "pill-btn lemma-btn" +
+                    (selectedLemmas.includes(lemma) ? " selected" : "")
                   }
                   onClick={() => toggleLemma(lemma)}
                 >
