@@ -13,12 +13,11 @@ export function generateRound({
     lemmas = [],
     numQuestions = 5,
     showHelp = false,
+    settings = {}
 }) {
-    const safeNum =
-        typeof numQuestions === "number" && numQuestions > 0
-            ? numQuestions
-            : 5;
 
+    const safeNum = Math.max(1, Number(numQuestions) || 5);
+    const safeSettings = settings || {};
     let questions = [];
 
     switch (category) {
@@ -43,6 +42,7 @@ export function generateRound({
                 filters: settings?.filters || {}
             });
             break;
+
         // weitere Kategorien (verbs, demonstratives, possessives, ...)
         // kommen hier später sauber getrennt dazu
 
@@ -56,5 +56,6 @@ export function generateRound({
         numQuestions: safeNum,
         questions,
         showHelp,
+        settings,
     };
 }

@@ -1,669 +1,184 @@
 [
     {
-        "id": "amo",
-        "lemma": "amo",
-        "lemmaDe": "lieben",
-        "forms": {
-            "praesens_ind_akt": {
-                "1sg": "amo",
-                "2sg": "amas",
-                "3sg": "amat",
-                "1pl": "amamus",
-                "2pl": "amatis",
-                "3pl": "amant"
-            },
-            "praesens_ind_pass": {
-                "1sg": "amor",
-                "2sg": "amaris",
-                "3sg": "amatur",
-                "1pl": "amamur",
-                "2pl": "amamini",
-                "3pl": "amantur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "amem",
-                "2sg": "ames",
-                "3sg": "amet",
-                "1pl": "amemus",
-                "2pl": "ametis",
-                "3pl": "ament"
-            },
-            "praesens_konj_pass": {
-                "1sg": "amer",
-                "2sg": "ameris",
-                "3sg": "ametur",
-                "1pl": "amemur",
-                "2pl": "amemini",
-                "3pl": "amentur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "ama",
-                "2pl": "amate"
-            },
-            "praesens_imp_pass": {
-                "2sg": "amare",
-                "2pl": "amamini"
-            }
-        }
-    },
-    {
-        "id": "laudo",
-        "lemma": "laudo",
+        "lemma": "laudare",
         "lemmaDe": "loben",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
         "forms": {
-            "praesens_ind_akt": {
-                "1sg": "laudo",
-                "2sg": "laudas",
-                "3sg": "laudat",
-                "1pl": "laudamus",
-                "2pl": "laudatis",
-                "3pl": "laudant"
-            },
-            "praesens_ind_pass": {
-                "1sg": "laudor",
-                "2sg": "laudaris",
-                "3sg": "laudatur",
-                "1pl": "laudamur",
-                "2pl": "laudamini",
-                "3pl": "laudantur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "laudem",
-                "2sg": "laudes",
-                "3sg": "laudet",
-                "1pl": "laudemus",
-                "2pl": "laudetis",
-                "3pl": "laudent"
-            },
-            "praesens_konj_pass": {
-                "1sg": "lauder",
-                "2sg": "lauderis",
-                "3sg": "laudetur",
-                "1pl": "laudemur",
-                "2pl": "laudemini",
-                "3pl": "laudentur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "lauda",
-                "2pl": "laudate"
-            },
-            "praesens_imp_pass": {
-                "2sg": "laudare",
-                "2pl": "laudamini"
-            }
+            "1Sg": "laudo",
+            "2Sg": "laudas",
+            "3Sg": "laudat",
+            "1Pl": "laudamus",
+            "2Pl": "laudatis",
+            "3Pl": "laudant"
         }
     },
     {
-        "id": "moneo",
-        "lemma": "moneo",
-        "lemmaDe": "ermahnen",
-        "forms": {
-            "praesens_ind_akt": {
-                "1sg": "moneo",
-                "2sg": "mones",
-                "3sg": "monet",
-                "1pl": "monemus",
-                "2pl": "monetis",
-                "3pl": "monent"
-            },
-            "praesens_ind_pass": {
-                "1sg": "moneor",
-                "2sg": "moneris",
-                "3sg": "monetur",
-                "1pl": "monemur",
-                "2pl": "monemini",
-                "3pl": "monentur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "moneam",
-                "2sg": "moneas",
-                "3sg": "moneat",
-                "1pl": "moneamus",
-                "2pl": "moneatis",
-                "3pl": "moneant"
-            },
-            "praesens_konj_pass": {
-                "1sg": "monear",
-                "2sg": "monearis",
-                "3sg": "moneatur",
-                "1pl": "moneamur",
-                "2pl": "moneamini",
-                "3pl": "moneantur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "mone",
-                "2pl": "monete"
-            },
-            "praesens_imp_pass": {
-                "2sg": "monere",
-                "2pl": "monemini"
-            }
-        }
-    },
-    {
-        "id": "video",
-        "lemma": "video",
+        "lemma": "videre",
         "lemmaDe": "sehen",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
         "forms": {
-            "praesens_ind_akt": {
-                "1sg": "video",
-                "2sg": "vides",
-                "3sg": "videt",
-                "1pl": "videmus",
-                "2pl": "videtis",
-                "3pl": "vident"
-            },
-            "praesens_ind_pass": {
-                "1sg": "videor",
-                "2sg": "videris",
-                "3sg": "videtur",
-                "1pl": "videmur",
-                "2pl": "videmini",
-                "3pl": "videntur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "videam",
-                "2sg": "videas",
-                "3sg": "videat",
-                "1pl": "videamus",
-                "2pl": "videatis",
-                "3pl": "videant"
-            },
-            "praesens_konj_pass": {
-                "1sg": "videar",
-                "2sg": "videaris",
-                "3sg": "videatur",
-                "1pl": "videamur",
-                "2pl": "videamini",
-                "3pl": "videantur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "vide",
-                "2pl": "videte"
-            },
-            "praesens_imp_pass": {
-                "2sg": "videri",
-                "2pl": "videmini"
-            }
+            "1Sg": "video",
+            "2Sg": "vides",
+            "3Sg": "videt",
+            "1Pl": "videmus",
+            "2Pl": "videtis",
+            "3Pl": "vident"
         }
     },
     {
-        "id": "ago",
-        "lemma": "ago",
-        "lemmaDe": "tun",
+        "lemma": "capere",
+        "lemmaDe": "fassen; nehmen",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
         "forms": {
-            "praesens_ind_akt": {
-                "1sg": "ago",
-                "2sg": "agis",
-                "3sg": "agit",
-                "1pl": "agimus",
-                "2pl": "agitis",
-                "3pl": "agunt"
-            },
-            "praesens_ind_pass": {
-                "1sg": "agor",
-                "2sg": "ageris",
-                "3sg": "agitur",
-                "1pl": "agimur",
-                "2pl": "agimini",
-                "3pl": "aguntur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "agam",
-                "2sg": "agas",
-                "3sg": "agat",
-                "1pl": "agamus",
-                "2pl": "agatis",
-                "3pl": "agant"
-            },
-            "praesens_konj_pass": {
-                "1sg": "agar",
-                "2sg": "agaris",
-                "3sg": "agatur",
-                "1pl": "agamur",
-                "2pl": "agamini",
-                "3pl": "agantur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "age",
-                "2pl": "agite"
-            },
-            "praesens_imp_pass": {
-                "2sg": "agere",
-                "2pl": "agimini"
-            }
+            "1Sg": "capio",
+            "2Sg": "capis",
+            "3Sg": "capit",
+            "1Pl": "capimus",
+            "2Pl": "capitis",
+            "3Pl": "capiunt"
         }
     },
     {
-        "id": "rego",
-        "lemma": "rego",
-        "lemmaDe": "lenken",
+        "lemma": "mittere",
+        "lemmaDe": "schicken",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
         "forms": {
-            "praesens_ind_akt": {
-                "1sg": "rego",
-                "2sg": "regis",
-                "3sg": "regit",
-                "1pl": "regimus",
-                "2pl": "regitis",
-                "3pl": "regunt"
-            },
-            "praesens_ind_pass": {
-                "1sg": "regor",
-                "2sg": "regeris",
-                "3sg": "regitur",
-                "1pl": "regimur",
-                "2pl": "regimini",
-                "3pl": "reguntur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "regam",
-                "2sg": "regas",
-                "3sg": "regat",
-                "1pl": "regamus",
-                "2pl": "regatis",
-                "3pl": "regant"
-            },
-            "praesens_konj_pass": {
-                "1sg": "regar",
-                "2sg": "regaris",
-                "3sg": "regatur",
-                "1pl": "regamur",
-                "2pl": "regamini",
-                "3pl": "regantur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "rege",
-                "2pl": "regite"
-            },
-            "praesens_imp_pass": {
-                "2sg": "regere",
-                "2pl": "regimini"
-            }
+            "1Sg": "mitto",
+            "2Sg": "mittis",
+            "3Sg": "mittit",
+            "1Pl": "mittimus",
+            "2Pl": "mittitis",
+            "3Pl": "mittunt"
         }
     },
     {
-        "id": "audio",
-        "lemma": "audio",
+        "lemma": "audire",
         "lemmaDe": "hören",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
         "forms": {
-            "praesens_ind_akt": {
-                "1sg": "audio",
-                "2sg": "audis",
-                "3sg": "audit",
-                "1pl": "audimus",
-                "2pl": "auditis",
-                "3pl": "audiunt"
-            },
-            "praesens_ind_pass": {
-                "1sg": "audior",
-                "2sg": "audiris",
-                "3sg": "auditur",
-                "1pl": "audimur",
-                "2pl": "audimini",
-                "3pl": "audiuntur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "audiam",
-                "2sg": "audias",
-                "3sg": "audiat",
-                "1pl": "audiamus",
-                "2pl": "audiatis",
-                "3pl": "audiant"
-            },
-            "praesens_konj_pass": {
-                "1sg": "audiar",
-                "2sg": "audiaris",
-                "3sg": "audiatur",
-                "1pl": "audiamur",
-                "2pl": "audiamini",
-                "3pl": "audiantur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "audi",
-                "2pl": "audite"
-            },
-            "praesens_imp_pass": {
-                "2sg": "audire",
-                "2pl": "audimini"
-            }
+            "1Sg": "audio",
+            "2Sg": "audis",
+            "3Sg": "audit",
+            "1Pl": "audimus",
+            "2Pl": "auditis",
+            "3Pl": "audiunt"
         }
     },
     {
-        "id": "sentio",
-        "lemma": "sentio",
-        "lemmaDe": "fühlen",
-        "forms": {
-            "praesens_ind_akt": {
-                "1sg": "sentio",
-                "2sg": "sentis",
-                "3sg": "sentit",
-                "1pl": "sentimus",
-                "2pl": "sentitis",
-                "3pl": "sentiunt"
-            },
-            "praesens_ind_pass": {
-                "1sg": "sentior",
-                "2sg": "sentiris",
-                "3sg": "sentitur",
-                "1pl": "sentimur",
-                "2pl": "sentimini",
-                "3pl": "sentiuntur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "sentiam",
-                "2sg": "sentias",
-                "3sg": "sentiat",
-                "1pl": "sentiamus",
-                "2pl": "sentiatis",
-                "3pl": "sentiant"
-            },
-            "praesens_konj_pass": {
-                "1sg": "sentiar",
-                "2sg": "sentiaris",
-                "3sg": "sentiatur",
-                "1pl": "sentiamur",
-                "2pl": "sentiamini",
-                "3pl": "sentiantur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "senti",
-                "2pl": "sentite"
-            },
-            "praesens_imp_pass": {
-                "2sg": "sentire",
-                "2pl": "sentimini"
-            }
-        }
-    },
-    {
-        "id": "capio",
-        "lemma": "capio",
-        "lemmaDe": "fassen",
-        "forms": {
-            "praesens_ind_akt": {
-                "1sg": "capio",
-                "2sg": "capis",
-                "3sg": "capit",
-                "1pl": "capimus",
-                "2pl": "capitis",
-                "3pl": "capiunt"
-            },
-            "praesens_ind_pass": {
-                "1sg": "capior",
-                "2sg": "caperis",
-                "3sg": "capitur",
-                "1pl": "capimur",
-                "2pl": "capimini",
-                "3pl": "capiuntur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "capiam",
-                "2sg": "capias",
-                "3sg": "capiat",
-                "1pl": "capiamus",
-                "2pl": "capiatis",
-                "3pl": "capiant"
-            },
-            "praesens_konj_pass": {
-                "1sg": "capiar",
-                "2sg": "capiaris",
-                "3sg": "capiatur",
-                "1pl": "capiamur",
-                "2pl": "capiamini",
-                "3pl": "capiantur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "cape",
-                "2pl": "capite"
-            },
-            "praesens_imp_pass": {
-                "2sg": "capere",
-                "2pl": "capimini"
-            }
-        }
-    },
-    {
-        "id": "iacio",
-        "lemma": "iacio",
-        "lemmaDe": "werfen",
-        "forms": {
-            "praesens_ind_akt": {
-                "1sg": "iacio",
-                "2sg": "iacis",
-                "3sg": "iacit",
-                "1pl": "iacimus",
-                "2pl": "iacitis",
-                "3pl": "iaciunt"
-            },
-            "praesens_ind_pass": {
-                "1sg": "iacior",
-                "2sg": "iaceris",
-                "3sg": "iacitur",
-                "1pl": "iacimur",
-                "2pl": "iacimini",
-                "3pl": "iaciuntur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "iaciam",
-                "2sg": "iacis",
-                "3sg": "iaciat",
-                "1pl": "iaciamus",
-                "2pl": "iaciatis",
-                "3pl": "iaciant"
-            },
-            "praesens_konj_pass": {
-                "1sg": "iaciar",
-                "2sg": "iaciaris",
-                "3sg": "iaciatur",
-                "1pl": "iaciamur",
-                "2pl": "iaciamini",
-                "3pl": "iaciantur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "iace",
-                "2pl": "iacite"
-            },
-            "praesens_imp_pass": {
-                "2sg": "iacere",
-                "2pl": "iacimini"
-            }
-        }
-    },
-    {
-        "id": "sum",
-        "lemma": "sum",
+        "lemma": "esse",
         "lemmaDe": "sein",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
         "forms": {
-            "praesens_ind_akt": {
-                "1sg": "sum",
-                "2sg": "es",
-                "3sg": "est",
-                "1pl": "sumus",
-                "2pl": "estis",
-                "3pl": "sunt"
-            },
-            "praesens_konj_akt": {
-                "1sg": "sim",
-                "2sg": "sis",
-                "3sg": "sit",
-                "1pl": "simus",
-                "2pl": "sitis",
-                "3pl": "sint"
-            },
-            "praesens_imp_akt": {
-                "2sg": "es",
-                "2pl": "este"
-            }
+            "1Sg": "sum",
+            "2Sg": "es",
+            "3Sg": "est",
+            "1Pl": "sumus",
+            "2Pl": "estis",
+            "3Pl": "sunt"
         }
     },
     {
-        "id": "fero",
-        "lemma": "fero",
-        "lemmaDe": "tragen",
-        "forms": {
-            "praesens_ind_akt": {
-                "1sg": "fero",
-                "2sg": "fers",
-                "3sg": "fert",
-                "1pl": "ferimus",
-                "2pl": "fertis",
-                "3pl": "ferunt"
-            },
-            "praesens_ind_pass": {
-                "1sg": "feror",
-                "2sg": "ferris",
-                "3sg": "fertur",
-                "1pl": "ferimur",
-                "2pl": "ferimini",
-                "3pl": "feruntur"
-            },
-            "praesens_konj_akt": {
-                "1sg": "feram",
-                "2sg": "feras",
-                "3sg": "ferat",
-                "1pl": "feramus",
-                "2pl": "feratis",
-                "3pl": "ferant"
-            },
-            "praesens_konj_pass": {
-                "1sg": "ferar",
-                "2sg": "feraris",
-                "3sg": "feratur",
-                "1pl": "feramur",
-                "2pl": "feramini",
-                "3pl": "ferantur"
-            },
-            "praesens_imp_akt": {
-                "2sg": "fer",
-                "2pl": "ferte"
-            },
-            "praesens_imp_pass": {
-                "2sg": "ferre",
-                "2pl": "ferimini"
-            }
-        }
-    },
-    {
-        "id": "eo",
-        "lemma": "eo",
-        "lemmaDe": "gehen",
-        "forms": {
-            "praesens_ind_akt": {
-                "1sg": "eo",
-                "2sg": "is",
-                "3sg": "it",
-                "1pl": "imus",
-                "2pl": "itis",
-                "3pl": "eunt"
-            },
-            "praesens_konj_akt": {
-                "1sg": "eam",
-                "2sg": "eas",
-                "3sg": "eat",
-                "1pl": "eamus",
-                "2pl": "eatis",
-                "3pl": "eant"
-            },
-            "praesens_imp_akt": {
-                "2sg": "i",
-                "2pl": "ite"
-            }
-        }
-    },
-    {
-        "id": "malo",
-        "lemma": "malo",
-        "lemmaDe": "lieber wollen",
-        "forms": {
-            "praesens_ind_akt": {
-                "1sg": "malo",
-                "2sg": "mavis",
-                "3sg": "mavult",
-                "1pl": "malumus",
-                "2pl": "mavultis",
-                "3pl": "malunt"
-            },
-            "praesens_konj_akt": {
-                "1sg": "malim",
-                "2sg": "malis",
-                "3sg": "malit",
-                "1pl": "malimus",
-                "2pl": "malitis",
-                "3pl": "malint"
-            }
-        }
-    },
-    {
-        "id": "nolo",
-        "lemma": "nolo",
-        "lemmaDe": "nicht wollen",
-        "forms": {
-            "praesens_ind_akt": {
-                "1sg": "nolo",
-                "2sg": "non vis",
-                "3sg": "non vult",
-                "1pl": "nolumus",
-                "2pl": "non vultis",
-                "3pl": "nolunt"
-            },
-            "praesens_konj_akt": {
-                "1sg": "nolim",
-                "2sg": "nolis",
-                "3sg": "nolit",
-                "1pl": "nolimus",
-                "2pl": "nolitis",
-                "3pl": "nolint"
-            },
-            "praesens_imp_akt": {
-                "2sg": "noli",
-                "2pl": "nolite"
-            }
-        }
-    },
-    {
-        "id": "possum",
-        "lemma": "possum",
+        "lemma": "posse",
         "lemmaDe": "können",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
         "forms": {
-            "praesens_ind_akt": {
-                "1sg": "possum",
-                "2sg": "potes",
-                "3sg": "potest",
-                "1pl": "possumus",
-                "2pl": "potestis",
-                "3pl": "possunt"
-            },
-            "praesens_konj_akt": {
-                "1sg": "possim",
-                "2sg": "possis",
-                "3sg": "possit",
-                "1pl": "possimus",
-                "2pl": "possitis",
-                "3pl": "possint"
-            }
+            "1Sg": "possum",
+            "2Sg": "potes",
+            "3Sg": "potest",
+            "1Pl": "possumus",
+            "2Pl": "potestis",
+            "3Pl": "possunt"
         }
     },
     {
-        "id": "volo",
-        "lemma": "volo",
-        "lemmaDe": "wollen",
+        "lemma": "ire",
+        "lemmaDe": "gehen",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
         "forms": {
-            "praesens_ind_akt": {
-                "1sg": "volo",
-                "2sg": "vis",
-                "3sg": "vult",
-                "1pl": "volumus",
-                "2pl": "vultis",
-                "3pl": "volunt"
-            },
-            "praesens_konj_akt": {
-                "1sg": "velim",
-                "2sg": "velis",
-                "3sg": "velit",
-                "1pl": "velimus",
-                "2pl": "velitis",
-                "3pl": "velint"
-            }
+            "1Sg": "eo",
+            "2Sg": "is",
+            "3Sg": "it",
+            "1Pl": "imus",
+            "2Pl": "itis",
+            "3Pl": "eunt"
+        }
+    },
+    {
+        "lemma": "ferre",
+        "lemmaDe": "tragen; bringen",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
+        "forms": {
+            "1Sg": "fero",
+            "2Sg": "fers",
+            "3Sg": "fert",
+            "1Pl": "ferimus",
+            "2Pl": "fertis",
+            "3Pl": "ferunt"
+        }
+    },
+    {
+        "lemma": "velle",
+        "lemmaDe": "wollen",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
+        "forms": {
+            "1Sg": "volo",
+            "2Sg": "vis",
+            "3Sg": "vult",
+            "1Pl": "volumus",
+            "2Pl": "vultis",
+            "3Pl": "volunt"
+        }
+    },
+    {
+        "lemma": "nolle",
+        "lemmaDe": "nicht wollen",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
+        "forms": {
+            "1Sg": "nolo",
+            "2Sg": "non vis",
+            "3Sg": "non vult",
+            "1Pl": "nolumus",
+            "2Pl": "non vultis",
+            "3Pl": "nolunt"
+        }
+    },
+    {
+        "lemma": "malle",
+        "lemmaDe": "lieber wollen",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
+        "forms": {
+            "1Sg": "malo",
+            "2Sg": "mavis",
+            "3Sg": "mavult",
+            "1Pl": "malumus",
+            "2Pl": "mavultis",
+            "3Pl": "malunt"
+        }
+    },
+    {
+        "lemma": "fieri",
+        "lemmaDe": "werden; geschehen",
+        "mood": "Indikativ",
+        "voice": "Aktiv",
+        "forms": {
+            "1Sg": "fio",
+            "2Sg": "fis",
+            "3Sg": "fit",
+            "1Pl": "fimus",
+            "2Pl": "fitis",
+            "3Pl": "fiunt"
         }
     }
 ]

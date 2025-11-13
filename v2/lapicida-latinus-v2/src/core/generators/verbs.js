@@ -7,14 +7,30 @@
 // - Gleichmäßige Verteilung über gewählte Lemmata
 // - Bei "ire": jede 2. Aufgabe ein Kompositum (ad/ex/in/re/transire)
 // - Bei "esse": 25% Kompositum (ab/ads/de/inter/prodesse)
+import PRAES from "../../data/verbs_praesens.json";
+import PERF from "../../data/verbs_perfekt.json";
+
+const BANK = {
+    "Praesens": PRAES,
+    "Perfekt": PERF
+    // später: "Imperfekt": IMPF, ...
+};
 
 const PERSONS = ["1", "2", "3"];
 const NUMBERS = ["Sg", "Pl"];
-const TENSES = ["Praesens", "Perfekt"];
 const MOODS = ["Indikativ", "Konjunktiv", "Imperativ"];
 const VOICES = ["Aktiv", "Passiv"];
+const TENSES = Object.keys(BANK);
 
-const asList = (x) => (Array.isArray(x) ? x : x ? [x] : []);
+// Utility: sichere Liste
+function asList(v) { return Array.isArray(v) ? v : (v ? [v] : []); }
+
+// Map -> schönes Label (immer ausgeschrieben)
+export function formatVerbSpec(opt) {
+    const numFull = opt.number === "Sg" ? "Singular" : "Plural";
+    return `${opt.person}. Person ${numFull} ${opt.mood} ${opt.voice} ${opt.tense}`;
+}
+
 const shuffle = (a) => {
     const arr = a.slice();
     for (let i = arr.length - 1; i > 0; i--) {
@@ -34,6 +50,30 @@ function evenSplitPick(pools, target) {
     }
     return out;
 }
+
+/**
+ * Erwartetes Datenformat in verbs.json:
+ * [
+ *  {
+ *    "lemma": "laudare",
+ *    "lemmaDe": "loben",
+ *    "forms": {
+ *       "Praesens": {
+ *         "Indikativ": {
+ *           "Aktiv": { "1Sg": "laudo", "2Sg":"laudas", ... "3Pl":"laudant" },
+ *           "Passiv": { ... }
+ *         },
+ *         "Konjunktiv": {...},
+ *         "Imperativ": {...} // hier typischerweise nur 2Sg/2Pl sinnvoll
+ *       },
+ *       "Perfekt": { ... },
+ *       ...
+ *    },
+ *    "notes": ["eunt (nicht iunt)", ...]  // optional: Merksätze, Hilfen
+ *  },
+ *  ...
+ * ]
+ */
 
 const LEMMA_META = {
     laudare: { de: "loben" },
@@ -321,75 +361,76 @@ function helperTable(lemmaShown, lemmaDe, tense, mood, voice, formsMap) {
 let ireToggle = 0;
 
 export function buildVerbQuestions({ lemmas, numQuestions, filters }) {
-    const wantLemmas = asList(lemmas).length ? asList(lemmas) : Object.keys(LEMMA_META);
-    const wantTenses = (filters?.tenses?.length ? filters.tenses : TENSES);
-    const wantMoods = (filters?.moods?.length ? filters.moods : MOODS);
-    const wantVoices = (filters?.voices?.length ? filters.voices : VOICES);
+    const allowTenses = asList(filters?.tenses).length ? filters.tenses : TENSES;
+    const allowMoods = asList(filters?.moods).length ? filters.moods : MOODS;
+    const allowVoices = asList(filters?.voices).length ? filters.voices : VOICES;
 
-    const lemmaPools = [];
+    const lemmaSet = new Set(asList(lemmas));
+    const wantedAll = lemmaSet.size === 0;
 
-    for (const lemma of wantLemmas) {
-        const pool = [];
-        const isIre = lemma === "ire";
-        const isEsse = lemma === "esse";
+    const candidates = [];
 
-        for (const tense of wantTenses) {
-            for (const mood of wantMoods) {
-                for (const voice of wantVoices) {
-                    if (mood === "Imperativ" && voice !== "Aktiv") continue;
+    for (const tense of allowTenses) {
+        const rows = BANK[tense] || [];
+        for (const row of rows) {
+            if (!wantedAll && !lemmaSet.has(row.lemma)) continue;
+            if (!allowMoods.includes(row.mood)) continue;
+            if (!allowVoices.includes(row.voice)) continue;
 
-                    let lemmaShown = lemma;
-                    let lemmaDe = LEMMA_META[lemma]?.de || lemma;
+            for (const person of PERSONS) {
+                for (const number of NUMBERS) {
+                    const key = `${person}${number}`;
+                    const form = row.forms?.[key];
+                    if (!form) continue;
 
-                    if (isIre) {
-                        if (ireToggle % 2 === 1) {
-                            const c = pick(IRE_COMPOUNDS);
-                            lemmaShown = c.key;
-                            lemmaDe = c.de;
-                        }
-                        ireToggle++;
-                    }
-
-                    if (isEsse && Math.random() < 0.25) {
-                        const c = pick(ESSE_COMPOUNDS);
-                        lemmaShown = c.key;
-                        // Formen bleiben die von "esse", aber Beschriftung/Satz sind zum Kompositum
-                    }
-
-                    const map = getBankEntry(lemma, tense, mood, voice);
-                    const keys = availablePNKeys(map);
-                    if (!keys.length) continue;
-
-                    for (const pn of keys) {
-                        const prompt = map[pn];
-                        const [person, number] = pn.split("|");
-                        const correctOptions = [{
-                            tense, mood, voice, person, number,
-                            de: `${deLabel(tense, mood, voice)} – ${renderDeClause(LEMMA_META[lemma]?.de, promptDe(lemmaShown, prompt), pn)}`
-                        }];
-
-                        const helper = helperTable(lemmaShown, lemmaDe, tense, mood, voice, map);
-                        const sample = sampleSentence(lemmaShown, LEMMA_META[lemma]?.de, tense, mood, voice, pn);
-
-                        pool.push({
-                            id: `verb_${lemmaShown}_${tense}_${mood}_${voice}_${pn}_${prompt}`,
-                            type: "verb",
-                            prompt,
-                            lemma,
-                            lemmaDe: LEMMA_META[lemma]?.de || lemma,
-                            lemmaShown,
-                            helper,
-                            sample,
-                            correctOptions,
-                        });
-                    }
+                    candidates.push({
+                        id: `verb_${row.lemma}_${tense}_${row.mood}_${row.voice}_${key}`,
+                        type: "verb",
+                        prompt: form,
+                        lemma: row.lemma,
+                        lemmaDe: row.lemmaDe,
+                        correctOptions: [{ person, number, tense, mood: row.mood, voice: row.voice }],
+                        helpParadigm: [
+                            { label: "1. Person", singular: row.forms["1Sg"] || "", plural: row.forms["1Pl"] || "" },
+                            { label: "2. Person", singular: row.forms["2Sg"] || "", plural: row.forms["2Pl"] || "" },
+                            { label: "3. Person", singular: row.forms["3Sg"] || "", plural: row.forms["3Pl"] || "" }
+                        ],
+                        helpTitle: `${row.lemma} – ${row.lemmaDe} (${row.mood} ${row.voice} ${tense})`,
+                        topics: ["verb"]
+                    });
                 }
             }
         }
-        if (pool.length) lemmaPools.push(shuffle(pool));
     }
 
-    if (!lemmaPools.length) return [];
-    const questions = evenSplitPick(lemmaPools, numQuestions);
-    return shuffle(questions);
+    if (!candidates.length) return [];
+
+    // faire Round-Robin-Verteilung über Lemmata
+    const byLemma = new Map();
+    for (const c of candidates) {
+        if (!byLemma.has(c.lemma)) byLemma.set(c.lemma, []);
+        byLemma.get(c.lemma).push(c);
+    }
+    for (const arr of byLemma.values()) arr.sort(() => Math.random() - 0.5);
+
+    const buckets = Array.from(byLemma.values());
+    const out = [];
+    let i = 0;
+    while (out.length < numQuestions && buckets.some(b => b.length)) {
+        const b = buckets[i % buckets.length];
+        if (b.length) out.push(b.shift());
+        i++;
+    }
+    return out;
+}
+
+// baut kleine Personen-Tabelle für die Hilfe
+function buildParadigmForBlock(voiceBlock) {
+    // voiceBlock: { "1Sg": "...", "2Sg": "...", ..., "3Pl":"..." }
+    const rows = [
+        { label: "1. Person", singular: voiceBlock["1Sg"] || "", plural: voiceBlock["1Pl"] || "" },
+        { label: "2. Person", singular: voiceBlock["2Sg"] || "", plural: voiceBlock["2Pl"] || "" },
+        { label: "3. Person", singular: voiceBlock["3Sg"] || "", plural: voiceBlock["3Pl"] || "" },
+    ];
+    return rows;
 }
