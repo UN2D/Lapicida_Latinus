@@ -41,14 +41,14 @@ function germanArticle(case_, number, gender) {
 
     return ""; // Fallback
 }
-
+/*
 function germanNounPhrase(case_, number, gender, lemmaDe) {
     const art = germanArticle(case_, number, gender);
     const base = (lemmaDe || "").trim();
     const suffix = (number === "Pl") ? " (Plural)" : "";
     return [art, base].filter(Boolean).join(" ") + suffix;
 }
-
+*/
 function pluralizeDeBase(noun) {
     if (!noun) return noun;
     if (DE_IRREG_PLURALS[noun]) return DE_IRREG_PLURALS[noun];
