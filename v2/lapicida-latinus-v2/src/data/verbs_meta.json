@@ -1,126 +1,1824 @@
 {
-    "laudare": {
-        "Indikativ": {
-            "Praesens": {
-                "Aktiv": {
-                    "1Sg": {
-                        "la": "laudo amicos",
-                        "de": "ich lobe die Freunde",
-                        "hints": []
+    "verbsMeta": [
+        {
+            "lemma": "laudare",
+            "lemmaDe": "loben",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "laudo amicos.",
+                                "german": "Ich lobe die Freunde.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "laudas amicos.",
+                                "german": "Du lobst die Freunde.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "laudat amicos.",
+                                "german": "Er/Sie lobt die Freunde.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "laudamus amicos.",
+                                "german": "Wir loben die Freunde.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "laudatis amicos.",
+                                "german": "Ihr lobt die Freunde.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "laudant amicos.",
+                                "german": "Sie loben die Freunde.",
+                                "hints": []
+                            }
+                        }
                     },
-                    "2Sg": {
-                        "la": "laudas amicos",
-                        "de": "du lobst die Freunde",
-                        "hints": []
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "laudor a magistro.",
+                                "german": "Ich werde vom Lehrer gelobt.",
+                                "hints": [
+                                    "Passiv + a/ab + Ablativ des Handelnden"
+                                ]
+                            },
+                            "2Sg": {
+                                "latin": "laudaris a magistro.",
+                                "german": "Du wirst vom Lehrer gelobt.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "laudatur a magistro.",
+                                "german": "Er/Sie wird vom Lehrer gelobt.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "laudamur a magistro.",
+                                "german": "Wir werden vom Lehrer gelobt.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "laudamini a magistro.",
+                                "german": "Ihr werdet vom Lehrer gelobt.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "laudantur a magistro.",
+                                "german": "Sie werden vom Lehrer gelobt.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "laudem amicos.",
+                                "german": "Ich möge die Freunde loben / ich würde loben.",
+                                "hints": [
+                                    "Konjunktiv Präsens: Wunschsatz / Potentialis"
+                                ]
+                            },
+                            "2Sg": {
+                                "latin": "laudes amicos.",
+                                "german": "Du mögest die Freunde loben.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "laudet amicos.",
+                                "german": "Er/Sie möge die Freunde loben.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "laudemus amicos.",
+                                "german": "Lasst uns die Freunde loben.",
+                                "hints": [
+                                    "Hortativ"
+                                ]
+                            },
+                            "2Pl": {
+                                "latin": "laudetis amicos.",
+                                "german": "Ihr möget die Freunde loben.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "laudent amicos.",
+                                "german": "Sie mögen die Freunde loben.",
+                                "hints": []
+                            }
+                        }
                     },
-                    "3Sg": {
-                        "la": "laudat amicos",
-                        "de": "er/sie/es lobt die Freunde",
-                        "hints": []
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "lauder a magistro.",
+                                "german": "Ich möge vom Lehrer gelobt werden.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "lauderis a magistro.",
+                                "german": "Du mögest vom Lehrer gelobt werden.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "laudetur a magistro.",
+                                "german": "Er/Sie möge gelobt werden.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "laudemur a magistro.",
+                                "german": "Wir mögen gelobt werden.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "laudemini a magistro.",
+                                "german": "Ihr möget gelobt werden.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "laudentur a magistro.",
+                                "german": "Sie mögen gelobt werden.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "lauda amicos!",
+                                "german": "Lobe die Freunde!",
+                                "hints": []
+                            },
+                            "Pl": {
+                                "latin": "laudate amicos!",
+                                "german": "Lobt die Freunde!",
+                                "hints": []
+                            }
+                        }
                     },
-                    "1Pl": {
-                        "la": "laudamus amicos",
-                        "de": "wir loben die Freunde",
-                        "hints": []
-                    },
-                    "2Pl": {
-                        "la": "laudatis amicos",
-                        "de": "ihr lobt die Freunde",
-                        "hints": []
-                    },
-                    "3Pl": {
-                        "la": "laudant amicos",
-                        "de": "sie loben die Freunde",
-                        "hints": []
+                    "Passiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "laudare!",
+                                "german": "Lass dich loben!",
+                                "hints": [
+                                    "Passiv-Imperativ Sg. selten; Pl. geläufiger"
+                                ]
+                            },
+                            "Pl": {
+                                "latin": "laudamini!",
+                                "german": "Lasst euch loben!",
+                                "hints": []
+                            }
+                        }
                     }
                 }
-            }
-        }
-    },
-    "esse": {
-        "Indikativ": {
-            "Praesens": {
-                "Aktiv": {
-                    "1Sg": {
-                        "la": "sum magister",
-                        "de": "ich bin Lehrer",
-                        "hints": [
-                            "Kopula: Nominativ beidseitig"
-                        ]
-                    },
-                    "2Sg": {
-                        "la": "es amicus",
-                        "de": "du bist ein Freund",
-                        "hints": []
-                    },
-                    "3Sg": {
-                        "la": "est puella",
-                        "de": "sie ist ein Mädchen",
-                        "hints": []
-                    },
-                    "1Pl": {
-                        "la": "sumus amici",
-                        "de": "wir sind Freunde",
-                        "hints": []
-                    },
-                    "2Pl": {
-                        "la": "estis domini",
-                        "de": "ihr seid Herren",
-                        "hints": []
-                    },
-                    "3Pl": {
-                        "la": "sunt pueri",
-                        "de": "sie sind Jungen",
-                        "hints": []
-                    }
-                }
-            }
+            },
+            "hints": [
+                "Passiv mit a/ab + Ablativ des Handelnden",
+                "Konjunktiv Präsens: Wunsch, Aufforderung (Hortativ: 1. Pl.)"
+            ]
         },
-        "Hinweise": [
-            "Lokativ bei Städten: Romae sum (ich bin in Rom).",
-            "Komposita adesse/prodesse/obesse → Dativ."
-        ]
-    },
-    "ire": {
-        "Indikativ": {
-            "Praesens": {
-                "Aktiv": {
-                    "1Sg": {
-                        "la": "eo Romam",
-                        "de": "ich gehe nach Rom",
-                        "hints": [
-                            "Richtung: Akkusativ ohne Präposition bei Städtenamen"
-                        ]
+        {
+            "lemma": "videre",
+            "lemmaDe": "sehen",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "video urbem.",
+                                "german": "Ich sehe die Stadt.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "vides urbem.",
+                                "german": "Du siehst die Stadt.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "videt urbem.",
+                                "german": "Er/Sie sieht die Stadt.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "videmus urbem.",
+                                "german": "Wir sehen die Stadt.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "videtis urbem.",
+                                "german": "Ihr seht die Stadt.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "vident urbem.",
+                                "german": "Sie sehen die Stadt.",
+                                "hints": []
+                            }
+                        }
                     },
-                    "2Sg": {
-                        "la": "is domum",
-                        "de": "du gehst nach Hause",
-                        "hints": []
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "videor a civibus.",
+                                "german": "Ich werde von den Bürgern gesehen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "videris a civibus.",
+                                "german": "Du wirst von den Bürgern gesehen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "videtur a civibus.",
+                                "german": "Er/Sie wird von den Bürgern gesehen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "videmur a civibus.",
+                                "german": "Wir werden von den Bürgern gesehen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "videmini a civibus.",
+                                "german": "Ihr werdet von den Bürgern gesehen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "videntur a civibus.",
+                                "german": "Sie werden von den Bürgern gesehen.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "videam urbem.",
+                                "german": "Ich möge die Stadt sehen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "videas urbem.",
+                                "german": "Du mögest die Stadt sehen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "videat urbem.",
+                                "german": "Er/Sie möge die Stadt sehen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "videamus urbem.",
+                                "german": "Lasst uns die Stadt sehen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "videatis urbem.",
+                                "german": "Ihr möget die Stadt sehen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "videant urbem.",
+                                "german": "Sie mögen die Stadt sehen.",
+                                "hints": []
+                            }
+                        }
                     },
-                    "3Sg": {
-                        "la": "it ad forum",
-                        "de": "er geht zum Forum",
-                        "hints": []
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "videar a civibus.",
+                                "german": "Ich möge von den Bürgern gesehen werden.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "videaris a civibus.",
+                                "german": "Du mögest von den Bürgern gesehen werden.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "videatur a civibus.",
+                                "german": "Er/Sie möge gesehen werden.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "videamur a civibus.",
+                                "german": "Wir mögen gesehen werden.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "videamini a civibus.",
+                                "german": "Ihr möget gesehen werden.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "videantur a civibus.",
+                                "german": "Sie mögen gesehen werden.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "vide urbem!",
+                                "german": "Sieh die Stadt!",
+                                "hints": []
+                            },
+                            "Pl": {
+                                "latin": "videte urbem!",
+                                "german": "Seht die Stadt!",
+                                "hints": []
+                            }
+                        }
                     },
-                    "1Pl": {
-                        "la": "imus scholam",
-                        "de": "wir gehen zur Schule",
-                        "hints": []
-                    },
-                    "2Pl": {
-                        "la": "itis urbem",
-                        "de": "ihr geht in die Stadt",
-                        "hints": []
-                    },
-                    "3Pl": {
-                        "la": "eunt agrum",
-                        "de": "sie gehen aufs Feld",
-                        "hints": [
-                            "Praesens 3Pl: eunt (nicht iunt)"
-                        ]
+                    "Passiv": {
+                        "note": "Passiv-Imperativ selten/ungebräuchlich."
                     }
                 }
-            }
+            },
+            "hints": [
+                "2. Konjugation: -e-",
+                "Passiv mit a/ab + Abl."
+            ]
+        },
+        {
+            "lemma": "capere",
+            "lemmaDe": "fassen, nehmen",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "capio urbem.",
+                                "german": "Ich nehme die Stadt (ein).",
+                                "hints": [
+                                    "3. Konj. -io"
+                                ]
+                            },
+                            "2Sg": {
+                                "latin": "capis urbem.",
+                                "german": "Du nimmst die Stadt (ein).",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "capit urbem.",
+                                "german": "Er/Sie nimmt die Stadt (ein).",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "capimus urbem.",
+                                "german": "Wir nehmen die Stadt (ein).",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "capitis urbem.",
+                                "german": "Ihr nehmt die Stadt (ein).",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "capiunt urbem.",
+                                "german": "Sie nehmen die Stadt (ein).",
+                                "hints": [
+                                    "Achtung: -iunt"
+                                ]
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "capior a hostibus.",
+                                "german": "Ich werde von den Feinden ergriffen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "caperis a hostibus.",
+                                "german": "Du wirst von den Feinden ergriffen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "capitur a hostibus.",
+                                "german": "Er/Sie wird ergriffen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "capimur a hostibus.",
+                                "german": "Wir werden ergriffen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "capimini a hostibus.",
+                                "german": "Ihr werdet ergriffen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "capiuntur a hostibus.",
+                                "german": "Sie werden ergriffen.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "capiam urbem.",
+                                "german": "Ich möge die Stadt nehmen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "capias urbem.",
+                                "german": "Du mögest die Stadt nehmen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "capiat urbem.",
+                                "german": "Er/Sie möge die Stadt nehmen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "capiamus urbem.",
+                                "german": "Lasst uns die Stadt nehmen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "capiatis urbem.",
+                                "german": "Ihr möget die Stadt nehmen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "capiant urbem.",
+                                "german": "Sie mögen die Stadt nehmen.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "capiar a hostibus.",
+                                "german": "Ich möge ergriffen werden.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "capiaris a hostibus.",
+                                "german": "Du mögest ergriffen werden.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "capiatur a hostibus.",
+                                "german": "Er/Sie möge ergriffen werden.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "capiamur a hostibus.",
+                                "german": "Wir mögen ergriffen werden.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "capiamini a hostibus.",
+                                "german": "Ihr möget ergriffen werden.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "capiantur a hostibus.",
+                                "german": "Sie mögen ergriffen werden.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "cape urbem!",
+                                "german": "Nimm die Stadt!",
+                                "hints": []
+                            },
+                            "Pl": {
+                                "latin": "capite urbem!",
+                                "german": "Nehmt die Stadt!",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "capere!",
+                                "german": "Lass dich ergreifen!",
+                                "hints": [
+                                    "selten"
+                                ]
+                            },
+                            "Pl": {
+                                "latin": "capimini!",
+                                "german": "Lasst euch ergreifen!",
+                                "hints": []
+                            }
+                        }
+                    }
+                }
+            },
+            "hints": [
+                "3. Konjugation -io: 3Pl Aktiv: -iunt.",
+                "Passiv mit a/ab + Abl."
+            ]
+        },
+        {
+            "lemma": "mittere",
+            "lemmaDe": "schicken",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "mitto nuntium.",
+                                "german": "Ich schicke einen Boten.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "mittis nuntium.",
+                                "german": "Du schickst einen Boten.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "mittit nuntium.",
+                                "german": "Er/Sie schickt einen Boten.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "mittimus nuntium.",
+                                "german": "Wir schicken einen Boten.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "mittitis nuntium.",
+                                "german": "Ihr schickt einen Boten.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "mittunt nuntium.",
+                                "german": "Sie schicken einen Boten.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "mittor a consule.",
+                                "german": "Ich werde vom Konsul geschickt.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "mitteris a consule.",
+                                "german": "Du wirst vom Konsul geschickt.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "mittitur a consule.",
+                                "german": "Er/Sie wird geschickt.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "mittimur a consule.",
+                                "german": "Wir werden geschickt.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "mittimini a consule.",
+                                "german": "Ihr werdet geschickt.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "mittuntur a consule.",
+                                "german": "Sie werden geschickt.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "mittam nuntium.",
+                                "german": "Ich möge einen Boten schicken.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "mittas nuntium.",
+                                "german": "Du mögest einen Boten schicken.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "mittat nuntium.",
+                                "german": "Er/Sie möge einen Boten schicken.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "mittamus nuntium.",
+                                "german": "Lasst uns einen Boten schicken.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "mittatis nuntium.",
+                                "german": "Ihr möget einen Boten schicken.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "mittant nuntium.",
+                                "german": "Sie mögen einen Boten schicken.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "mittar a consule.",
+                                "german": "Ich möge geschickt werden.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "mittaris a consule.",
+                                "german": "Du mögest geschickt werden.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "mittatur a consule.",
+                                "german": "Er/Sie möge geschickt werden.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "mittamur a consule.",
+                                "german": "Wir mögen geschickt werden.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "mittamini a consule.",
+                                "german": "Ihr möget geschickt werden.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "mittantur a consule.",
+                                "german": "Sie mögen geschickt werden.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "mitte nuntium!",
+                                "german": "Schicke einen Boten!",
+                                "hints": []
+                            },
+                            "Pl": {
+                                "latin": "mittite nuntium!",
+                                "german": "Schickt einen Boten!",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "mittere!",
+                                "german": "Lass dich schicken!",
+                                "hints": [
+                                    "selten"
+                                ]
+                            },
+                            "Pl": {
+                                "latin": "mittimini!",
+                                "german": "Lasst euch schicken!",
+                                "hints": []
+                            }
+                        }
+                    }
+                }
+            },
+            "hints": [
+                "3. Konjugation ohne -io.",
+                "Passiv mit a/ab + Abl."
+            ]
+        },
+        {
+            "lemma": "audire",
+            "lemmaDe": "hören",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "audio magistrum.",
+                                "german": "Ich höre den Lehrer.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "audis magistrum.",
+                                "german": "Du hörst den Lehrer.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "audit magistrum.",
+                                "german": "Er/Sie hört den Lehrer.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "audimus magistrum.",
+                                "german": "Wir hören den Lehrer.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "auditis magistrum.",
+                                "german": "Ihr hört den Lehrer.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "audiunt magistrum.",
+                                "german": "Sie hören den Lehrer.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "audior a discipulis.",
+                                "german": "Ich werde von den Schülern gehört.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "audiris a discipulis.",
+                                "german": "Du wirst von den Schülern gehört.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "auditur a discipulis.",
+                                "german": "Er/Sie wird gehört.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "audimur a discipulis.",
+                                "german": "Wir werden gehört.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "audimini a discipulis.",
+                                "german": "Ihr werdet gehört.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "audiuntur a discipulis.",
+                                "german": "Sie werden gehört.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "audiam magistrum.",
+                                "german": "Ich möge den Lehrer hören.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "audias magistrum.",
+                                "german": "Du mögest den Lehrer hören.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "audiat magistrum.",
+                                "german": "Er/Sie möge den Lehrer hören.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "audiamus magistrum.",
+                                "german": "Lasst uns den Lehrer hören.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "audiatis magistrum.",
+                                "german": "Ihr möget den Lehrer hören.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "audiant magistrum.",
+                                "german": "Sie mögen den Lehrer hören.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "audiar a discipulis.",
+                                "german": "Ich möge gehört werden.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "audiaris a discipulis.",
+                                "german": "Du mögest gehört werden.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "audiatur a discipulis.",
+                                "german": "Er/Sie möge gehört werden.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "audiamur a discipulis.",
+                                "german": "Wir mögen gehört werden.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "audiamini a discipulis.",
+                                "german": "Ihr möget gehört werden.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "audiantur a discipulis.",
+                                "german": "Sie mögen gehört werden.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "audi magistrum!",
+                                "german": "Höre den Lehrer!",
+                                "hints": []
+                            },
+                            "Pl": {
+                                "latin": "audite magistrum!",
+                                "german": "Hört den Lehrer!",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "audire!",
+                                "german": "Lass dich hören!",
+                                "hints": [
+                                    "selten"
+                                ]
+                            },
+                            "Pl": {
+                                "latin": "audimini!",
+                                "german": "Lasst euch hören!",
+                                "hints": []
+                            }
+                        }
+                    }
+                }
+            },
+            "hints": [
+                "4. Konjugation: -i-",
+                "Passiv mit a/ab + Abl."
+            ]
+        },
+        {
+            "lemma": "sum",
+            "lemmaDe": "sein",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "sum in schola.",
+                                "german": "Ich bin in der Schule.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "es in urbe.",
+                                "german": "Du bist in der Stadt.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "est amicus.",
+                                "german": "Er/Sie ist ein Freund.",
+                                "hints": [
+                                    "Kopula mit Prädikatsnomen"
+                                ]
+                            },
+                            "1Pl": {
+                                "latin": "sumus Romae.",
+                                "german": "Wir sind in Rom.",
+                                "hints": [
+                                    "Lokativ bei Städtenamen (Romae)"
+                                ]
+                            },
+                            "2Pl": {
+                                "latin": "estis laeti.",
+                                "german": "Ihr seid fröhlich.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "sunt domi.",
+                                "german": "Sie sind zu Hause.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "sim felix.",
+                                "german": "Ich möge glücklich sein.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "sis felix.",
+                                "german": "Du mögest glücklich sein.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "sit felix.",
+                                "german": "Er/Sie möge glücklich sein.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "simus parati.",
+                                "german": "Lasst uns bereit sein.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "sitis parati.",
+                                "german": "Ihr möget bereit sein.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "sint parati.",
+                                "german": "Sie mögen bereit sein.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "esto!",
+                                "german": "Sei!",
+                                "hints": []
+                            },
+                            "Pl": {
+                                "latin": "estote!",
+                                "german": "Seid!",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                }
+            },
+            "hints": [
+                "Lokativ bei Städten/kleinen Inseln (Romae).",
+                "Kopula mit Nominativ."
+            ]
+        },
+        {
+            "lemma": "possum",
+            "lemmaDe": "können",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "possum venire.",
+                                "german": "Ich kann kommen.",
+                                "hints": [
+                                    "+ Infinitiv"
+                                ]
+                            },
+                            "2Sg": {
+                                "latin": "potes venire.",
+                                "german": "Du kannst kommen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "potest venire.",
+                                "german": "Er/Sie kann kommen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "possumus venire.",
+                                "german": "Wir können kommen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "potestis venire.",
+                                "german": "Ihr könnt kommen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "possunt venire.",
+                                "german": "Sie können kommen.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "possim venire.",
+                                "german": "Ich könnte kommen / ich möge kommen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "possis venire.",
+                                "german": "Du könntest kommen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "possit venire.",
+                                "german": "Er/Sie könnte kommen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "possimus venire.",
+                                "german": "Wir könnten kommen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "possitis venire.",
+                                "german": "Ihr könntet kommen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "possint venire.",
+                                "german": "Sie könnten kommen.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "note": "Kein normaler Imperativ."
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                }
+            },
+            "hints": [
+                "pot- + esse → posse.",
+                "+ Infinitiv."
+            ]
+        },
+        {
+            "lemma": "eo",
+            "lemmaDe": "gehen",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "eo Romam.",
+                                "german": "Ich gehe nach Rom.",
+                                "hints": [
+                                    "Richtung: Akkusativ (Romam)"
+                                ]
+                            },
+                            "2Sg": {
+                                "latin": "is Romam.",
+                                "german": "Du gehst nach Rom.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "it Romam.",
+                                "german": "Er/Sie geht nach Rom.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "imus Romam.",
+                                "german": "Wir gehen nach Rom.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "itis Romam.",
+                                "german": "Ihr geht nach Rom.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "eunt Romam.",
+                                "german": "Sie gehen nach Rom.",
+                                "hints": [
+                                    "nicht *iunt*"
+                                ]
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "eam Romam.",
+                                "german": "Ich möge nach Rom gehen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "eas Romam.",
+                                "german": "Du mögest nach Rom gehen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "eat Romam.",
+                                "german": "Er/Sie möge nach Rom gehen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "eamus Romam.",
+                                "german": "Lasst uns nach Rom gehen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "eatis Romam.",
+                                "german": "Ihr möget nach Rom gehen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "eant Romam.",
+                                "german": "Sie mögen nach Rom gehen.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "i!",
+                                "german": "Geh!",
+                                "hints": [
+                                    "Imperativ: ī!/īte!"
+                                ]
+                            },
+                            "Pl": {
+                                "latin": "ite!",
+                                "german": "Geht!",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                }
+            },
+            "hints": [
+                "eunt (nicht iunt).",
+                "Richtung (Romam), Ort (Romae), Herkunft (Roma)."
+            ]
+        },
+        {
+            "lemma": "ferre",
+            "lemmaDe": "tragen, bringen; ertragen",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "fero dona.",
+                                "german": "Ich trage Geschenke.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "fers dona.",
+                                "german": "Du trägst Geschenke.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "fert dona.",
+                                "german": "Er/Sie trägt Geschenke.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "ferimus dona.",
+                                "german": "Wir tragen Geschenke.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "fertis dona.",
+                                "german": "Ihr tragt Geschenke.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "ferunt dona.",
+                                "german": "Sie tragen Geschenke.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "feror a servis.",
+                                "german": "Ich werde von Sklaven getragen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "ferris a servis.",
+                                "german": "Du wirst von Sklaven getragen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "fertur a servis.",
+                                "german": "Er/Sie wird getragen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "ferimur a servis.",
+                                "german": "Wir werden getragen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "ferimini a servis.",
+                                "german": "Ihr werdet getragen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "feruntur a servis.",
+                                "german": "Sie werden getragen.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "feram dona.",
+                                "german": "Ich möge Geschenke tragen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "feras dona.",
+                                "german": "Du mögest Geschenke tragen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "ferat dona.",
+                                "german": "Er/Sie möge Geschenke tragen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "feramus dona.",
+                                "german": "Lasst uns Geschenke tragen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "feratis dona.",
+                                "german": "Ihr möget Geschenke tragen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "ferant dona.",
+                                "german": "Sie mögen Geschenke tragen.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "ferar a servis.",
+                                "german": "Ich möge getragen werden.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "feraris a servis.",
+                                "german": "Du mögest getragen werden.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "feratur a servis.",
+                                "german": "Er/Sie möge getragen werden.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "feramur a servis.",
+                                "german": "Wir mögen getragen werden.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "feramini a servis.",
+                                "german": "Ihr möget getragen werden.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "ferantur a servis.",
+                                "german": "Sie mögen getragen werden.",
+                                "hints": []
+                            }
+                        }
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "fer!",
+                                "german": "Trage!",
+                                "hints": []
+                            },
+                            "Pl": {
+                                "latin": "ferte!",
+                                "german": "Tragt!",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "ferre!",
+                                "german": "Lass dich tragen!",
+                                "hints": [
+                                    "selten"
+                                ]
+                            },
+                            "Pl": {
+                                "latin": "ferimini!",
+                                "german": "Lasst euch tragen!",
+                                "hints": []
+                            }
+                        }
+                    }
+                }
+            },
+            "hints": [
+                "Präsensstamm fer-, Perfekt tuli-, Supinum lat-.",
+                "Viele Komposita: auferre, referre …"
+            ]
+        },
+        {
+            "lemma": "volo",
+            "lemmaDe": "wollen",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "volo venire.",
+                                "german": "Ich will kommen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "vis venire.",
+                                "german": "Du willst kommen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "vult venire.",
+                                "german": "Er/Sie will kommen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "volumus venire.",
+                                "german": "Wir wollen kommen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "vultis venire.",
+                                "german": "Ihr wollt kommen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "volunt venire.",
+                                "german": "Sie wollen kommen.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "velim venire.",
+                                "german": "Ich möchte kommen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "velis venire.",
+                                "german": "Du möchtest kommen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "velit venire.",
+                                "german": "Er/Sie möchte kommen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "velimus venire.",
+                                "german": "Wir möchten kommen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "velitis venire.",
+                                "german": "Ihr möchtet kommen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "velint venire.",
+                                "german": "Sie möchten kommen.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "note": "Kein normaler Imperativ."
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                }
+            },
+            "hints": [
+                "Unregelmäßige Präsensformen: vis, vult."
+            ]
+        },
+        {
+            "lemma": "nolo",
+            "lemmaDe": "nicht wollen",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "nolo venire.",
+                                "german": "Ich will nicht kommen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "non vis venire.",
+                                "german": "Du willst nicht kommen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "non vult venire.",
+                                "german": "Er/Sie will nicht kommen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "nolumus venire.",
+                                "german": "Wir wollen nicht kommen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "non vultis venire.",
+                                "german": "Ihr wollt nicht kommen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "nolunt venire.",
+                                "german": "Sie wollen nicht kommen.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "nolim venire.",
+                                "german": "Ich möchte nicht kommen.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "nolis venire.",
+                                "german": "Du möchtest nicht kommen.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "nolit venire.",
+                                "german": "Er/Sie möchte nicht kommen.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "nolimus venire.",
+                                "german": "Wir möchten nicht kommen.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "nolitis venire.",
+                                "german": "Ihr möchtet nicht kommen.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "nolint venire.",
+                                "german": "Sie möchten nicht kommen.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "Sg": {
+                                "latin": "noli + inf.! (noli currere!)",
+                                "german": "Tu nicht …! (Laufe nicht!)",
+                                "hints": [
+                                    "negativer Imperativ"
+                                ]
+                            },
+                            "Pl": {
+                                "latin": "nolite + inf.!",
+                                "german": "Tut nicht …!",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                }
+            },
+            "hints": [
+                "Noli/Nolite + Infinitiv = negativer Imperativ."
+            ]
+        },
+        {
+            "lemma": "malo",
+            "lemmaDe": "lieber wollen",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "malo manere.",
+                                "german": "Ich will lieber bleiben.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "mavis manere.",
+                                "german": "Du willst lieber bleiben.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "mavult manere.",
+                                "german": "Er/Sie will lieber bleiben.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "malumus manere.",
+                                "german": "Wir wollen lieber bleiben.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "mavultis manere.",
+                                "german": "Ihr wollt lieber bleiben.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "malunt manere.",
+                                "german": "Sie wollen lieber bleiben.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "malim manere.",
+                                "german": "Ich möchte lieber bleiben.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "malis manere.",
+                                "german": "Du möchtest lieber bleiben.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "malit manere.",
+                                "german": "Er/Sie möchte lieber bleiben.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "malimus manere.",
+                                "german": "Wir möchten lieber bleiben.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "malitis manere.",
+                                "german": "Ihr möchtet lieber bleiben.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "malint manere.",
+                                "german": "Sie möchten lieber bleiben.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "note": "Kein normaler Imperativ."
+                    },
+                    "Passiv": {
+                        "note": "Kein Passiv."
+                    }
+                }
+            },
+            "hints": [
+                "Formen mit māv- (mavis, mavult …)."
+            ]
+        },
+        {
+            "lemma": "fio",
+            "lemmaDe": "werden; geschehen",
+            "tense": "Praesens",
+            "moods": {
+                "Indikativ": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "fio rex.",
+                                "german": "Ich werde König.",
+                                "hints": [
+                                    "Prädikativ im Nominativ"
+                                ]
+                            },
+                            "2Sg": {
+                                "latin": "fis laetus.",
+                                "german": "Du wirst fröhlich.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "fit silentium.",
+                                "german": "Es entsteht Stille.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "fimus parati.",
+                                "german": "Wir werden bereit.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "fitis parati.",
+                                "german": "Ihr werdet bereit.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "fiunt amici.",
+                                "german": "Sie werden zu Freunden.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "fio fungiert als Passiversatz zu facere; keine eigene Passivreihe."
+                    }
+                },
+                "Konjunktiv": {
+                    "Aktiv": {
+                        "examples": {
+                            "1Sg": {
+                                "latin": "fiam rex.",
+                                "german": "Ich möge König werden.",
+                                "hints": []
+                            },
+                            "2Sg": {
+                                "latin": "fias laetus.",
+                                "german": "Du mögest fröhlich werden.",
+                                "hints": []
+                            },
+                            "3Sg": {
+                                "latin": "fiat silentium.",
+                                "german": "Es möge Stille werden.",
+                                "hints": []
+                            },
+                            "1Pl": {
+                                "latin": "fiamus parati.",
+                                "german": "Lasst uns bereit werden.",
+                                "hints": []
+                            },
+                            "2Pl": {
+                                "latin": "fiatis parati.",
+                                "german": "Ihr möget bereit werden.",
+                                "hints": []
+                            },
+                            "3Pl": {
+                                "latin": "fiant amici.",
+                                "german": "Sie mögen zu Freunden werden.",
+                                "hints": []
+                            }
+                        }
+                    },
+                    "Passiv": {
+                        "note": "—"
+                    }
+                },
+                "Imperativ": {
+                    "Aktiv": {
+                        "note": "Kein normaler Imperativ gebräuchlich."
+                    },
+                    "Passiv": {
+                        "note": "—"
+                    }
+                }
+            },
+            "hints": [
+                "fio als Passiversatz zu facere.",
+                "Prädikatsnomen im Nominativ."
+            ]
         }
-    }
+    ]
 }
