@@ -6,7 +6,18 @@ import { formatVerbSpec } from "../core/generators/verbs";
 import QuestionVerb from "./QuestionVerb.jsx";
 
 
+const CASE_DE = { Nom: "Nominativ", Gen: "Genitiv", Dat: "Dativ", Akk: "Akkusativ", Abl: "Ablativ" };
+const NUM_DE = { Sg: "Singular", Pl: "Plural" };
 const GEND_DE = { m: "maskulin", f: "feminin", n: "neutrum" };
+
+function formatCaseNumberGender(o) {
+    const c = CASE_DE[o.case] || o.case;
+    const n = NUM_DE[o.number] || o.number;
+    const g = GEND_DE[o.gender] || o.gender;
+    return `${c} ${n} ${g}`;
+}
+
+
 
 export function Quiz({ round, onExit }) {
     const { questions = [], showHelp = false } = round || {};
@@ -16,6 +27,8 @@ export function Quiz({ round, onExit }) {
 
     const total = questions.length;
     const current = questions[index] || null;
+
+
 
     if (!total) {
         return (
@@ -82,7 +95,7 @@ export function Quiz({ round, onExit }) {
             </div>
         );
     }
-
+    console.log(current);
     return (
         <div className="screen">
             <header className="top-bar">
@@ -133,21 +146,20 @@ export function Quiz({ round, onExit }) {
                         <div className="result-correct-list">
                             {currentResult.correctOptions.map((opt, i) => (
                                 <div key={i} className="result-correct-line">
-                                    {currentResult.question.type === "verb"
-                                        ? formatVerbSpec(opt)
-                                        : <>
-                                            {opt.case && opt.number && opt.gender
-                                                ? `${opt.case} ${opt.number} ${opt.gender}`
-                                                : ""}
-                                            {opt.de ? ` – ${opt.de}` : ""}
-                                        </>
-                                    }
+
+
+                                    <li key={i}>
+                                        {currentResult.question.type === "verb"
+                                            ? formatVerbSpec(opt)
+                                            : `${formatCaseNumberGender(opt)}${opt.de ? " – " + opt.de : ""}`}
+                                    </li>
+
                                 </div>
                             ))}
                         </div>
 
                         {/* Adjektiv-Hilfe (Fix: GEND_DE) */}
-                        {currentResult.paradigm && Array.isArray(currentResult.paradigm) && showHelp && (
+                        {currentResult.paradigm && Array.isArray(currentResult.paradigm) && showHelp && (currentResult.question.type === "noun" || currentResult.question.type === "adj_context") && (
                             <div className="paradigm-box">
                                 <div className="paradigm-title">
                                     Formenübersicht zu {currentResult.lemma}
@@ -175,6 +187,58 @@ export function Quiz({ round, onExit }) {
                                 </table>
                             </div>
                         )}
+                        {currentResult && currentResult.question?.helpParadigm && currentResult.question.type === "verb" && (
+                            <div className="paradigm-box">
+
+                                {/* Beispiel & Übersetzung – OBERHALB der Tabelle */}
+                                {(() => {
+                                    const ex = currentResult.question.helpExample || currentResult.question.example || null;
+                                    const hints = ex?.hints || currentResult.question.hints || [];
+                                    return (
+                                        <>
+                                            {ex && (
+                                                <div className="example-box">
+                                                    <div className="ex-la"><em>{ex.latin} - {ex.german}</em></div>
+                                                </div>
+                                            )}
+                                            {Array.isArray(hints) && hints.length > 0 && (
+                                                <ul className="help-hints">
+                                                    {hints.map((h, i) => <li key={i}>{h}</li>)}
+                                                </ul>
+                                            )}
+                                        </>
+                                    );
+                                })()}
+
+                                <div className="paradigm-title">
+                                    Formenübersicht: {currentResult.question.lemma} – {currentResult.question.lemmaDe}
+                                </div>
+                                {currentResult?.question?.helpExample && (
+                                    <div className="example-box">
+                                        {(currentResult.question.helpExample.hints || []).length > 0 && (
+                                            <ul className="ex-hints">
+                                                {currentResult.question.helpExample.hints.map((h, i) => <li key={i}>{h}</li>)}
+                                            </ul>
+                                        )}
+                                    </div>
+                                )}
+                                <table className="paradigm-table">
+                                    <colgroup><col className="col-case" /><col className="col-sing" /><col className="col-plur" /></colgroup>
+                                    <thead><tr><th>Person</th><th>Singular</th><th>Plural</th></tr></thead>
+                                    <tbody>
+                                        {currentResult.question.helpParadigm.map((row, i) => (
+                                            <tr key={i}>
+                                                <td className="col-case">{i + 1}.</td>
+                                                <td className="cell-form">{row.singular}</td>
+                                                <td className="cell-form">{row.plural}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+
 
                         <button className="primary-btn large" onClick={handleNext}>Weiter</button>
                     </div>

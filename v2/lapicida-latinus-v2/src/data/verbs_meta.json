@@ -1,0 +1,126 @@
+{
+    "laudare": {
+        "Indikativ": {
+            "Praesens": {
+                "Aktiv": {
+                    "1Sg": {
+                        "la": "laudo amicos",
+                        "de": "ich lobe die Freunde",
+                        "hints": []
+                    },
+                    "2Sg": {
+                        "la": "laudas amicos",
+                        "de": "du lobst die Freunde",
+                        "hints": []
+                    },
+                    "3Sg": {
+                        "la": "laudat amicos",
+                        "de": "er/sie/es lobt die Freunde",
+                        "hints": []
+                    },
+                    "1Pl": {
+                        "la": "laudamus amicos",
+                        "de": "wir loben die Freunde",
+                        "hints": []
+                    },
+                    "2Pl": {
+                        "la": "laudatis amicos",
+                        "de": "ihr lobt die Freunde",
+                        "hints": []
+                    },
+                    "3Pl": {
+                        "la": "laudant amicos",
+                        "de": "sie loben die Freunde",
+                        "hints": []
+                    }
+                }
+            }
+        }
+    },
+    "esse": {
+        "Indikativ": {
+            "Praesens": {
+                "Aktiv": {
+                    "1Sg": {
+                        "la": "sum magister",
+                        "de": "ich bin Lehrer",
+                        "hints": [
+                            "Kopula: Nominativ beidseitig"
+                        ]
+                    },
+                    "2Sg": {
+                        "la": "es amicus",
+                        "de": "du bist ein Freund",
+                        "hints": []
+                    },
+                    "3Sg": {
+                        "la": "est puella",
+                        "de": "sie ist ein Mädchen",
+                        "hints": []
+                    },
+                    "1Pl": {
+                        "la": "sumus amici",
+                        "de": "wir sind Freunde",
+                        "hints": []
+                    },
+                    "2Pl": {
+                        "la": "estis domini",
+                        "de": "ihr seid Herren",
+                        "hints": []
+                    },
+                    "3Pl": {
+                        "la": "sunt pueri",
+                        "de": "sie sind Jungen",
+                        "hints": []
+                    }
+                }
+            }
+        },
+        "Hinweise": [
+            "Lokativ bei Städten: Romae sum (ich bin in Rom).",
+            "Komposita adesse/prodesse/obesse → Dativ."
+        ]
+    },
+    "ire": {
+        "Indikativ": {
+            "Praesens": {
+                "Aktiv": {
+                    "1Sg": {
+                        "la": "eo Romam",
+                        "de": "ich gehe nach Rom",
+                        "hints": [
+                            "Richtung: Akkusativ ohne Präposition bei Städtenamen"
+                        ]
+                    },
+                    "2Sg": {
+                        "la": "is domum",
+                        "de": "du gehst nach Hause",
+                        "hints": []
+                    },
+                    "3Sg": {
+                        "la": "it ad forum",
+                        "de": "er geht zum Forum",
+                        "hints": []
+                    },
+                    "1Pl": {
+                        "la": "imus scholam",
+                        "de": "wir gehen zur Schule",
+                        "hints": []
+                    },
+                    "2Pl": {
+                        "la": "itis urbem",
+                        "de": "ihr geht in die Stadt",
+                        "hints": []
+                    },
+                    "3Pl": {
+                        "la": "eunt agrum",
+                        "de": "sie gehen aufs Feld",
+                        "hints": [
+                            "Praesens 3Pl: eunt (nicht iunt)"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

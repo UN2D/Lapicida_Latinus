@@ -45,6 +45,7 @@ export default function QuestionVerb({ question, showHelp, onAnswer }) {
 
     // constants (always render all)
     const PERSONS = [1, 2, 3];
+    const PERSON_LABELS = { "1": "1.", "2": "2.", "3": "3." };
     const NUMBERS = ["Sg", "Pl"];
     const TENSES = ["Präsens", "Imperfekt", "Perfekt", "Plusquamp.", "Futur I", "Futur II"];
     const MOODS = ["Indikativ", "Konjunktiv", "Imperativ"];
@@ -53,6 +54,9 @@ export default function QuestionVerb({ question, showHelp, onAnswer }) {
     const allChosen =
         selPerson != null && selNumber != null &&
         selTense != null && selMood != null && selVoice != null;
+
+    const [attemptStage, setAttemptStage] = useState(0);
+    const canCheck = selPerson && selNumber && selTense && selMood && selVoice;
 
     // --- Normalisierung auf Codes ----------------------------------------------
 
@@ -158,18 +162,25 @@ export default function QuestionVerb({ question, showHelp, onAnswer }) {
         }
         return SOLC[dim] === v;
     }
-
-    function isFullSelectionCorrect() {
-        return (
-            selPerson != null && isDimCorrect('person', selPerson) &&
-            selNumber != null && isDimCorrect('number', selNumber) &&
-            selTense != null && isDimCorrect('tense', selTense) &&
-            selMood != null && isDimCorrect('mood', selMood) &&
-            selVoice != null && isDimCorrect('voice', selVoice)
+    /*
+        function isFullSelectionCorrect() {
+            return (
+                selPerson != null && isDimCorrect('person', selPerson) &&
+                selNumber != null && isDimCorrect('number', selNumber) &&
+                selTense != null && isDimCorrect('tense', selTense) &&
+                selMood != null && isDimCorrect('mood', selMood) &&
+                selVoice != null && isDimCorrect('voice', selVoice)
+            );
+        }
+    */
+    const isFullSelectionCorrect = () =>
+        (question.correctOptions || []).some(o =>
+            o.person != null && isDimCorrect('person', selPerson) &&
+            o.number != null && isDimCorrect('number', selNumber) &&
+            o.tense != null && isDimCorrect('tense', selTense) &&
+            o.mood != null && isDimCorrect('mood', selMood) &&
+            o.voice != null && isDimCorrect('voice', selVoice)
         );
-    }
-
-
 
     // auto-finish in hint mode when the combination becomes correct
     /*
@@ -255,59 +266,57 @@ export default function QuestionVerb({ question, showHelp, onAnswer }) {
     }
 
     function handleCheck() {
-        if (!allChosen) return;
+        // Vollständige Auswahl erforderlich
+        if (!allChosen || !canCheck) return;
 
         const fullOk = isFullSelectionCorrect();
 
-        // Erstversuch
+        // === ERSTER Klick auf "Prüfen" ===
         if (!firstChecked) {
-            setFirstChecked(true);
+            setFirstChecked(true); // <- wichtig: Erstversuch markieren
 
             if (fullOk) {
+                // sofort richtig abschließen
                 onAnswer?.({ ok: true });
                 return;
             }
 
             if (helpOn) {
-                // Live-Feedback: keine Freezes, nur Anzeigemodus
+                // Hilfe AN: in den Hinweismodus wechseln (Live-Feedback),
+                // aber noch KEIN Ergebnis-Screen.
                 setHintMode(true);
                 setFrozen(null);
             } else {
-                // Hilfe AUS: pro-Dimension Ergebnis einfrieren
+                // Hilfe AUS: Momentaufnahme einfrieren (keine Live-Farben),
+                // noch KEIN Ergebnis-Screen.
                 setHintMode(false);
                 setFrozen({
-                    person: { value: selPerson, ok: isDimCorrect('person', selPerson) },
-                    number: { value: selNumber, ok: isDimCorrect('number', selNumber) },
-                    tense: { value: selTense, ok: isDimCorrect('tense', selTense) },
-                    mood: { value: selMood, ok: isDimCorrect('mood', selMood) },
-                    voice: { value: selVoice, ok: isDimCorrect('voice', selVoice) },
+                    person: { value: selPerson, ok: isDimCorrect("person", selPerson) },
+                    number: { value: selNumber, ok: isDimCorrect("number", selNumber) },
+                    tense: { value: selTense, ok: isDimCorrect("tense", selTense) },
+                    mood: { value: selMood, ok: isDimCorrect("mood", selMood) },
+                    voice: { value: selVoice, ok: isDimCorrect("voice", selVoice) },
                 });
             }
             return;
         }
 
-        // Zweiter (oder weiterer) Klick
+        // === ZWEITER Klick auf "Prüfen" (oder weitere) ===
         if (fullOk) {
+            // korrekt -> Abschluss
             onAnswer?.({ ok: true });
             return;
         }
 
-        if (!helpOn) {
-            // Hilfe AUS: Freeze *erneuern*, damit die Farben auf neue Auswahl reagieren
-            setFrozen({
-                person: { value: selPerson, ok: isDimCorrect('person', selPerson) },
-                number: { value: selNumber, ok: isDimCorrect('number', selNumber) },
-                tense: { value: selTense, ok: isDimCorrect('tense', selTense) },
-                mood: { value: selMood, ok: isDimCorrect('mood', selMood) },
-                voice: { value: selVoice, ok: isDimCorrect('voice', selVoice) },
-            });
-        }
+        // weiterhin falsch -> Ergebnis FALSCH anzeigen
+        // Hilfe AN ODER AUS: jetzt final auswerten
+        onAnswer?.({ ok: false });
     }
 
 
 
 
-    const canCheck = allChosen;
+    //const canCheck = allChosen;
 
     // ---- render ---------------------------------------------------------------
 

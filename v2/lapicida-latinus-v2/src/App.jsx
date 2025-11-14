@@ -310,7 +310,7 @@ export default function App() {
                 </section>
 
                 <div className="pill-row">
-                  <button className="pill-btn" onClick={() => setVerbUiStep(1)}>
+                  <button className="primary-btn white" onClick={() => setVerbUiStep(1)}>
                     Zurück
                   </button>
                   <button className="primary-btn large" onClick={handleStart}>

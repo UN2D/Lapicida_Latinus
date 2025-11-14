@@ -286,6 +286,10 @@ body {
   transform: none;
 }
 
+.white-btn {
+  background-color: white !important;
+}
+
 /* ========================================
    Quiz: Fragekarte
 ======================================== */
@@ -447,6 +451,13 @@ body {
 
 .result-correct-line+.result-correct-line {
   margin-top: 2px;
+  list-style: none;
+}
+
+.result-correct-line li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 /* ===========================
@@ -639,4 +650,11 @@ body {
   width: min(92vw, 720px) !important;
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+.example-box {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  font-size: 1em;
+  color: #374151;
 }
