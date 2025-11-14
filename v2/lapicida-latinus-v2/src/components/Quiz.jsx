@@ -144,18 +144,22 @@ export function Quiz({ round, onExit }) {
 
                         <div className="result-correct-title">Richtige Bestimmung(en)</div>
                         <div className="result-correct-list">
-                            {currentResult.correctOptions.map((opt, i) => (
-                                <div key={i} className="result-correct-line">
+                            {currentResult.correctOptions.map((opt, i) => {
+                                const label = formatCaseNumberGender(opt); // "Genitiv Plural neutrum"
+                                // Wenn opt.de bereits mit dem Label beginnt, nicht doppeln:
+                                const line = opt.de && opt.de.startsWith(label)
+                                    ? opt.de
+                                    : opt.de
+                                        ? `${label} – ${opt.de}`
+                                        : label;
 
+                                return (
+                                    <div key={i} className="result-correct-line">
+                                        {line}
+                                    </div>
+                                );
+                            })}
 
-                                    <li key={i}>
-                                        {currentResult.question.type === "verb"
-                                            ? formatVerbSpec(opt)
-                                            : `${formatCaseNumberGender(opt)}${opt.de ? " – " + opt.de : ""}`}
-                                    </li>
-
-                                </div>
-                            ))}
                         </div>
 
                         {/* Adjektiv-Hilfe (Fix: GEND_DE) */}
@@ -199,13 +203,14 @@ export function Quiz({ round, onExit }) {
                                             {ex && (
                                                 <div className="example-box">
                                                     <div className="ex-la"><em>{ex.latin} - {ex.german}</em></div>
+                                                    {Array.isArray(hints) && hints.length > 0 && (
+                                                        <ul className="help-hints">
+                                                            {hints.map((h, i) => <li key={i}>{h}</li>)}
+                                                        </ul>
+                                                    )}
                                                 </div>
                                             )}
-                                            {Array.isArray(hints) && hints.length > 0 && (
-                                                <ul className="help-hints">
-                                                    {hints.map((h, i) => <li key={i}>{h}</li>)}
-                                                </ul>
-                                            )}
+
                                         </>
                                     );
                                 })()}
@@ -213,15 +218,6 @@ export function Quiz({ round, onExit }) {
                                 <div className="paradigm-title">
                                     Formenübersicht: {currentResult.question.lemma} – {currentResult.question.lemmaDe}
                                 </div>
-                                {currentResult?.question?.helpExample && (
-                                    <div className="example-box">
-                                        {(currentResult.question.helpExample.hints || []).length > 0 && (
-                                            <ul className="ex-hints">
-                                                {currentResult.question.helpExample.hints.map((h, i) => <li key={i}>{h}</li>)}
-                                            </ul>
-                                        )}
-                                    </div>
-                                )}
                                 <table className="paradigm-table">
                                     <colgroup><col className="col-case" /><col className="col-sing" /><col className="col-plur" /></colgroup>
                                     <thead><tr><th>Person</th><th>Singular</th><th>Plural</th></tr></thead>

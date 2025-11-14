@@ -1,0 +1,24 @@
+[
+    {
+        "lemma": "bonus",
+        "examples": {
+            "Nom": [
+                "ein gutes Wort / das gute Wort",
+                "gute Worte / die guten Worte"
+            ],
+            "Akk": [
+                "ein gutes Wort / das gute Wort (Objekt)"
+            ]
+        },
+        "sampleSentences": [
+            {
+                "la": "Bonum verbum dicit.",
+                "de": "Er sagt ein gutes Wort."
+            },
+            {
+                "la": "Bonum verbum est utile.",
+                "de": "Ein gutes Wort ist nützlich."
+            }
+        ]
+    }
+]

@@ -526,6 +526,12 @@ body {
   width: 36%;
 }
 
+.help-hints {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  color: #000;
+}
 
 /* Auf sehr schmalen Geräten die Kasus-Spalte etwas schmaler machen */
 @media (max-width: 420px) {
@@ -654,7 +660,7 @@ body {
 
 .example-box {
   margin-top: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   font-size: 1em;
   color: #374151;
 }

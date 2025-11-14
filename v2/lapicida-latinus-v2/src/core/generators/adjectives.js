@@ -4,6 +4,20 @@
 // Liefert pro Frage: prompt, correctOptions[], paradigm (nur gewähltes Genus), paradigmGender.
 
 import data from "../../data/nounsAdjectives.json";
+import adjMeta from "../../data/adjectives_meta.json";
+
+
+function attachAdjMeta(question) {
+    if (!question?.lemma) return;
+    const meta = (adjMeta || []).find(m => m.lemma === question.lemma);
+    if (!meta) return;
+
+    // Beispiele pro Kasus (Anzeige oben/unterhalb der Ergebnisliste)
+    question.helpExamples = meta.examples || null;
+
+    // Optional ein bis zwei Beispielsätze (werden in der Result-Karte/Help-Box gezeigt)
+    question.helpSampleSentences = meta.sampleSentences || [];
+}
 
 /* =========================
    Konstanten / Basismaps
@@ -49,12 +63,12 @@ function germanDefArticle(c, n, g) {
         Akk: { Sg: "den", Pl: "die" },
         Dat: { Sg: (g === "f" ? "der" : "dem"), Pl: "den" },
         Gen: { Sg: (g === "f" ? "der" : "des"), Pl: "der" },
-        Abl: { Sg: (g === "f" ? "der" : "dem"), Pl: "den" } // Abl ~ Dat
+        Abl: { Sg: (g === "f" ? "der" : "dem"), Pl: "den" }, // Abl ~ Dat
     };
     return (m[c] && m[c][n]) || (n === "Sg" ? (g === "n" ? "das" : "der") : "die");
 }
 
-// schwache Adjektivendung nach bestimmtem Artikel (Anfänger-freundlich, Abl ~ Dat)
+// schwache Adjektivendung nach bestimmtem Artikel (Anfänger-freundlich)
 function germanAdjEndingAfterDefArticle(c, n, g) {
     if (n === "Pl") return "en";
     if (c === "Nom") return "e";
@@ -80,34 +94,28 @@ const PLURAL_OVERRIDES = {
     "Ort": "Orte",
     "Stadt": "Städte",
     "Villa": "Villen",
-    // Für „Wort“ kann man „Wörter“ (zählig) oder „Worte“ (Kollektiv) wählen.
-    // Der Nutzer wünschte „Worte“:
-    "Wort": "Worte"
+    // „Wort“ → „Worte“ (hier gewünscht)
+    "Wort": "Worte",
 };
 
 // sehr einfache Regel für Genitiv Sg. Mask./Neutr.
 function addGenitiveSEnding(noun) {
     const lower = noun.toLowerCase();
-    const needsEs = (
-        lower.length <= 2 ||                       // sehr kurz
-        /[sßxz]$/.test(lower) ||                   // endet auf s/ß/x/z
-        /[bcdfghjklmnpqrstvwxz]$/.test(lower) &&  // endet auf „harter“ Konsonant → meist „-es“
-        !/[aeiou]$/.test(lower)
-    );
+    const needsEs =
+        lower.length <= 2 ||
+        /[sßxz]$/.test(lower) ||
+        (/[bcdfghjklmnpqrstvwxz]$/.test(lower) && !/[aeiou]$/.test(lower));
     return needsEs ? noun + "es" : noun + "s";
 }
 
 function germanNounDisplay(c, n, g, base) {
     if (!base) return "";
-    // Plural:
     if (n === "Pl") {
         return PLURAL_OVERRIDES[base] || (base + " (Plural)");
     }
-    // Genitiv Singular maskulin/neutrum:
     if (c === "Gen" && (g === "m" || g === "n")) {
         return addGenitiveSEnding(base);
     }
-    // sonst unverändert
     return base;
 }
 
@@ -186,9 +194,9 @@ function buildAdjParadigmForBaseFiltered(base, gender /* 'm'|'f'|'n' */) {
    ========================= */
 
 function formatAdjContextDe(c, n, g, adjDe, nounDe) {
-    const kase = CASE_DE[c] || c;
-    const num = NUM_DE[n] || n;
-    const gen = GEN_DE[g] || g;
+    const kase = { Nom: "Nominativ", Gen: "Genitiv", Dat: "Dativ", Akk: "Akkusativ", Abl: "Ablativ" }[c] || c;
+    const num = { Sg: "Singular", Pl: "Plural" }[n] || n;
+    const gen = { m: "maskulin", f: "feminin", n: "neutrum" }[g] || g;
 
     const art = germanDefArticle(c, n, g);
     const end = germanAdjEndingAfterDefArticle(c, n, g);
@@ -197,7 +205,7 @@ function formatAdjContextDe(c, n, g, adjDe, nounDe) {
     const nounWord = germanNounDisplay(c, n, g, nounDe);
     const ablTag = ablHint(c);
 
-    // z.B. "Genitiv Plural neutrum – der schönen Worte"
+    // z.B. "Genitiv Plural maskulin – der guten Freunde"
     return `${kase} ${num} ${gen} – ${art} ${adjW} ${nounWord}${ablTag}`.replace(/\s+/g, " ").trim();
 }
 
@@ -268,6 +276,7 @@ export function generateAdjWithNounRound({ lemmas = [], numQuestions = 5 }) {
             // Für jede gültige Ambiguität eine korrekte Option + natürliche DE-Zeile
             for (const e of ambiguous) {
                 const deLine = formatAdjContextDe(e.case, e.number, e.gender, adj.lemmaDe, e.lemmaDe || "");
+
                 const key = `${e.case}_${e.number}_${e.gender}_${deLine}`;
 
                 // Duplikate vermeiden
