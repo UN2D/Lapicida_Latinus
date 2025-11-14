@@ -317,7 +317,9 @@ body {
 }
 
 .choice-group {
-  margin-bottom: 14px;
+  margin-bottom: 10px;
+  padding: 5px 5px 5px 5px;
+  background-color: #6b728033;
 }
 
 .choice-label {
@@ -325,6 +327,7 @@ body {
   font-weight: 600;
   color: #111827;
   margin-bottom: 6px;
+  margin-top: 6px;
 }
 
 

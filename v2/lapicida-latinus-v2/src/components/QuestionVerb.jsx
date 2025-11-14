@@ -1,128 +1,338 @@
-// src/components/QuestionVerb.jsx
-import { useState } from "react";
-import { formatVerbSpec } from "../core/generators/verbs";
+import React, { useEffect, useState } from "react";
 
-const PERSONS = ["1", "2", "3"];
-const NUMBERS = ["Sg", "Pl"];
-const TENSES = ["Praesens", "Imperfekt", "Perfekt", "Plusquamperfekt", "Futur I", "Futur II"];
-const MOODS = ["Indikativ", "Konjunktiv", "Imperativ"];
-const VOICES = ["Aktiv", "Passiv"];
+/**
+ * question = {
+ *   prompt: "laudatis",
+ *   lemma: "laudare",
+ *   lemmaDe: "loben",
+ *   correctOptions: [
+ *     { person: 2, number: "Pl", tense: "Praesens", mood: "Indikativ", voice: "Aktiv" },
+ *     ...
+ *   ]
+ * }
+ *
+ * Props:
+ * - showHelp: boolean
+ * - onAnswer({ ok: boolean })
+ */
+export default function QuestionVerb({ question, showHelp, onAnswer }) {
+    const TENSETAB = {
+        "praesens": "PRS", "präsens": "PRS", "praesent": "PRS",
+        "imperfekt": "IMPF",
+        "perfekt": "PERF",
+        "plusquamperfekt": "PQP", "plusquamp.": "PQP", "plusquamperf.": "PQP", "plusquamperf": "PQP",
+        "futur i": "FUT1", "futur1": "FUT1",
+        "futur ii": "FUT2", "futur2": "FUT2"
+    };
+    const MOODTAB = { "indikativ": "IND", "konjunktiv": "KONJ", "imperativ": "IMP" };
+    const VOICETAB = { "aktiv": "ACT", "passiv": "PASS" };
+    const NUMTAB = { "sg": "SG", "singular": "SG", "pl": "PL", "plural": "PL" };
 
-const LABELS = {
-    Sg: "Singular",
-    Pl: "Plural",
-};
+    // selections
+    const [selPerson, setSelPerson] = useState(null);    // 1|2|3
+    const [selNumber, setSelNumber] = useState(null);    // "Sg"|"Pl"
+    const [selTense, setSelTense] = useState(null);    // string
+    const [selMood, setSelMood] = useState(null);    // string
+    const [selVoice, setSelVoice] = useState(null);    // "Aktiv"|"Passiv"
 
-export function QuestionVerb({ question, onAnswer, showHelp }) {
-    const correct = (question.correctOptions || [])[0] || {};
+    // attempt state (aligned with nouns/adjectives wording)
+    const helpOn = !!showHelp;
+    const [firstChecked, setFirstChecked] = useState(false); // user pressed Prüfen at least once
+    const [hintMode, setHintMode] = useState(false);         // only with help ON after wrong first try
+    // Frozen feedback for help OFF (stores only what was selected when pressing Prüfen)
+    const [frozen, setFrozen] = useState(null);
+    // { person: {value, ok}, number:{...}, tense:{...}, mood:{...}, voice:{...} }
 
-    const [sel, setSel] = useState({
-        person: null,
-        number: null,
-        tense: null,
-        mood: null,
-        voice: null,
-    });
+    // constants (always render all)
+    const PERSONS = [1, 2, 3];
+    const NUMBERS = ["Sg", "Pl"];
+    const TENSES = ["Präsens", "Imperfekt", "Perfekt", "Plusquamp.", "Futur I", "Futur II"];
+    const MOODS = ["Indikativ", "Konjunktiv", "Imperativ"];
+    const VOICES = ["Aktiv", "Passiv"];
 
-    const [phase, setPhase] = useState("idle"); // idle | hinted | locked
-    const canCheck = Object.values(sel).every(Boolean);
+    const allChosen =
+        selPerson != null && selNumber != null &&
+        selTense != null && selMood != null && selVoice != null;
 
-    const isCorrectNow =
-        sel.person === correct.person &&
-        sel.number === correct.number &&
-        sel.tense === correct.tense &&
-        sel.mood === correct.mood &&
-        sel.voice === correct.voice;
+    // --- Normalisierung auf Codes ----------------------------------------------
 
-    const handleCheck = () => {
-        if (!canCheck) return;
 
-        // Hilfe AUS: immer 1 Fehlversuch mit einmaligem Feedback, kein Live
-        if (!showHelp) {
-            if (phase === "idle") {
-                // erster Prüfversuch -> nur markieren, kein Ergebnis-Screen
-                setPhase("hinted");
-                return;
-            }
-            // zweiter Klick -> final
-            onAnswer(isCorrectNow, {
-                userAnswer: { ...sel },
-                attempts: 2,
+    function codeTense(v) { if (v == null) return null; return TENSETAB[String(v).toLowerCase()] || String(v); }
+    function codeMood(v) { if (v == null) return null; return MOODTAB[String(v).toLowerCase()] || String(v); }
+    function codeVoice(v) { if (v == null) return null; return VOICETAB[String(v).toLowerCase()] || String(v); }
+    function codeNum(v) { if (v == null) return null; return NUMTAB[String(v).toLowerCase()] || String(v); }
+    function codePerson(v) { return v == null ? null : Number(v); }
+
+    // Alle ausgewählten Werte als Codes
+    function selCodes(sel) {
+        return {
+            person: codePerson(sel.selPerson),
+            number: codeNum(sel.selNumber),
+            tense: codeTense(sel.selTense),
+            mood: codeMood(sel.selMood),
+            voice: codeVoice(sel.selVoice),
+        };
+    }
+
+    // Option (aus correctOptions) als Codes
+    function optCodes(o) {
+        return {
+            person: codePerson(o.person),
+            number: codeNum(o.number),
+            tense: codeTense(o.tense),
+            mood: codeMood(o.mood),
+            voice: codeVoice(o.voice),
+        };
+    }
+
+    const correct = question.correctOptions || [];
+    const SOL = correct[0] || {}; // z.B. { person:'3', number:'Pl', tense:'Praes', mood:'Ind', voice:'Act' }
+    const SOLC = optCodes(SOL); //
+
+    // ---- helpers --------------------------------------------------------------
+
+    function matchesAllOther(oRaw, exceptKeys) {
+        const ex = new Set(exceptKeys);
+        const o = optCodes(oRaw);
+        const s = selCodes({ selPerson, selNumber, selTense, selMood, selVoice });
+
+        if (!ex.has("person") && s.person != null && o.person !== s.person) return false;
+        if (!ex.has("number") && s.number != null && o.number !== s.number) return false;
+        if (!ex.has("tense") && s.tense != null && o.tense !== s.tense) return false;
+        if (!ex.has("mood") && s.mood != null && o.mood !== s.mood) return false;
+        if (!ex.has("voice") && s.voice != null && o.voice !== s.voice) return false;
+        return true;
+    }
+
+    /*
+     function isPersonCorrect(p) {
+         console.log("isPersonCorrect", p, selNumber);
+ 
+         if (selNumber != null) {
+             var bumms = correct.some(o => o.person === p && o.number === selNumber && matchesAllOther(o, ["person", "number"]));
+             console.log("with number:", bumms);
+             return bumms;
+         }
+         return correct.some(o => o.person === p && matchesAllOther(o, ["person"]));
+     }
+         */
+    function isPersonCorrect(p) {
+        const pp = codePerson(p);
+        if (selNumber != null) {
+            const nn = codeNum(selNumber);
+            return correct.some(o => {
+                const oc = optCodes(o);
+                return oc.person === pp;
             });
-            setPhase("locked");
-            return;
         }
+        return correct.some(o => optCodes(o).person === pp);
+    }
 
-        // Hilfe AN
-        if (phase === "idle") {
-            if (!isCorrectNow) {
-                setPhase("hinted"); // Live-Update aktiv
+    function isNumberCorrect(n) {
+        const nn = codeNum(n);
+        if (selPerson != null) {
+            const pp = codePerson(selPerson);
+            return correct.some(o => {
+                const oc = optCodes(o);
+                return oc.number === nn
+            });
+        }
+        return correct.some(o => optCodes(o).number === nn);
+    }
+
+    const isTenseCorrect = (t) => correct.some(o => optCodes(o).tense === codeTense(t));
+    const isMoodCorrect = (m) => correct.some(o => optCodes(o).mood === codeMood(m));
+    const isVoiceCorrect = (v) => correct.some(o => optCodes(o).voice === codeVoice(v));
+
+    function isDimCorrect(dim, rawVal) {
+        if (!SOL) return false;
+        // ausgewählten Wert in Code umsetzen
+        let v;
+        switch (dim) {
+            case "person": v = codePerson(rawVal); break;
+            case "number": v = codeNum(rawVal); break;
+            case "tense": v = codeTense(rawVal); break;
+            case "mood": v = codeMood(rawVal); break;
+            case "voice": v = codeVoice(rawVal); break;
+            default: v = rawVal;
+        }
+        return SOLC[dim] === v;
+    }
+
+    function isFullSelectionCorrect() {
+        return (
+            selPerson != null && isDimCorrect('person', selPerson) &&
+            selNumber != null && isDimCorrect('number', selNumber) &&
+            selTense != null && isDimCorrect('tense', selTense) &&
+            selMood != null && isDimCorrect('mood', selMood) &&
+            selVoice != null && isDimCorrect('voice', selVoice)
+        );
+    }
+
+
+
+    // auto-finish in hint mode when the combination becomes correct
+    /*
+    useEffect(() => {
+        if (hintMode && allChosen && isFullSelectionCorrect()) {
+            onAnswer?.({ ok: true });
+        }
+    }, [hintMode, selPerson, selNumber, selTense, selMood, selVoice]); // eslint-disable-line
+*/
+    // ---- button class logic (same pattern as nouns/adjectives) ----------------
+
+    function frozenStatusFor(dim, value) {
+        if (!frozen) return null;
+        const f = frozen[dim];
+        if (!f) return null;
+        if (f.value !== value) return "neutral";
+        return f.ok ? "correct" : "wrong";
+    }
+
+    function currentRightFor(dim, value) {
+        switch (dim) {
+            case "person": return isPersonCorrect(value);
+            case "number": return isNumberCorrect(value);
+            case "tense": return isTenseCorrect(value);
+            case "mood": return isMoodCorrect(value);
+            case "voice": return isVoiceCorrect(value);
+            default: return false;
+        }
+    }
+
+    function getBtnClass(dim, value) {
+        const selected =
+            (dim === "person" && selPerson === value) ||
+            (dim === "number" && selNumber === value) ||
+            (dim === "tense" && selTense === value) ||
+            (dim === "mood" && selMood === value) ||
+            (dim === "voice" && selVoice === value);
+
+        let cls = "choice-btn";
+        if (selected) cls += " selected";
+
+        // before first Prüfen OR not selected → neutral (blue only)
+        if (!firstChecked || !selected) return cls;
+
+        // after first Prüfen:
+        if (helpOn) {
+            if (hintMode) {
+                const ok = currentRightFor(dim, value);
+                cls += ok ? " correct" : " wrong";
+            }
+        } else {
+            const st = frozenStatusFor(dim, value);
+            if (st === "correct") cls += " correct";
+            else if (st === "wrong") cls += " wrong";
+        }
+        return cls;
+    }
+
+    // ---- events ---------------------------------------------------------------
+
+    const onPick = (setter, value) => {
+        setter(prev => (prev === value ? null : value));
+    };
+
+    function dimValueIsPossible(dim, val) {
+        const tmp = {
+            person: selPerson,
+            number: selNumber,
+            tense: selTense,
+            mood: selMood,
+            voice: selVoice,
+        };
+
+        tmp[dim] = val;
+        // possible if any correct option matches all currently set values in tmp
+        return correct.some(o =>
+            (tmp.person == null || o.person === tmp.person) &&
+            (tmp.number == null || o.number === tmp.number) &&
+            (tmp.tense == null || o.tense === tmp.tense) &&
+            (tmp.mood == null || o.mood === tmp.mood) &&
+            (tmp.voice == null || o.voice === tmp.voice)
+        );
+    }
+
+    function handleCheck() {
+        if (!allChosen) return;
+
+        const fullOk = isFullSelectionCorrect();
+
+        // Erstversuch
+        if (!firstChecked) {
+            setFirstChecked(true);
+
+            if (fullOk) {
+                onAnswer?.({ ok: true });
                 return;
             }
-            // direkt richtig
-            onAnswer(true, { userAnswer: { ...sel }, attempts: 1 });
-            setPhase("locked");
+
+            if (helpOn) {
+                // Live-Feedback: keine Freezes, nur Anzeigemodus
+                setHintMode(true);
+                setFrozen(null);
+            } else {
+                // Hilfe AUS: pro-Dimension Ergebnis einfrieren
+                setHintMode(false);
+                setFrozen({
+                    person: { value: selPerson, ok: isDimCorrect('person', selPerson) },
+                    number: { value: selNumber, ok: isDimCorrect('number', selNumber) },
+                    tense: { value: selTense, ok: isDimCorrect('tense', selTense) },
+                    mood: { value: selMood, ok: isDimCorrect('mood', selMood) },
+                    voice: { value: selVoice, ok: isDimCorrect('voice', selVoice) },
+                });
+            }
             return;
         }
 
-        // phase === "hinted": final werten
-        onAnswer(isCorrectNow, { userAnswer: { ...sel }, attempts: 2 });
-        setPhase("locked");
-    };
-
-    const clickIfEditable = (updater) => {
-        if (phase === "locked") return;
-        setSel(prev => ({ ...prev, ...updater }));
-    };
-
-    // Button-Klassen: identisch zum Nomen-Flow
-    const btnClass = (kind, value) => {
-        const base = ["pill-btn"];
-        const selected = sel[kind] === value;
-        if (selected) base.push("selected");
-
-        if (phase === "hinted") {
-            const test = { ...sel, [kind]: value };
-            const ok =
-                test.person === correct.person &&
-                test.number === correct.number &&
-                test.tense === correct.tense &&
-                test.mood === correct.mood &&
-                test.voice === correct.voice;
-
-            if (!showHelp) {
-                // Hilfe AUS: nur die **aktuelle** Auswahl einfärben (keine Live-Neuberechnung beim Wechsel)
-                if (selected) base.push(ok ? "correct" : "wrong");
-            } else {
-                // Hilfe AN: Live-Update – aktuell gewählte Buttons zeigen grün/rot live
-                if (selected) base.push(ok ? "correct" : "wrong");
-            }
+        // Zweiter (oder weiterer) Klick
+        if (fullOk) {
+            onAnswer?.({ ok: true });
+            return;
         }
-        return base.join(" ");
-    };
 
-    const lemmaLine =
-        question.lemma && question.lemmaDe
-            ? `${question.lemma} – ${question.lemmaDe}`
-            : question.lemma || "";
+        if (!helpOn) {
+            // Hilfe AUS: Freeze *erneuern*, damit die Farben auf neue Auswahl reagieren
+            setFrozen({
+                person: { value: selPerson, ok: isDimCorrect('person', selPerson) },
+                number: { value: selNumber, ok: isDimCorrect('number', selNumber) },
+                tense: { value: selTense, ok: isDimCorrect('tense', selTense) },
+                mood: { value: selMood, ok: isDimCorrect('mood', selMood) },
+                voice: { value: selVoice, ok: isDimCorrect('voice', selVoice) },
+            });
+        }
+    }
+
+
+
+
+    const canCheck = allChosen;
+
+    // ---- render ---------------------------------------------------------------
 
     return (
         <div className="question-card">
-            {lemmaLine && <div className="question-lemma">{lemmaLine}</div>}
+            {question?.lemma && (
+                <div className="question-lemma">
+                    {question.lemma}
+                    {question.lemmaDe ? ` – ${question.lemmaDe}` : ""}
+                </div>
+            )}
 
             <div className="question-form-box">
-                <div className="question-form">{question.prompt}</div>
+                <div className="question-form">{question?.prompt}</div>
             </div>
 
             {/* Person */}
-            <div className="choice-group compact">
+            <div className="choice-group">
                 <div className="choice-label">Person</div>
-                <div className="grid-3">
-                    {PERSONS.map(p => (
+                <div className="choice-row">
+                    {PERSONS.map((p) => (
                         <button
                             key={p}
-                            className={btnClass("person", p)}
-                            onClick={() => clickIfEditable({ person: p })}
+                            className={getBtnClass("person", p)}
+                            onClick={() => onPick(setSelPerson, p)}
                         >
                             {p}. Person
                         </button>
@@ -131,30 +341,30 @@ export function QuestionVerb({ question, onAnswer, showHelp }) {
             </div>
 
             {/* Numerus */}
-            <div className="choice-group compact">
+            <div className="choice-group">
                 <div className="choice-label">Numerus</div>
-                <div className="grid-3">
-                    {NUMBERS.map(n => (
+                <div className="choice-row">
+                    {NUMBERS.map((n) => (
                         <button
                             key={n}
-                            className={btnClass("number", n)}
-                            onClick={() => clickIfEditable({ number: n })}
+                            className={getBtnClass("number", n)}
+                            onClick={() => onPick(setSelNumber, n)}
                         >
-                            {LABELS[n]}
+                            {n === "Sg" ? "Singular" : "Plural"}
                         </button>
                     ))}
                 </div>
             </div>
 
-            {/* Zeit */}
-            <div className="choice-group compact">
-                <div className="choice-label">Zeit</div>
-                <div className="grid-3">
-                    {TENSES.map(t => (
+            {/* Zeitform */}
+            <div className="choice-group">
+                <div className="choice-label">Zeitform</div>
+                <div className="choice-row">
+                    {TENSES.map((t) => (
                         <button
                             key={t}
-                            className={btnClass("tense", t)}
-                            onClick={() => clickIfEditable({ tense: t })}
+                            className={getBtnClass("tense", t)}
+                            onClick={() => onPick(setSelTense, t)}
                         >
                             {t}
                         </button>
@@ -163,14 +373,14 @@ export function QuestionVerb({ question, onAnswer, showHelp }) {
             </div>
 
             {/* Modus */}
-            <div className="choice-group compact">
+            <div className="choice-group">
                 <div className="choice-label">Modus</div>
-                <div className="grid-3">
-                    {MOODS.map(m => (
+                <div className="choice-row">
+                    {MOODS.map((m) => (
                         <button
                             key={m}
-                            className={btnClass("mood", m)}
-                            onClick={() => clickIfEditable({ mood: m })}
+                            className={getBtnClass("mood", m)}
+                            onClick={() => onPick(setSelMood, m)}
                         >
                             {m}
                         </button>
@@ -179,14 +389,14 @@ export function QuestionVerb({ question, onAnswer, showHelp }) {
             </div>
 
             {/* Genus (Diathese) */}
-            <div className="choice-group compact">
+            <div className="choice-group">
                 <div className="choice-label">Genus (Diathese)</div>
-                <div className="grid-3">
-                    {VOICES.map(v => (
+                <div className="choice-row">
+                    {VOICES.map((v) => (
                         <button
                             key={v}
-                            className={btnClass("voice", v)}
-                            onClick={() => clickIfEditable({ voice: v })}
+                            className={getBtnClass("voice", v)}
+                            onClick={() => onPick(setSelVoice, v)}
                         >
                             {v}
                         </button>

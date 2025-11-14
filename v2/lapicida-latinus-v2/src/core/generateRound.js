@@ -8,14 +8,14 @@ import { buildVerbQuestions } from "./generators/verbs";
  * Erzeugt eine Trainingsrunde für die gewählte Kategorie.
  * Alle Spiele hängen hier dran, damit App.jsx nur eine Quelle hat.
  */
-export function generateRound({
-    category,
-    lemmas = [],
-    numQuestions = 5,
-    showHelp = false,
-    settings = {}
-}) {
-
+export default function generateRound(opts) {
+    const {
+        category,
+        lemmas = [],
+        numQuestions = 5,
+        showHelp = true,
+        settings = {}    // <— wichtig!
+    } = opts || {};
     const safeNum = Math.max(1, Number(numQuestions) || 5);
     const safeSettings = settings || {};
     let questions = [];
