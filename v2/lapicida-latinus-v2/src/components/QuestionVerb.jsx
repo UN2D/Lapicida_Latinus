@@ -155,7 +155,16 @@ export default function QuestionVerb({ question, showHelp, onAnswer }) {
     }
 
     // ----------------------------- Events --------------------------------------
+    /*const onPick = (setter, value) => {
+        setter(prev => (prev === value ? null : value));
+    };
+*/
     const onPick = (setter, value) => {
+        // Hilfe AUS: Wenn schon einmal geprüft wurde und der User nun umwählt,
+        // sollen die eingefrorenen Farben verschwinden -> wieder neutral.
+        if (firstChecked && !helpOn) {
+            setFrozen(null);
+        }
         setter(prev => (prev === value ? null : value));
     };
 

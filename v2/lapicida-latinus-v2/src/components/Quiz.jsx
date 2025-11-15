@@ -229,6 +229,20 @@ export function Quiz({ round, onExit }) {
                         {currentResult?.question?.type === "verb" && (
                             <>
                                 {(currentResult.question.helpGloss || currentResult.question.helpExample) && (
+                                    <div className="result-correct-list">
+                                        {currentResult.correctOptions.map((opt, i) => (
+                                            <div key={i} className="result-correct-line">
+                                                <li key={i}>
+                                                {currentResult.question.type === "verb"
+                                                    ? formatVerbSpec(opt)
+                                                    : `${formatCaseNumberGender(opt)}${opt.de ? " – " + opt.de : ""}`}
+                                            </li>
+
+                                        </div>
+                                        ))}
+                                    </div>
+
+
                                     <div className="example-box">
                                         {currentResult.question.helpGloss && (
                                             <div className="ex-gloss">
@@ -301,6 +315,7 @@ export function Quiz({ round, onExit }) {
                             Array.isArray(currentResult.question.helpParadigm) && (
 
                                 <div className="paradigm-box">
+                                    {/* 
                                     {currentResult.question.helpExample && (
                                         <div className="example-box">
                                             <div className="ex-la">
@@ -313,7 +328,7 @@ export function Quiz({ round, onExit }) {
                                             )}
                                         </div>
                                     )}
-
+*/}
                                     <div className="paradigm-title">
                                         Formenübersicht: {currentResult.question.lemma} – {currentResult.question.lemmaDe}
                                     </div>
