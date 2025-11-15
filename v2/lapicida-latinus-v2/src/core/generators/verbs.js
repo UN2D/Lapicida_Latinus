@@ -1,255 +1,168 @@
 // src/core/generators/verbs.js
-// -------------------------------------------------------------
-// Verb-Runden-Generator mit:
-//  - Gleichmäßiger Verteilung über gewählte Lemmata
-//  - Hilfetabelle (1./2./3. Person × Sg/Pl)
-//  - Beispiel + deutsche Kurzbedeutung + Hinweise aus verbs_meta.json
-// -------------------------------------------------------------
-
 import PRAES from "../../data/verbs_praesens.json";
 import PERF from "../../data/verbs_perfekt.json";
-import VERB_META_RAW from "../../data/verbs_meta.json";
+import VERB_META_WRAPPER from "../../data/verbs_meta.json";
 
-// Einheitliche Konstanten wie im Rest der App
+// -----------------------------
+// Konstanten & Hilfen
+// -----------------------------
 const PERSONS = ["1", "2", "3"];
 const NUMBERS = ["Sg", "Pl"];
-const MOODS = ["Indikativ", "Konjunktiv", "Imperativ"];
-const VOICES = ["Aktiv", "Passiv"];
-
-const LEMMA_ALIAS = {
-    sum: "esse",
-    possum: "posse",
-    eo: "ire",
-    fero: "ferre",
-    volo: "velle",
-    nolo: "nolle",
-    malo: "malle",
-    fio: "fieri",
-};
-
+const DEFAULT_TENSES = ["Praesens"];
+const DEFAULT_MOODS = ["Indikativ"];
+const DEFAULT_VOICES = ["Aktiv"];
 
 const TENSETAB = {
-    "praesens": "PRS", "präsens": "PRS", "praesent": "PRS",
-    "imperfekt": "IMPF",
-    "perfekt": "PERF",
-    "plusquamperfekt": "PQP", "plusquamp.": "PQP", "plusquamperf.": "PQP", "plusquamperf": "PQP",
-    "futur i": "FUT1", "futur1": "FUT1",
-    "futur ii": "FUT2", "futur2": "FUT2"
+    "praesens": "PRS", "Präsens": "PRS", "Praesens": "PRS",
+    "imperfekt": "IMPF", "Imperfekt": "IMPF",
+    "perfekt": "PERF", "Perfekt": "PERF",
+    "plusquamperfekt": "PQP", "Plusquamperfekt": "PQP",
+    "futur i": "FUT1", "Futur I": "FUT1", "futur1": "FUT1",
+    "futur ii": "FUT2", "Futur II": "FUT2", "futur2": "FUT2"
 };
 
 const BANK = {
     Praesens: PRAES,
     Perfekt: PERF,
 };
-const TENSES = Object.keys(BANK);
 
-// -------- kleine Utils ---------------------------------------------------------
-const asList = (v) => Array.isArray(v) ? v : (v ? [v] : []);
-const PN = (person, number) => `${person}${number}`; // z.B. "1Sg"
-const stripPunct = (s) => (s || "").replace(/[.?!]\s*$/u, "");
-
-// Fallbacks für deutsche Kurzbedeutung („ich lobe“, „du lobst“ …)
-const DE_FINITE_FALLBACK = {
-    "1Sg": (inf) => `ich ${inf}e`,
-    "2Sg": (inf) => `du ${inf}st`,
-    "3Sg": (inf) => `er/sie/es ${inf}t`,
-    "1Pl": (inf) => `wir ${inf}en`,
-    "2Pl": (inf) => `ihr ${inf}t`,
-    "3Pl": (inf) => `sie ${inf}en`,
-};
-
-// Meta-Index (nach Lemma + Tense + Mood + Voice)
-const VERB_META = (() => {
-    const out = {};
-    const list = VERB_META_RAW?.verbsMeta ?? [];
-    for (const m of list) {
-        const key = normalizeLemma(m.lemma);
-        out[key] = out[key] || {};
-        const t = m.tense;
-        out[key][t] = m.moods || {};
-    }
-    return out;
-})();
-
-function normalizeLemma(lemma) {
-    if (!lemma) return "";
-    return LEMMA_ALIAS[lemma] || lemma;
+// robust: akzeptiere Array ODER Objekt (Map)
+function rowsForTense(tense) {
+    const t = BANK[tense] ?? BANK[normalizePraesens(tense)];
+    if (!t) return [];
+    if (Array.isArray(t)) return t;
+    // Falls das JSON als Objekt kommt (z.B. { "rows": [...] }):
+    if (Array.isArray(t.rows)) return t.rows;
+    // Als letzte Rettung: Object.values
+    return Object.values(t);
 }
 
-function indexVerbMeta(raw) {
-    const list = Array.isArray(raw?.verbsMeta) ? raw.verbsMeta : Array.isArray(raw) ? raw : [];
-    const idx = {};
+function normalizePraesens(s) {
+    // fange "Präsens" und "praesens" ab
+    if (!s) return "Praesens";
+    const low = String(s).toLowerCase();
+    if (low.includes("präs") || low.includes("praes")) return "Praesens";
+    return s;
+}
+
+function toPNKey(person, number) {
+    return `${person}${number}`; // "1Sg", "3Pl"
+}
+
+// -----------------------------
+// VERB_META Index aufbauen
+// verbs_meta.json Format: { "verbsMeta": [ {...}, ... ] }
+// Wir indexieren: lemma -> tense -> mood -> voice -> PNKey -> {latin,german,hints,gloss}
+// -----------------------------
+const VERB_META_ARRAY = Array.isArray(VERB_META_WRAPPER?.verbsMeta)
+    ? VERB_META_WRAPPER.verbsMeta
+    : [];
+
+const META_INDEX = buildMetaIndex(VERB_META_ARRAY);
+
+function buildMetaIndex(list) {
+    const idx = new Map();
     for (const entry of list) {
-        const { lemma, tense, moods } = entry || {};
-        if (!lemma || !tense || !moods) continue;
-        idx[lemma] ??= {};
-        idx[lemma][tense] ??= {};
-        for (const mood of Object.keys(moods)) {
-            idx[lemma][tense][mood] ??= {};
-            for (const voice of Object.keys(moods[mood] || {})) {
-                // Speichere den ganzen Block (examples, glosses, notes)
-                idx[lemma][tense][mood][voice] = moods[mood][voice];
+        const lemma = entry.lemma;
+        const tense = entry.tense;        // z.B. "Praesens"
+        const moods = entry.moods || {};
+        if (!lemma || !tense) continue;
+
+        if (!idx.has(lemma)) idx.set(lemma, new Map());
+        const byTense = idx.get(lemma);
+        if (!byTense.has(tense)) byTense.set(tense, new Map());
+
+        for (const [mood, voicesObj] of Object.entries(moods)) {
+            if (!byTense.get(tense).has(mood)) byTense.get(tense).set(mood, new Map());
+
+            for (const [voice, pack] of Object.entries(voicesObj || {})) {
+                const ex = pack.examples || {};
+                const gl = pack.gloss || {};
+                const node = new Map();
+                // examples & gloss beide per PNKey ablegen
+                for (const [pn, obj] of Object.entries(ex)) {
+                    node.set(pn, { example: obj, gloss: gl[pn] || null });
+                }
+                byTense.get(tense).get(mood).set(voice, node);
             }
         }
     }
     return idx;
 }
 
-/** Hole Beispiel (latin/german/hints) aus der Meta, mit sanften Fallbacks */
-function pickVerbExample(lemma, { tense, mood, voice, person, number }) {
-    const block = VERB_META?.[lemma]?.[tense]?.[mood]?.[voice];
-    if (!block) return null;
-    const ex = block.examples?.[PN(person, number)]
-        || block.examples?.["3Sg"]
-        || block.examples?.["1Sg"]
-        || null;
-    return ex ? { latin: ex.latin || "", german: ex.german || "", hints: ex.hints || [] } : null;
+function pickFromMeta(lemma, tense, mood, voice, person, number) {
+    const byLemma = META_INDEX.get(lemma);
+    if (!byLemma) return { example: null, gloss: null };
+    const byTense = byLemma.get(tense);
+    if (!byTense) return { example: null, gloss: null };
+    const byMood = byTense.get(mood);
+    if (!byMood) return { example: null, gloss: null };
+    const byVoice = byMood.get(voice);
+    if (!byVoice) return { example: null, gloss: null };
+    const pnKey = toPNKey(person, number);
+    const leaf = byVoice.get(pnKey);
+    if (!leaf) return { example: null, gloss: null };
+    return { example: leaf.example || null, gloss: leaf.gloss || null };
 }
 
-/** Hole kurze Personen-Übersetzung („ich lobe“, „wir gehen“ …) aus der Meta */
-function pickVerbGloss(lemma, { tense, mood, voice, person, number }) {
-    const block = VERB_META?.[lemma]?.[tense]?.[mood]?.[voice];
-    if (!block) return null;
-    const gl = block.glosses?.[PN(person, number)];
-    return gl || null;
-}
+// -----------------------------
+// Export: buildVerbQuestions
+// -----------------------------
+export function buildVerbQuestions({
+    lemmas = [],
+    numQuestions = 5,
+    filters = {}
+}) {
+    const wantedAll = !lemmas || lemmas.length === 0;
+    const lemmaSet = new Set(lemmas);
 
-// Hilfetabelle (Personen × Sg/Pl)
-function buildHelpParadigm(row) {
-    return [
-        { label: "1. Person", singular: row.forms["1Sg"] || "", plural: row.forms["1Pl"] || "" },
-        { label: "2. Person", singular: row.forms["2Sg"] || "", plural: row.forms["2Pl"] || "" },
-        { label: "3. Person", singular: row.forms["3Sg"] || "", plural: row.forms["3Pl"] || "" },
-    ];
-}
-
-// Beispiel + Hinweise aus verbs_meta.json holen (robust mit Fallback)
-function buildHelpExample(lemmaKey, row, spec) {
-    const meta = VERB_META[lemmaKey] || {};
-    const pnKey = PN(spec.person, spec.number);
-
-
-    // 1) Kurzdeutsch (z.B. „du lobst“). Reihenfolge: sehr spezifisch → allgemein → Fallback
-    let deFinite = "";
-    if (meta.deFinite?.[spec.tense]?.[spec.mood]?.[spec.voice]?.[pnKey]) {
-        deFinite = meta.deFinite[spec.tense][spec.mood][spec.voice][pnKey];
-    } else if (meta.deFinite?.[spec.tense]?.[spec.mood]?.[pnKey]) {
-        deFinite = meta.deFinite[spec.tense][spec.mood][pnKey];
-    } else if (meta.deFinite?.[spec.tense]?.[pnKey]) {
-        deFinite = meta.deFinite[spec.tense][pnKey];
-    } else if (meta.deFinite?.[pnKey]) {
-        deFinite = meta.deFinite[pnKey];
-    } else {
-        // letzter Notnagel: aus lemmaDe einen einfachen Präsens bauen
-        const infinit = (row.lemmaDe || "").replace(/\s*\(.*?\)\s*/g, "").trim(); // Klammern raus
-        if (infinit) deFinite = DE_FINITE_FALLBACK[pnKey]?.(infinit) || infinit;
-    }
-
-    // 2) Beispiel (mit {form} ersetzbar). Reihenfolge: spezifisch → allgemein
-    let ex = meta.examples?.[spec.tense]?.[spec.mood]?.[spec.voice]?.[pnKey]
-        || meta.examples?.[spec.tense]?.[spec.mood]?.[pnKey]
-        || meta.examples?.[spec.tense]?.[pnKey]
-        || meta.examples?.[pnKey]
-        || null;
-
-    const latinForm = spec.form || row.forms?.[pnKey] || "";
-
-    const example = ex
-        ? {
-            latin: stripPunct((ex.lat || "").replace("{form}", latinForm)),
-            german: stripPunct((ex.de || "").replace("{form}", deFinite || latinForm)),
-            hints: Array.isArray(ex.hints) ? ex.hints.slice() : [],
-        }
-        : {
-            // Default, falls in META nichts vorhanden ist
-            latin: stripPunct(`${latinForm} amīcōs.`),
-            german: deFinite ? stripPunct(`${deFinite} die Freunde.`) : "",
-            hints: [],
-        };
-
-    const title = `${row.lemma} – ${row.lemmaDe} (${spec.tense}, ${spec.mood}${spec.voice ? `, ${spec.voice}` : ""})`;
-
-    return { title, example, deFinite };
-}
-
-// Öffentlich: Anzeigezeile unter „Richtige Bestimmung(en)“
-export function formatVerbSpec(opt) {
-    const numFull = opt.number === "Sg" ? "Singular" : "Plural";
-    // Reihenfolge wie gewünscht: Person, Numerus, Modus, Genus, Zeitform
-    return `${opt.person}. Person ${numFull} ${opt.mood} ${opt.voice} ${opt.tense}`;
-}
-
-// -------------------------------------------------------------
-// Hauptfunktion: erzeugt die Verb-Fragen
-// -------------------------------------------------------------
-export function buildVerbQuestions({ lemmas, numQuestions, filters }) {
-    const allowTenses = asList(filters?.tenses).length ? filters.tenses : TENSES;
-    const allowMoods = asList(filters?.moods).length ? filters.moods : MOODS;
-    const allowVoices = asList(filters?.voices).length ? filters.voices : VOICES;
-
-    const wanted = new Set(asList(lemmas).map(s => (s || "").toLowerCase()));
-    const wantAll = wanted.size === 0;
+    const allowTenses = filters.tenses?.length ? filters.tenses : DEFAULT_TENSES;
+    const allowMoods = filters.moods?.length ? filters.moods : DEFAULT_MOODS;
+    const allowVoices = filters.voices?.length ? filters.voices : DEFAULT_VOICES;
 
     const candidates = [];
 
     for (const tense of allowTenses) {
-        const rows = BANK[tense] || [];
+        const rows = rowsForTense(tense); // <= robust!
         for (const row of rows) {
-            const lemmaKey = (row.lemma || "").toLowerCase();
-            if (!wantAll && !wanted.has(lemmaKey)) continue;
+            // row: { lemma, lemmaDe, mood, voice, compound?, forms: { "1Sg": "...", ... } }
+            if (!wantedAll && !lemmaSet.has(row.lemma)) continue;
             if (!allowMoods.includes(row.mood)) continue;
             if (!allowVoices.includes(row.voice)) continue;
 
             for (const person of PERSONS) {
                 for (const number of NUMBERS) {
-
-
-                    const pnKey = `${person}${number}`; // z.B. "1Sg"
-                    const form = row.forms?.[pnKey];
-
+                    const pn = toPNKey(person, number);
+                    const form = row.forms?.[pn];
                     if (!form) continue;
 
-                    const spec = { person, number, tense, mood: row.mood, voice: row.voice };
-                    const helpExample = pickVerbExample(row.lemma, spec);            // aus Meta
-                    const helpGloss = pickVerbGloss(row.lemma, spec);
-
-                    console.log("BUILD VERB Q:", helpExample, helpGloss);
-
-                    const helpParadigm = buildHelpParadigm(row);
-                    // const { title: helpTitle, example: helpExample } = buildHelpExample(lemmaKey, row, spec);
-                    const clean = s => (s || "").trim().replace(/[.。]\s*$/, ""); // Punkt am Ende optional entfernen
-
-                    const lemmaKey = normalizeLemma(row.lemma);
-                    const metaByTense = VERB_META[lemmaKey]?.[tense];
-                    const byMood = metaByTense?.[row.mood];
-                    const byVoice = byMood?.[row.voice];
-
-                    // Beispiele
-
-                    const example = byVoice?.examples?.[pnKey] || null;
-
-                    // Gloss/Übersetzung (kurz)
-                    const gloss = byVoice?.gloss?.[pnKey] || null;
-
+                    // Meta (Beispiel + Gloss/Übersetzung)
+                    const { example, gloss } = pickFromMeta(
+                        row.lemma, normalizePraesens(tense), row.mood, row.voice, person, number
+                    );
 
                     candidates.push({
-                        //id: `verb_${row.lemma}_${tense}_${row.mood}_${row.voice}_${key}`,
+                        id: `verb_${row.lemma}_${normalizePraesens(tense)}_${row.mood}_${row.voice}_${pn}`,
                         type: "verb",
                         prompt: form,
                         lemma: row.lemma,
                         lemmaDe: row.lemmaDe,
-                        correctOptions: [{ person, number, tense, mood: row.mood, voice: row.voice }],
+                        correctOptions: [{ person, number, tense: normalizePraesens(tense), mood: row.mood, voice: row.voice }],
 
-                        // Hilfetabelle (hattest du bereits)
+                        // Hilfe-Paradigma 1.–3. Person / Sg/Pl
                         helpParadigm: [
                             { label: "1. Person", singular: row.forms["1Sg"] || "", plural: row.forms["1Pl"] || "" },
                             { label: "2. Person", singular: row.forms["2Sg"] || "", plural: row.forms["2Pl"] || "" },
                             { label: "3. Person", singular: row.forms["3Sg"] || "", plural: row.forms["3Pl"] || "" }
                         ],
-                        helpTitle: `${row.lemma} – ${row.lemmaDe} (${tense}, ${row.mood}, ${row.voice})`,
+                        helpTitle: `${row.lemma} – ${row.lemmaDe} (${normalizePraesens(tense)}, ${row.mood}, ${row.voice})`,
 
-                        // NEU: aus der Meta – wird in Quiz.jsx angezeigt
-                        helpExample: example ? { latin: example.latin, german: example.german, hints: example.hints || [] } : null,
+                        // Beispiel + echte Kurzübersetzung aus Meta (falls vorhanden)
+                        helpExample: example ? {
+                            latin: example.latin || "",
+                            german: example.german || "",
+                            hints: Array.isArray(example.hints) ? example.hints : []
+                        } : null,
                         helpGloss: gloss || null,
 
                         topics: ["verb"]
@@ -259,24 +172,50 @@ export function buildVerbQuestions({ lemmas, numQuestions, filters }) {
         }
     }
 
-    if (!candidates.length) return [];
-
-    // Gleichmäßig über Lemmata verteilen
-    const byLemma = new Map();
-    for (const c of candidates) {
-        const k = c.lemma.toLowerCase();
-        if (!byLemma.has(k)) byLemma.set(k, []);
-        byLemma.get(k).push(c);
+    // fair unter den gewählten Lemmata verteilen (falls mehrere ausgewählt)
+    let out = candidates;
+    if (lemmas && lemmas.length > 1) {
+        out = roundRobinPerLemma(candidates, lemmas, numQuestions);
+    } else {
+        out = candidates.slice(0, numQuestions);
     }
-    for (const list of byLemma.values()) list.sort(() => Math.random() - 0.5);
 
-    const buckets = Array.from(byLemma.values());
-    const out = [];
+    return out;
+}
+
+// Gleichverteilung: pro Lemma reihum ziehen, bis numQuestions
+function roundRobinPerLemma(cands, lemmas, limit) {
+    const byLemma = new Map();
+    for (const l of lemmas) byLemma.set(l, []);
+    for (const c of cands) {
+        if (!byLemma.has(c.lemma)) byLemma.set(c.lemma, []);
+        byLemma.get(c.lemma).push(c);
+    }
+    // mischen pro Lemma
+    for (const list of byLemma.values()) shuffle(list);
+    const result = [];
     let i = 0;
-    while (out.length < numQuestions && buckets.some(b => b.length)) {
-        const b = buckets[i % buckets.length];
-        if (b.length) out.push(b.shift());
+    while (result.length < limit) {
+        let added = false;
+        for (const l of lemmas) {
+            const list = byLemma.get(l) || [];
+            if (i < list.length) {
+                result.push(list[i]);
+                added = true;
+                if (result.length >= limit) break;
+            }
+        }
+        if (!added) break;
         i++;
     }
-    return out;
+    return result;
+}
+
+function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
 }

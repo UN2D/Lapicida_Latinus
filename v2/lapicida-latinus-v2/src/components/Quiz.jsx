@@ -186,7 +186,8 @@ export function Quiz({ round, onExit }) {
                             <div className="result-correct-list">
                                 {(currentResult.correctOptions || []).map((opt, i) => (
                                     <div key={i} className="result-correct-line">
-                                        {formatVerbSpec(opt)}
+                                        {formatVerbSpec(opt)}<br></br>
+                                        {currentResult.question.helpGloss}
                                     </div>
                                 ))}
                             </div>
@@ -234,16 +235,28 @@ export function Quiz({ round, onExit }) {
                         {currentResult.question.type === "verb" &&
                             currentResult.question.helpParadigm &&
                             Array.isArray(currentResult.question.helpParadigm) && (
-                                <div className="paradigm-box">
 
+                                <div className="paradigm-box">
+                                    {currentResult.question.helpExample && (
+                                        <div className="example-box">
+                                            <div className="ex-la">
+                                                <em>{currentResult.question.helpExample.latin} - {currentResult.question.helpExample.german}</em>
+                                            </div>
+                                            {currentResult.question.helpExample.hints?.length > 0 && (
+                                                <ul className="ex-hints">
+                                                    {currentResult.question.helpExample.hints.map((h, i) => <li key={i}>{h}</li>)}
+                                                </ul>
+                                            )}
+                                        </div>
+                                    )}
                                     {/* Beispiel + Übersetzung + optionale Hinweise */}
-                                    {(() => {
+                                    {/* (() => {
                                         // Prefer helpExample (from verbs_meta), fallback to example/hints if present
                                         const ex = currentResult.question.helpExample || null;   // kein Fallback mehr
                                         const hints =
                                             (currentResult.question.helpExample && currentResult.question.helpExample.hints)
                                             || [];
-                                        console.log("RENDER HELP EXAMPLE:", currentResult.question);
+                                        
                                         return ex ? (
                                             <div className="example-box">
                                                 <div className="ex-la">
@@ -263,7 +276,7 @@ export function Quiz({ round, onExit }) {
                                                 )}
                                             </div>
                                         ) : null;
-                                    })()}
+                                    })()*/}
 
                                     <div className="paradigm-title">
                                         Formenübersicht: {currentResult.question.lemma} – {currentResult.question.lemmaDe}
