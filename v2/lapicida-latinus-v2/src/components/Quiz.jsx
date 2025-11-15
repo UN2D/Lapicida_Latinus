@@ -226,15 +226,35 @@ export function Quiz({ round, onExit }) {
                         )}
 
                         {/* — VERBEN — */}
-                        {currentResult.question.type === "verb" && (
-                            <div className="result-correct-list">
-                                {(currentResult.correctOptions || []).map((opt, i) => (
-                                    <div key={i} className="result-correct-line">
-                                        {formatVerbSpec(opt)}<br></br>
-                                        {currentResult.question.helpGloss}
+                        {currentResult?.question?.type === "verb" && (
+                            <>
+                                {(currentResult.question.helpGloss || currentResult.question.helpExample) && (
+                                    <div className="example-box">
+                                        {currentResult.question.helpGloss && (
+                                            <div className="ex-gloss">
+                                                {currentResult.question.helpGloss}
+                                            </div>
+                                        )}
+                                        {currentResult.question.helpExample && (
+                                            <div className="ex-la">
+                                                <em>
+                                                    {currentResult.question.helpExample.latin?.replace(/\.$/, "")}
+                                                    {" – "}
+                                                    {currentResult.question.helpExample.german?.replace(/\.$/, "")}
+                                                </em>
+                                            </div>
+                                        )}
+                                        {Array.isArray(currentResult.question.helpExample?.hints) &&
+                                            currentResult.question.helpExample.hints.length > 0 && (
+                                                <ul className="ex-hints">
+                                                    {currentResult.question.helpExample.hints.map((h, i) => (
+                                                        <li key={i}>{h}</li>
+                                                    ))}
+                                                </ul>
+                                            )}
                                     </div>
-                                ))}
-                            </div>
+                                )}
+                            </>
                         )}
 
                         {/* === HILFE: Nomen / Adjektive – Paradigma === */}
@@ -293,34 +313,6 @@ export function Quiz({ round, onExit }) {
                                             )}
                                         </div>
                                     )}
-                                    {/* Beispiel + Übersetzung + optionale Hinweise */}
-                                    {/* (() => {
-                                        // Prefer helpExample (from verbs_meta), fallback to example/hints if present
-                                        const ex = currentResult.question.helpExample || null;   // kein Fallback mehr
-                                        const hints =
-                                            (currentResult.question.helpExample && currentResult.question.helpExample.hints)
-                                            || [];
-                                        
-                                        return ex ? (
-                                            <div className="example-box">
-                                                <div className="ex-la">
-                                                    <em>
-                                                        {ex.latin}
-                                                        {" – "}
-                                                        {ex.german}
-                                                    </em>
-                                                </div>
-
-                                                {Array.isArray(hints) && hints.length > 0 && (
-                                                    <ul className="help-hints no-bullets">
-                                                        {hints.map((h, i) => (
-                                                            <li key={i}>{h}</li>
-                                                        ))}
-                                                    </ul>
-                                                )}
-                                            </div>
-                                        ) : null;
-                                    })()*/}
 
                                     <div className="paradigm-title">
                                         Formenübersicht: {currentResult.question.lemma} – {currentResult.question.lemmaDe}
