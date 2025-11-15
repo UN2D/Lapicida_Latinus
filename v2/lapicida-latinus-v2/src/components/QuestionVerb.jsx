@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-const [helpStage, setHelpStage] = useState(0); // 0 = noch kein Fehlversuch gezeigt, 1 = Fehlversuch markiert
-const [firstWrong, setFirstWrong] = useState(null);
+
 
 
 
 export default function QuestionVerb({ question, showHelp, onAnswer }) {
+    const [helpStage, setHelpStage] = useState(0); // 0 = noch kein Fehlversuch gezeigt, 1 = Fehlversuch markiert
+    const [firstWrong, setFirstWrong] = useState(null);
     const TENSETAB = {
         "praesens": "PRS", "präsens": "PRS", "praesent": "PRS",
         "imperfekt": "IMPF",

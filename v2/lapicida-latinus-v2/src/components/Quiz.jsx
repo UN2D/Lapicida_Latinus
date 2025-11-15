@@ -9,6 +9,7 @@ import QuestionVerb from "./QuestionVerb.jsx";
 // Verb-Helfer für die Ergebniszeile
 import { formatVerbSpec } from "../core/generators/verbs";
 
+
 // Lokale Maps für die Anzeige (wie bisher)
 const CASE_DE = { Nom: "Nominativ", Gen: "Genitiv", Dat: "Dativ", Akk: "Akkusativ", Abl: "Ablativ" };
 const NUM_DE = { Sg: "Singular", Pl: "Plural" };

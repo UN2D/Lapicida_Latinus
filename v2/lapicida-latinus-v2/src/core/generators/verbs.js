@@ -26,6 +26,39 @@ const BANK = {
     Perfekt: PERF,
 };
 
+// ===== Label-Maps (Deutsch) =====
+const PERSON_LABELS = { "1": "1. Person", "2": "2. Person", "3": "3. Person" };
+const NUMBER_LABELS = { "Sg": "Singular", "Pl": "Plural" };
+
+// Akzeptiere verschiedene Schreibweisen -> normiere auf die schöne Ausgabe
+const TENSE_LABELS = {
+    "Praesens": "Präsens", "Präsens": "Präsens", "PRS": "Präsens",
+    "Imperfekt": "Imperfekt", "IMPF": "Imperfekt",
+    "Perfekt": "Perfekt", "PERF": "Perfekt",
+    "Plusquamperfekt": "Plusquamperfekt", "PQP": "Plusquamperfekt",
+    "Futur I": "Futur I", "FUT1": "Futur I",
+    "Futur II": "Futur II", "FUT2": "Futur II"
+};
+
+const MOOD_LABELS = {
+    "Indikativ": "Indikativ", "Konjunktiv": "Konjunktiv", "Imperativ": "Imperativ"
+};
+
+const VOICE_LABELS = {
+    "Aktiv": "Aktiv", "Passiv": "Passiv"
+};
+
+export function formatVerbSpec(spec = {}) {
+    const p = PERSON_LABELS[spec.person] ?? spec.person ?? "";
+    const n = NUMBER_LABELS[spec.number] ?? spec.number ?? "";
+    const t = TENSE_LABELS[spec.tense] ?? spec.tense ?? "";
+    const m = MOOD_LABELS[spec.mood] ?? spec.mood ?? "";
+    const v = VOICE_LABELS[spec.voice] ?? spec.voice ?? "";
+
+    // Reihenfolge: Person, Numerus, Zeitform, Modus, Genus (Diathese)
+    return [p, n, t, m, v].filter(Boolean).join(", ");
+}
+
 // robust: akzeptiere Array ODER Objekt (Map)
 function rowsForTense(tense) {
     const t = BANK[tense] ?? BANK[normalizePraesens(tense)];
