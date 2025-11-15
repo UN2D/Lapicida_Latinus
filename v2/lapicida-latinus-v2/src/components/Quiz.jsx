@@ -233,16 +233,17 @@ export function Quiz({ round, onExit }) {
                                         {currentResult.correctOptions.map((opt, i) => (
                                             <div key={i} className="result-correct-line">
                                                 <li key={i}>
-                                                {currentResult.question.type === "verb"
-                                                    ? formatVerbSpec(opt)
-                                                    : `${formatCaseNumberGender(opt)}${opt.de ? " – " + opt.de : ""}`}
-                                            </li>
+                                                    {currentResult.question.type === "verb"
+                                                        ? formatVerbSpec(opt)
+                                                        : `${formatCaseNumberGender(opt)}${opt.de ? " – " + opt.de : ""}`}
+                                                </li>
 
-                                        </div>
+                                            </div>
                                         ))}
                                     </div>
+                                )}
 
-
+                                {(currentResult.question.helpGloss || currentResult.question.helpExample) && (
                                     <div className="example-box">
                                         {currentResult.question.helpGloss && (
                                             <div className="ex-gloss">
@@ -260,7 +261,7 @@ export function Quiz({ round, onExit }) {
                                         )}
                                         {Array.isArray(currentResult.question.helpExample?.hints) &&
                                             currentResult.question.helpExample.hints.length > 0 && (
-                                                <ul className="ex-hints">
+                                                <ul className="help-hints">
                                                     {currentResult.question.helpExample.hints.map((h, i) => (
                                                         <li key={i}>{h}</li>
                                                     ))}
