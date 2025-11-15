@@ -1,257 +1,226 @@
 // src/core/generators/verbs.js
-import PRAES from "../../data/verbs_praesens.json";
-import PERF from "../../data/verbs_perfekt.json";
-import VERB_META_WRAPPER from "../../data/verbs_meta.json";
+//
+// Robuste Generator-Logik für Verbfragen.
+// - Unterstützt Filters: { tenses?, moods?, voices? }
+// - Lemmas: [] => alle; andernfalls nur die ausgewählten
+// - Exportiert buildVerbQuestions + formatVerbSpec
+// - Nutzt Tabellen-Schlüssel "1Sg", "2Sg", "3Sg", "1Pl", "2Pl", "3Pl"
+//
+// Datenform (z.B. verbs_praesens.json):
+// [
+//   {
+//     "lemma": "laudare",
+//     "lemmaDe": "loben",
+//     "tense": "Praesens",
+//     "mood": "Indikativ",
+//     "voice": "Aktiv",
+//     "forms": { "1Sg":"laudo", "2Sg":"laudas", ..., "3Pl":"laudant" }
+//   },
+//   ...
+// ]
 
-// -----------------------------
-// Konstanten & Hilfen
-// -----------------------------
+import PRS from "../../data/verbs_praesens.json";
+// Falls weitere Zeiten später dazukommen, einfach entkommentieren + ergänzen:
+// import IMPF from "../../data/verbs_imperfekt.json";
+// import PERF from "../../data/verbs_perfekt.json";
+// import PQP  from "../../data/verbs_plusquamperfekt.json";
+// import FUT1 from "../../data/verbs_futur1.json";
+// import FUT2 from "../../data/verbs_futur2.json";
 
-// ===== helpers & constants (robust) =====
-const TENSES = ["Praesens", "Imperfekt", "Perfekt", "Plusquamperfekt", "Futur I", "Futur II"];
-const MOODS = ["Indikativ", "Konjunktiv", "Imperativ"];
-const VOICES = ["Aktiv", "Passiv"];
 
-// Akzeptiert Einzelwert, Array oder null → immer Array
-function asList(x) {
-    if (x == null) return [];
-    return Array.isArray(x) ? x : [x];
-}
-
-// Normalisierer für Keys
-function capFirst(s) {
-    if (!s) return "";
-    const t = String(s).trim();
-    return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
-}
-function normTense(t) {
-    if (!t) return "";
-    const s = String(t).toLowerCase().replace(/\s+/g, " ").trim();
-    if (s === "futur 1" || s === "futur i" || s === "futur1") return "Futur I";
-    if (s === "futur 2" || s === "futur ii" || s === "futur2") return "Futur II";
-    if (s === "plusquamperf" || s.startsWith("plusquamperf")) return "Plusquamperfekt";
-    if (s === "praesens" || s === "präsens" || s === "prasens") return "Praesens";
-    if (s === "imperfekt") return "Imperfekt";
-    if (s === "perfekt") return "Perfekt";
-    // Fallback: Titel-Case
-    return capFirst(s);
-}
-function normMood(m) {
-    const s = capFirst(m || "");
-    if (s === "Konjunktiv" || s === "Indikativ" || s === "Imperativ") return s;
-    // Fallback, häufige Varianten
-    if (/konj/.test(s.toLowerCase())) return "Konjunktiv";
-    if (/ind/.test(s.toLowerCase())) return "Indikativ";
-    if (/imp/.test(s.toLowerCase())) return "Imperativ";
-    return s || "Indikativ";
-}
-function normVoice(v) {
-    const s = capFirst(v || "");
-    if (s === "Aktiv" || s === "Passiv") return s;
-    if (/act/.test(s.toLowerCase())) return "Aktiv";
-    if (/pass/.test(s.toLowerCase())) return "Passiv";
-    return s || "Aktiv";
-}
-
-// Lemma normalisieren für Meta-Lookups
-function normalizeLemma(s) {
-    return (s || "").toLowerCase().trim();
-}
-
-// Kleine Anzeige-Helfer für Quiz/Summary (exportiert!)
-export function formatVerbSpec({ person, number, tense, mood, voice }) {
-    const PERSON_LABEL = { "1": "1. Person", "2": "2. Person", "3": "3. Person" };
-    const NUMBER_LABEL = { "Sg": "Singular", "Pl": "Plural" };
-    return [
-        PERSON_LABEL[person] || person,
-        NUMBER_LABEL[number] || number,
-        tense,
-        mood,
-        voice
-    ].join(" ");
-}
+const DEBUG = true;
+const BANK = Object.create(null);
+// -------------------- Helfer --------------------
 
 const PERSONS = ["1", "2", "3"];
 const NUMBERS = ["Sg", "Pl"];
-const DEFAULT_TENSES = ["Praesens"];
-const DEFAULT_MOODS = ["Indikativ"];
-const DEFAULT_VOICES = ["Aktiv"];
 
+const ALL_TENSES = ["Praesens"/*, "Imperfekt", "Perfekt", "Plusquamperfekt", "Futur I", "Futur II"*/];
+const ALL_MOODS = ["Indikativ", "Konjunktiv", "Imperativ"];
+const ALL_VOICES = ["Aktiv", "Passiv"];
 
-const BANK = {
-    Praesens: PRAES,
-    Perfekt: PERF,
-};
-
-// ===== Label-Maps (Deutsch) =====
-const PERSON_LABELS = { "1": "1. Person", "2": "2. Person", "3": "3. Person" };
-const NUMBER_LABELS = { "Sg": "Singular", "Pl": "Plural" };
-
-// Akzeptiere verschiedene Schreibweisen -> normiere auf die schöne Ausgabe
-const TENSE_LABELS = {
-    "Praesens": "Präsens", "Präsens": "Präsens", "PRS": "Präsens",
-    "Imperfekt": "Imperfekt", "IMPF": "Imperfekt",
-    "Perfekt": "Perfekt", "PERF": "Perfekt",
-    "Plusquamperfekt": "Plusquamperfekt", "PQP": "Plusquamperfekt",
-    "Futur I": "Futur I", "FUT1": "Futur I",
-    "Futur II": "Futur II", "FUT2": "Futur II"
-};
-
-const MOOD_LABELS = {
-    "Indikativ": "Indikativ", "Konjunktiv": "Konjunktiv", "Imperativ": "Imperativ"
-};
-
-const VOICE_LABELS = {
-    "Aktiv": "Aktiv", "Passiv": "Passiv"
-};
-
-// robust: akzeptiere Array ODER Objekt (Map)
-function rowsForTense(tense) {
-    const t = Array.isArray(BANK?.[tense]) ? BANK[tense] : [];
-    //const t = BANK[tense] ?? BANK[normalizePraesens(tense)];
-    if (!t) return [];
-    if (Array.isArray(t)) return t;
-    // Falls das JSON als Objekt kommt (z.B. { "rows": [...] }):
-    if (Array.isArray(t.rows)) return t.rows;
-    // Als letzte Rettung: Object.values
-    return Object.values(t);
+// Sicheres Array
+function asList(x) {
+    console.log("asList ", x);
+    if (!x) return [];
+    return Array.isArray(x) ? x : [x];
 }
 
-function normalizePraesens(s) {
-    // fange "Präsens" und "praesens" ab
-    if (!s) return "Praesens";
-    const low = String(s).toLowerCase();
-    if (low.includes("präs") || low.includes("praes")) return "Praesens";
-    return s;
+// Trim/Normalisierung humaner Filter-Einträge -> exakt wie in Daten
+function normTense(t) {
+    if (!t) return null;
+    const s = ("" + t).toLowerCase().trim();
+    if (s.startsWith("pr")) return "Praesens";
+    if (s.startsWith("impe")) return "Imperfekt";
+    if (s.startsWith("per")) return "Perfekt";
+    if (s.startsWith("plus")) return "Plusquamperfekt";
+    if (s.replace(/\s+/g, "") === "futuri") return "Futur I";
+    if (s.replace(/\s+/g, "") === "futurii") return "Futur II";
+    return t; // Fallback unverändert
 }
 
-function toPNKey(person, number) {
-    return `${person}${number}`; // "1Sg", "3Pl"
+function normMood(m) {
+    if (!m) return null;
+    const s = ("" + m).toLowerCase().trim();
+    if (s.startsWith("in")) return "Indikativ";
+    if (s.startsWith("ko") || s.startsWith("con")) return "Konjunktiv";
+    if (s.startsWith("im")) return "Imperativ";
+    return m;
 }
 
-// -----------------------------
-// VERB_META Index aufbauen
-// verbs_meta.json Format: { "verbsMeta": [ {...}, ... ] }
-// Wir indexieren: lemma -> tense -> mood -> voice -> PNKey -> {latin,german,hints,gloss}
-// -----------------------------
-const VERB_META_ARRAY = Array.isArray(VERB_META_WRAPPER?.verbsMeta)
-    ? VERB_META_WRAPPER.verbsMeta
-    : [];
+function normVoice(v) {
+    if (!v) return null;
+    const s = ("" + v).toLowerCase().trim();
+    if (s.startsWith("ak")) return "Aktiv";
+    if (s.startsWith("pa")) return "Passiv";
+    return v;
+}
 
-const META_INDEX = buildMetaIndex(VERB_META_ARRAY);
+// Unit-Label für Ausgabe (wie bei Nomen/Adjektiven: ausgeschrieben)
+function labelPerson(p) {
+    return p === "1" ? "1. Person" : p === "2" ? "2. Person" : "3. Person";
+}
+function labelNumber(n) {
+    return n === "Sg" ? "Singular" : "Plural";
+}
 
-function buildMetaIndex(list) {
-    const idx = new Map();
-    for (const entry of list) {
-        const lemma = entry.lemma;
-        const tense = entry.tense;        // z.B. "Praesens"
-        const moods = entry.moods || {};
-        if (!lemma || !tense) continue;
+// -------------------- Datenbank zusammenführen --------------------
 
-        if (!idx.has(lemma)) idx.set(lemma, new Map());
-        const byTense = idx.get(lemma);
-        if (!byTense.has(tense)) byTense.set(tense, new Map());
+// BANK: { [tense: string]: Array<Row> }
+// Row: { lemma, lemmaDe, tense, mood, voice, forms, (optional: compound) }
 
-        for (const [mood, voicesObj] of Object.entries(moods)) {
-            if (!byTense.get(tense).has(mood)) byTense.get(tense).set(mood, new Map());
 
-            for (const [voice, pack] of Object.entries(voicesObj || {})) {
-                const ex = pack.examples || {};
-                const gl = pack.gloss || {};
-                const node = new Map();
-                // examples & gloss beide per PNKey ablegen
-                for (const [pn, obj] of Object.entries(ex)) {
-                    node.set(pn, { example: obj, gloss: gl[pn] || null });
-                }
-                byTense.get(tense).get(mood).set(voice, node);
+addRows(PRS);
+if (DEBUG) console.log("[verbs] BANK ", BANK);
+// addRows(IMPF);
+// addRows(PERF);
+// addRows(PQP);
+// addRows(FUT1);
+// addRows(FUT2);
+
+
+function addRows(input) {
+    if (!input) return;
+    console.log("addRows ", input);
+    if (Array.isArray(input)) {
+        for (const r of input) {
+            const t = normTense(r?.tense) || "Praesens";
+            if (!BANK[t]) BANK[t] = [];
+            BANK[t].push({ ...r, tense: t });
+        }
+        return;
+    }
+
+    if (typeof input === "object") {
+        for (const [tenseKey, arr] of Object.entries(input)) {
+            if (!Array.isArray(arr)) continue;
+            const tKey = normTense(tenseKey) || "Praesens";
+            if (!BANK[tKey]) BANK[tKey] = [];
+            for (const r of arr) {
+                const t = normTense(r?.tense) || tKey;
+                if (!BANK[t]) BANK[t] = [];
+                BANK[t].push({ ...r, tense: t });
             }
         }
     }
-    return idx;
 }
 
-function pickFromMeta(lemma, tense, mood, voice, person, number) {
-    const byLemma = META_INDEX.get(lemma);
-    if (!byLemma) return { example: null, gloss: null };
-    const byTense = byLemma.get(tense);
-    if (!byTense) return { example: null, gloss: null };
-    const byMood = byTense.get(mood);
-    if (!byMood) return { example: null, gloss: null };
-    const byVoice = byMood.get(voice);
-    if (!byVoice) return { example: null, gloss: null };
-    const pnKey = toPNKey(person, number);
-    const leaf = byVoice.get(pnKey);
-    if (!leaf) return { example: null, gloss: null };
-    return { example: leaf.example || null, gloss: leaf.gloss || null };
+// Aktuell nur Präsens sicher eingebunden.
+// Weitere Zeiten später einfach addRows(…)
+
+
+// -------------------- Export: Anzeigeformat für Zusammenfassung --------------------
+
+export function formatVerbSpec(opt = {}) {
+    // "1. Person Plural, Praesens, Indikativ, Aktiv"
+    const P = opt.person ? labelPerson(opt.person) : "";
+    const N = opt.number ? labelNumber(opt.number) : "";
+    const T = opt.tense || "";
+    const M = opt.mood || "";
+    const V = opt.voice || "";
+    return [P, N, T, M, V].filter(Boolean).join(", ");
 }
 
+// -------------------- Kern: Fragen bauen --------------------
+
+/**
+ * buildVerbQuestions
+ * @param {Object} params
+ * @param {string[]} params.lemmas      - leere Liste => alle Lemmas, sonst die ausgewählten
+ * @param {number}   params.numQuestions
+ * @param {Object}   params.filters     - { tenses?:[], moods?:[], voices?:[] }
+ * @returns {Array<Question>}
+ */
+export function buildVerbQuestions({ lemmas = [], numQuestions = 5, filters = {} }) {
+    if (DEBUG) console.log("[verbs] build IN", { lemmas, numQuestions, filters });
+    if (DEBUG) console.log("[verbs] BANK ", BANK);
+    // 1) Erlaubte Filtermengen robust ableiten
+    console.log("filters.tenses ", filters.tenses);
+    const allowTenses = (asList(filters.tenses).length ? asList(filters.tenses) : ALL_TENSES)
+        .map(normTense)
+        .filter(Boolean)
+        .filter((t) => BANK[t]); // nur Zeiten, die es in den Daten auch gibt
+    console.log("normTense ", normTense);
+    if (DEBUG) console.log("allowTenses ", allowTenses);
+
+    const allowMoods = (asList(filters.moods).length ? asList(filters.moods) : ALL_MOODS)
+        .map(normMood)
+        .filter(Boolean);
+
+    const allowVoices = (asList(filters.voices).length ? asList(filters.voices) : ALL_VOICES)
+        .map(normVoice)
+        .filter(Boolean);
 
 
 
-// -----------------------------
-// Export: buildVerbQuestions
-// -----------------------------
-export function buildVerbQuestions({
-    lemmas = [],
-    numQuestions = 5,
-    filters = {}
-}) {
-    const wantedAll = !lemmas || lemmas.length === 0;
-    const lemmaSet = new Set(lemmas);
+    if (DEBUG) console.log("[verbs] allow", { allowTenses, allowMoods, allowVoices });
+    // 2) Lemma-Filter
+    const lemmaSet = new Set(asList(lemmas));
+    const wantedAll = lemmaSet.size === 0;
 
-    const fT = asList(filters?.tenses).map(normTense);
-    const fM = asList(filters?.moods).map(normMood);
-    const fV = asList(filters?.voices).map(normVoice);
+    if (DEBUG) console.log("[verbs] wantAll", wantedAll, lemmaSet);
 
-    const allowTenses = (fT.length ? fT : TENSES);
-    const allowMoods = (fM.length ? fM : MOODS);
-    const allowVoices = (fV.length ? fV : VOICES);
-
+    // 3) Kandidaten sammeln
     const candidates = [];
 
+
+
+
     for (const tense of allowTenses) {
-        const rows = rowsForTense(tense); // <= robust!
+        //if (DEBUG) console.log(`[verbs] tense=${tense} rows=${rows.length}`);
+
+        const rows = BANK[tense] || [];
         for (const row of rows) {
-            // row: { lemma, lemmaDe, mood, voice, compound?, forms: { "1Sg": "...", ... } }
+            // Lemma einschränken?
             if (!wantedAll && !lemmaSet.has(row.lemma)) continue;
+
+            // Mood/Voice einschränken?
             if (!allowMoods.includes(row.mood)) continue;
             if (!allowVoices.includes(row.voice)) continue;
 
-            for (const person of PERSONS) {
-                for (const number of NUMBERS) {
-                    const pn = toPNKey(person, number);
-                    const form = row.forms?.[pn];
+            // Erwartete Tabellen-Schlüssel
+            for (const p of PERSONS) {
+                for (const n of NUMBERS) {
+                    const key = `${p}${n}`; // "1Sg", "3Pl", ...
+                    const form = row?.forms?.[key];
                     if (!form) continue;
 
-                    // Meta (Beispiel + Gloss/Übersetzung)
-                    const { example, gloss } = pickFromMeta(
-                        row.lemma, normalizePraesens(tense), row.mood, row.voice, person, number
-                    );
-
                     candidates.push({
-                        id: `verb_${row.lemma}_${normalizePraesens(tense)}_${row.mood}_${row.voice}_${pn}`,
+                        id: `verb_${row.lemma}_${tense}_${row.mood}_${row.voice}_${key}`,
                         type: "verb",
                         prompt: form,
                         lemma: row.lemma,
                         lemmaDe: row.lemmaDe,
-                        correctOptions: [{ person, number, tense: normalizePraesens(tense), mood: row.mood, voice: row.voice }],
-
-                        // Hilfe-Paradigma 1.–3. Person / Sg/Pl
+                        correctOptions: [
+                            { person: p, number: n, tense, mood: row.mood, voice: row.voice }
+                        ],
+                        // Basis-Hilfe (Paradigma über Personen – passt in deine bestehende Tabelle)
                         helpParadigm: [
                             { label: "1. Person", singular: row.forms["1Sg"] || "", plural: row.forms["1Pl"] || "" },
                             { label: "2. Person", singular: row.forms["2Sg"] || "", plural: row.forms["2Pl"] || "" },
                             { label: "3. Person", singular: row.forms["3Sg"] || "", plural: row.forms["3Pl"] || "" }
                         ],
-                        helpTitle: `${row.lemma} – ${row.lemmaDe} (${normalizePraesens(tense)}, ${row.mood}, ${row.voice})`,
-
-                        // Beispiel + echte Kurzübersetzung aus Meta (falls vorhanden)
-                        helpExample: example ? {
-                            latin: example.latin || "",
-                            german: example.german || "",
-                            hints: Array.isArray(example.hints) ? example.hints : []
-                        } : null,
-                        helpGloss: gloss || null,
-
+                        helpTitle: `${row.lemma} – ${row.lemmaDe} (${tense}, ${row.mood}, ${row.voice})`,
                         topics: ["verb"]
                     });
                 }
@@ -259,44 +228,16 @@ export function buildVerbQuestions({
         }
     }
 
-    // fair unter den gewählten Lemmata verteilen (falls mehrere ausgewählt)
-    let out = candidates;
-    if (lemmas && lemmas.length > 1) {
-        out = roundRobinPerLemma(candidates, lemmas, numQuestions);
-    } else {
-        out = candidates.slice(0, numQuestions);
-    }
+    // 4) Keine Daten? -> leere Liste, aber kein Crash
+    if (!candidates.length) return [];
 
-    return out;
+    // 5) Mischen & begrenzen
+    const shuffled = shuffle(candidates);
+    const take = Math.min(numQuestions, shuffled.length);
+    return shuffled.slice(0, take);
 }
 
-// Gleichverteilung: pro Lemma reihum ziehen, bis numQuestions
-function roundRobinPerLemma(cands, lemmas, limit) {
-    const byLemma = new Map();
-    for (const l of lemmas) byLemma.set(l, []);
-    for (const c of cands) {
-        if (!byLemma.has(c.lemma)) byLemma.set(c.lemma, []);
-        byLemma.get(c.lemma).push(c);
-    }
-    // mischen pro Lemma
-    for (const list of byLemma.values()) shuffle(list);
-    const result = [];
-    let i = 0;
-    while (result.length < limit) {
-        let added = false;
-        for (const l of lemmas) {
-            const list = byLemma.get(l) || [];
-            if (i < list.length) {
-                result.push(list[i]);
-                added = true;
-                if (result.length >= limit) break;
-            }
-        }
-        if (!added) break;
-        i++;
-    }
-    return result;
-}
+// -------------------- Utils --------------------
 
 function shuffle(arr) {
     const a = arr.slice();
@@ -305,8 +246,4 @@ function shuffle(arr) {
         [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
-} export {
-    asList, normTense, normMood, normVoice, normalizeLemma
-    // plus alles, was du sonst schon exportierst (buildVerbQuestions etc.)
-};
-
+}
