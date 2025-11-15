@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-/**
- * question = {
- *   prompt: "laudatis",
- *   lemma: "laudare",
- *   lemmaDe: "loben",
- *   correctOptions: [
- *     { person: 2, number: "Pl", tense: "Praesens", mood: "Indikativ", voice: "Aktiv" },
- *     ...
- *   ]
- * }
- *
- * Props:
- * - showHelp: boolean
- * - onAnswer({ ok: boolean })
- */
+const [helpStage, setHelpStage] = useState(0); // 0 = noch kein Fehlversuch gezeigt, 1 = Fehlversuch markiert
+const [firstWrong, setFirstWrong] = useState(null);
+
+
+
 export default function QuestionVerb({ question, showHelp, onAnswer }) {
     const TENSETAB = {
         "praesens": "PRS", "präsens": "PRS", "praesent": "PRS",
@@ -108,18 +98,6 @@ export default function QuestionVerb({ question, showHelp, onAnswer }) {
         return true;
     }
 
-    /*
-     function isPersonCorrect(p) {
-         console.log("isPersonCorrect", p, selNumber);
- 
-         if (selNumber != null) {
-             var bumms = correct.some(o => o.person === p && o.number === selNumber && matchesAllOther(o, ["person", "number"]));
-             console.log("with number:", bumms);
-             return bumms;
-         }
-         return correct.some(o => o.person === p && matchesAllOther(o, ["person"]));
-     }
-         */
     function isPersonCorrect(p) {
         const pp = codePerson(p);
         if (selNumber != null) {
@@ -238,7 +216,27 @@ export default function QuestionVerb({ question, showHelp, onAnswer }) {
         }
         return cls;
     }
+    const currentSel = () => ({
+        person: selPerson,
+        number: selNumber,
+        tense: selTense,
+        mood: selMood,
+        voice: selVoice,
+    });
 
+    // komplette Auswahl prüfen
+    function isFullyCorrect() {
+        if (correct.length === 0) return false;
+        const u = currentSel();
+        return correct.some(
+            (o) =>
+                o.person === u.person &&
+                o.number === u.number &&
+                o.tense === u.tense &&
+                o.mood === u.mood &&
+                o.voice === u.voice
+        );
+    }
     // ---- events ---------------------------------------------------------------
 
     const onPick = (setter, value) => {
@@ -265,55 +263,102 @@ export default function QuestionVerb({ question, showHelp, onAnswer }) {
         );
     }
 
+    /* function handleCheck() {
+         // Vollständige Auswahl erforderlich
+         if (!allChosen || !canCheck) return;
+         if (
+             selPerson == null ||
+             selNumber == null ||
+             !selTense ||
+             !selMood ||
+             !selVoice
+         ) return;
+ 
+         const fullOk = isFullSelectionCorrect();
+ 
+         const ok = isFullyCorrect();
+         const user = currentSel();
+ 
+         // === ERSTER Klick auf "Prüfen" ===
+         if (!firstChecked) {
+             setFirstChecked(true); // <- wichtig: Erstversuch markieren
+ 
+             if (fullOk) {
+                 // sofort richtig abschließen
+                 onAnswer?.({ ok: true });
+                 return;
+             }
+ 
+             if (helpOn) {
+                 // Hilfe AN: in den Hinweismodus wechseln (Live-Feedback),
+                 // aber noch KEIN Ergebnis-Screen.
+                 setHintMode(true);
+                 setFrozen(null);
+             } else {
+                 // Hilfe AUS: Momentaufnahme einfrieren (keine Live-Farben),
+                 // noch KEIN Ergebnis-Screen.
+                 setHintMode(false);
+                 setFrozen({
+                     person: { value: selPerson, ok: isDimCorrect("person", selPerson) },
+                     number: { value: selNumber, ok: isDimCorrect("number", selNumber) },
+                     tense: { value: selTense, ok: isDimCorrect("tense", selTense) },
+                     mood: { value: selMood, ok: isDimCorrect("mood", selMood) },
+                     voice: { value: selVoice, ok: isDimCorrect("voice", selVoice) },
+                 });
+             }
+             return;
+         }
+ 
+         // === ZWEITER Klick auf "Prüfen" (oder weitere) ===
+         if (fullOk) {
+             // korrekt -> Abschluss
+             onAnswer?.({ ok: true });
+             return;
+         }
+ 
+         // weiterhin falsch -> Ergebnis FALSCH anzeigen
+         // Hilfe AN ODER AUS: jetzt final auswerten
+         onAnswer?.({ ok: false });
+     }
+ 
+ */
     function handleCheck() {
-        // Vollständige Auswahl erforderlich
-        if (!allChosen || !canCheck) return;
+        // vollständig ausgewählt?
+        if (
+            selPerson == null ||
+            selNumber == null ||
+            !selTense ||
+            !selMood ||
+            !selVoice
+        ) return;
 
-        const fullOk = isFullSelectionCorrect();
+        const ok = isFullyCorrect();
+        const user = currentSel();
 
-        // === ERSTER Klick auf "Prüfen" ===
-        if (!firstChecked) {
-            setFirstChecked(true); // <- wichtig: Erstversuch markieren
-
-            if (fullOk) {
-                // sofort richtig abschließen
-                onAnswer?.({ ok: true });
+        if (showHelp) {
+            // HILFE AN:
+            if (helpStage === 0 && !ok) {
+                // 1. Fehlversuch → färben, aber NICHT abschließen
+                setHelpStage(1);
+                setFirstWrong(user);
                 return;
             }
-
-            if (helpOn) {
-                // Hilfe AN: in den Hinweismodus wechseln (Live-Feedback),
-                // aber noch KEIN Ergebnis-Screen.
-                setHintMode(true);
-                setFrozen(null);
-            } else {
-                // Hilfe AUS: Momentaufnahme einfrieren (keine Live-Farben),
-                // noch KEIN Ergebnis-Screen.
-                setHintMode(false);
-                setFrozen({
-                    person: { value: selPerson, ok: isDimCorrect("person", selPerson) },
-                    number: { value: selNumber, ok: isDimCorrect("number", selNumber) },
-                    tense: { value: selTense, ok: isDimCorrect("tense", selTense) },
-                    mood: { value: selMood, ok: isDimCorrect("mood", selMood) },
-                    voice: { value: selVoice, ok: isDimCorrect("voice", selVoice) },
-                });
+            // zweiter Klick ODER gleich richtig: jetzt final bewerten (richtig ODER falsch!)
+            onAnswer(ok, { userAnswer: user, attempts: helpStage === 0 ? 1 : 2 });
+            // reset lokale Hilfe-States für nächste Frage erst in Quiz nach "Weiter"
+            return;
+        } else {
+            // HILFE AUS:
+            if (helpStage === 0) {
+                // einmal Farben zeigen, aber NICHT finalisieren
+                setHelpStage(1);
+                setFirstWrong(user);
+                return;
             }
-            return;
+            // zweiter Klick finalisiert (richtig ODER falsch)
+            onAnswer(ok, { userAnswer: user, attempts: 2 });
         }
-
-        // === ZWEITER Klick auf "Prüfen" (oder weitere) ===
-        if (fullOk) {
-            // korrekt -> Abschluss
-            onAnswer?.({ ok: true });
-            return;
-        }
-
-        // weiterhin falsch -> Ergebnis FALSCH anzeigen
-        // Hilfe AN ODER AUS: jetzt final auswerten
-        onAnswer?.({ ok: false });
     }
-
-
 
 
     //const canCheck = allChosen;

@@ -101,7 +101,7 @@ export function Quiz({ round, onExit }) {
             </div>
         );
     }
-    console.log({ current, currentResult });
+
     return (
         <div className="screen">
             <header className="top-bar">
@@ -243,7 +243,7 @@ export function Quiz({ round, onExit }) {
                                         const hints =
                                             (currentResult.question.helpExample && currentResult.question.helpExample.hints)
                                             || [];
-
+                                        console.log("RENDER HELP EXAMPLE:", currentResult.question);
                                         return ex ? (
                                             <div className="example-box">
                                                 <div className="ex-la">

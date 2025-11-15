@@ -1,184 +1,802 @@
-[
-    {
-        "lemma": "laudare",
-        "lemmaDe": "loben",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "laudo",
-            "2Sg": "laudas",
-            "3Sg": "laudat",
-            "1Pl": "laudamus",
-            "2Pl": "laudatis",
-            "3Pl": "laudant"
+{
+    "Praesens": [
+        {
+            "lemma": "laudare",
+            "lemmaDe": "loben",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "laudo",
+                "2Sg": "laudas",
+                "3Sg": "laudat",
+                "1Pl": "laudamus",
+                "2Pl": "laudatis",
+                "3Pl": "laudant"
+            }
+        },
+        {
+            "lemma": "laudare",
+            "lemmaDe": "loben",
+            "mood": "Indikativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "laudor",
+                "2Sg": "laudaris",
+                "3Sg": "laudatur",
+                "1Pl": "laudamur",
+                "2Pl": "laudamini",
+                "3Pl": "laudantur"
+            }
+        },
+        {
+            "lemma": "laudare",
+            "lemmaDe": "loben",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "laudem",
+                "2Sg": "laudes",
+                "3Sg": "laudet",
+                "1Pl": "laudemus",
+                "2Pl": "laudetis",
+                "3Pl": "laudent"
+            }
+        },
+        {
+            "lemma": "laudare",
+            "lemmaDe": "loben",
+            "mood": "Konjunktiv",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "lauder",
+                "2Sg": "lauderis",
+                "3Sg": "laudetur",
+                "1Pl": "laudemur",
+                "2Pl": "laudemini",
+                "3Pl": "laudentur"
+            }
+        },
+        {
+            "lemma": "laudare",
+            "lemmaDe": "loben",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "lauda",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "laudate",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "laudare",
+            "lemmaDe": "loben",
+            "mood": "Imperativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "laudamini",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "videre",
+            "lemmaDe": "sehen",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "video",
+                "2Sg": "vides",
+                "3Sg": "videt",
+                "1Pl": "videmus",
+                "2Pl": "videtis",
+                "3Pl": "vident"
+            }
+        },
+        {
+            "lemma": "videre",
+            "lemmaDe": "sehen",
+            "mood": "Indikativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "videor",
+                "2Sg": "videris",
+                "3Sg": "videtur",
+                "1Pl": "videmur",
+                "2Pl": "videmini",
+                "3Pl": "videntur"
+            }
+        },
+        {
+            "lemma": "videre",
+            "lemmaDe": "sehen",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "videam",
+                "2Sg": "videas",
+                "3Sg": "videat",
+                "1Pl": "videamus",
+                "2Pl": "videatis",
+                "3Pl": "videant"
+            }
+        },
+        {
+            "lemma": "videre",
+            "lemmaDe": "sehen",
+            "mood": "Konjunktiv",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "videar",
+                "2Sg": "videaris",
+                "3Sg": "videatur",
+                "1Pl": "videamur",
+                "2Pl": "videamini",
+                "3Pl": "videantur"
+            }
+        },
+        {
+            "lemma": "videre",
+            "lemmaDe": "sehen",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "vide",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "videte",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "videre",
+            "lemmaDe": "sehen",
+            "mood": "Imperativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "videmini",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "capere",
+            "lemmaDe": "fassen, nehmen",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "capio",
+                "2Sg": "capis",
+                "3Sg": "capit",
+                "1Pl": "capimus",
+                "2Pl": "capitis",
+                "3Pl": "capiunt"
+            }
+        },
+        {
+            "lemma": "capere",
+            "lemmaDe": "fassen, nehmen",
+            "mood": "Indikativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "capior",
+                "2Sg": "caperis",
+                "3Sg": "capitur",
+                "1Pl": "capimur",
+                "2Pl": "capimini",
+                "3Pl": "capiuntur"
+            }
+        },
+        {
+            "lemma": "capere",
+            "lemmaDe": "fassen, nehmen",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "capiam",
+                "2Sg": "capias",
+                "3Sg": "capiat",
+                "1Pl": "capiamus",
+                "2Pl": "capiatis",
+                "3Pl": "capiant"
+            }
+        },
+        {
+            "lemma": "capere",
+            "lemmaDe": "fassen, nehmen",
+            "mood": "Konjunktiv",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "capiar",
+                "2Sg": "capiaris",
+                "3Sg": "capiatur",
+                "1Pl": "capiamur",
+                "2Pl": "capiamini",
+                "3Pl": "capiantur"
+            }
+        },
+        {
+            "lemma": "capere",
+            "lemmaDe": "fassen, nehmen",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "cape",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "capite",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "capere",
+            "lemmaDe": "fassen, nehmen",
+            "mood": "Imperativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "capimini",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "mittere",
+            "lemmaDe": "schicken",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "mitto",
+                "2Sg": "mittis",
+                "3Sg": "mittit",
+                "1Pl": "mittimus",
+                "2Pl": "mittitis",
+                "3Pl": "mittunt"
+            }
+        },
+        {
+            "lemma": "mittere",
+            "lemmaDe": "schicken",
+            "mood": "Indikativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "mittor",
+                "2Sg": "mitteris",
+                "3Sg": "mittitur",
+                "1Pl": "mittimur",
+                "2Pl": "mittimini",
+                "3Pl": "mittuntur"
+            }
+        },
+        {
+            "lemma": "mittere",
+            "lemmaDe": "schicken",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "mittam",
+                "2Sg": "mittas",
+                "3Sg": "mittat",
+                "1Pl": "mittamus",
+                "2Pl": "mittatis",
+                "3Pl": "mittant"
+            }
+        },
+        {
+            "lemma": "mittere",
+            "lemmaDe": "schicken",
+            "mood": "Konjunktiv",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "mittar",
+                "2Sg": "mittaris",
+                "3Sg": "mittatur",
+                "1Pl": "mittamur",
+                "2Pl": "mittamini",
+                "3Pl": "mittantur"
+            }
+        },
+        {
+            "lemma": "mittere",
+            "lemmaDe": "schicken",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "mitte",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "mittite",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "mittere",
+            "lemmaDe": "schicken",
+            "mood": "Imperativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "mittimini",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "audire",
+            "lemmaDe": "hören",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "audio",
+                "2Sg": "audis",
+                "3Sg": "audit",
+                "1Pl": "audimus",
+                "2Pl": "auditis",
+                "3Pl": "audiunt"
+            }
+        },
+        {
+            "lemma": "audire",
+            "lemmaDe": "hören",
+            "mood": "Indikativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "audior",
+                "2Sg": "audiris",
+                "3Sg": "auditur",
+                "1Pl": "audimur",
+                "2Pl": "audimini",
+                "3Pl": "audiuntur"
+            }
+        },
+        {
+            "lemma": "audire",
+            "lemmaDe": "hören",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "audiam",
+                "2Sg": "audias",
+                "3Sg": "audiat",
+                "1Pl": "audiamus",
+                "2Pl": "audiatis",
+                "3Pl": "audiant"
+            }
+        },
+        {
+            "lemma": "audire",
+            "lemmaDe": "hören",
+            "mood": "Konjunktiv",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "audiar",
+                "2Sg": "audiaris",
+                "3Sg": "audiatur",
+                "1Pl": "audiamur",
+                "2Pl": "audiamini",
+                "3Pl": "audiantur"
+            }
+        },
+        {
+            "lemma": "audire",
+            "lemmaDe": "hören",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "audi",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "audite",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "audire",
+            "lemmaDe": "hören",
+            "mood": "Imperativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "audimini",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "esse",
+            "lemmaDe": "sein",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "sum",
+                "2Sg": "es",
+                "3Sg": "est",
+                "1Pl": "sumus",
+                "2Pl": "estis",
+                "3Pl": "sunt"
+            }
+        },
+        {
+            "lemma": "esse",
+            "lemmaDe": "sein",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "sim",
+                "2Sg": "sis",
+                "3Sg": "sit",
+                "1Pl": "simus",
+                "2Pl": "sitis",
+                "3Pl": "sint"
+            }
+        },
+        {
+            "lemma": "esse",
+            "lemmaDe": "sein",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "es",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "este",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "posse",
+            "lemmaDe": "können",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "possum",
+                "2Sg": "potes",
+                "3Sg": "potest",
+                "1Pl": "possumus",
+                "2Pl": "potestis",
+                "3Pl": "possunt"
+            }
+        },
+        {
+            "lemma": "posse",
+            "lemmaDe": "können",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "possim",
+                "2Sg": "possis",
+                "3Sg": "possit",
+                "1Pl": "possimus",
+                "2Pl": "possitis",
+                "3Pl": "possint"
+            }
+        },
+        {
+            "lemma": "posse",
+            "lemmaDe": "können",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "ire",
+            "lemmaDe": "gehen",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "eo",
+                "2Sg": "is",
+                "3Sg": "it",
+                "1Pl": "imus",
+                "2Pl": "itis",
+                "3Pl": "eunt"
+            }
+        },
+        {
+            "lemma": "ire",
+            "lemmaDe": "gehen",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "eam",
+                "2Sg": "eas",
+                "3Sg": "eat",
+                "1Pl": "eamus",
+                "2Pl": "eatis",
+                "3Pl": "eant"
+            }
+        },
+        {
+            "lemma": "ire",
+            "lemmaDe": "gehen",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "i",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "ite",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "ferre",
+            "lemmaDe": "tragen, bringen",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "fero",
+                "2Sg": "fers",
+                "3Sg": "fert",
+                "1Pl": "ferimus",
+                "2Pl": "fertis",
+                "3Pl": "ferunt"
+            }
+        },
+        {
+            "lemma": "ferre",
+            "lemmaDe": "tragen, bringen",
+            "mood": "Indikativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "feror",
+                "2Sg": "ferris",
+                "3Sg": "fertur",
+                "1Pl": "ferimur",
+                "2Pl": "ferimini",
+                "3Pl": "feruntur"
+            }
+        },
+        {
+            "lemma": "ferre",
+            "lemmaDe": "tragen, bringen",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "feram",
+                "2Sg": "feras",
+                "3Sg": "ferat",
+                "1Pl": "feramus",
+                "2Pl": "feratis",
+                "3Pl": "ferant"
+            }
+        },
+        {
+            "lemma": "ferre",
+            "lemmaDe": "tragen, bringen",
+            "mood": "Konjunktiv",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "ferar",
+                "2Sg": "feraris",
+                "3Sg": "feratur",
+                "1Pl": "feramur",
+                "2Pl": "feramini",
+                "3Pl": "ferantur"
+            }
+        },
+        {
+            "lemma": "ferre",
+            "lemmaDe": "tragen, bringen",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "fer",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "ferte",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "ferre",
+            "lemmaDe": "tragen, bringen",
+            "mood": "Imperativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "ferimini",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "volo",
+            "lemmaDe": "wollen",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "volo",
+                "2Sg": "vis",
+                "3Sg": "vult",
+                "1Pl": "volumus",
+                "2Pl": "vultis",
+                "3Pl": "volunt"
+            }
+        },
+        {
+            "lemma": "volo",
+            "lemmaDe": "wollen",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "velim",
+                "2Sg": "velis",
+                "3Sg": "velit",
+                "1Pl": "velimus",
+                "2Pl": "velitis",
+                "3Pl": "velint"
+            }
+        },
+        {
+            "lemma": "volo",
+            "lemmaDe": "wollen",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "nolo",
+            "lemmaDe": "nicht wollen",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "nolo",
+                "2Sg": "non vis",
+                "3Sg": "non vult",
+                "1Pl": "nolumus",
+                "2Pl": "non vultis",
+                "3Pl": "nolunt"
+            }
+        },
+        {
+            "lemma": "nolo",
+            "lemmaDe": "nicht wollen",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "nolim",
+                "2Sg": "nolis",
+                "3Sg": "nolit",
+                "1Pl": "nolimus",
+                "2Pl": "nolitis",
+                "3Pl": "nolint"
+            }
+        },
+        {
+            "lemma": "nolo",
+            "lemmaDe": "nicht wollen",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "noli",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "nolite",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "malo",
+            "lemmaDe": "lieber wollen",
+            "mood": "Indikativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "malo",
+                "2Sg": "mavis",
+                "3Sg": "mavult",
+                "1Pl": "malumus",
+                "2Pl": "mavultis",
+                "3Pl": "malunt"
+            }
+        },
+        {
+            "lemma": "malo",
+            "lemmaDe": "lieber wollen",
+            "mood": "Konjunktiv",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "malim",
+                "2Sg": "malis",
+                "3Sg": "malit",
+                "1Pl": "malimus",
+                "2Pl": "malitis",
+                "3Pl": "malint"
+            }
+        },
+        {
+            "lemma": "malo",
+            "lemmaDe": "lieber wollen",
+            "mood": "Imperativ",
+            "voice": "Aktiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "",
+                "3Pl": ""
+            }
+        },
+        {
+            "lemma": "fio",
+            "lemmaDe": "werden, geschehen",
+            "mood": "Indikativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "fio",
+                "2Sg": "fis",
+                "3Sg": "fit",
+                "1Pl": "fimus",
+                "2Pl": "fitis",
+                "3Pl": "fiunt"
+            }
+        },
+        {
+            "lemma": "fio",
+            "lemmaDe": "werden, geschehen",
+            "mood": "Konjunktiv",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "fiam",
+                "2Sg": "fias",
+                "3Sg": "fiat",
+                "1Pl": "fiamus",
+                "2Pl": "fiatis",
+                "3Pl": "fiant"
+            }
+        },
+        {
+            "lemma": "fio",
+            "lemmaDe": "werden, geschehen",
+            "mood": "Imperativ",
+            "voice": "Passiv",
+            "forms": {
+                "1Sg": "",
+                "2Sg": "",
+                "3Sg": "",
+                "1Pl": "",
+                "2Pl": "",
+                "3Pl": ""
+            }
         }
-    },
-    {
-        "lemma": "videre",
-        "lemmaDe": "sehen",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "video",
-            "2Sg": "vides",
-            "3Sg": "videt",
-            "1Pl": "videmus",
-            "2Pl": "videtis",
-            "3Pl": "vident"
-        }
-    },
-    {
-        "lemma": "capere",
-        "lemmaDe": "fassen; nehmen",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "capio",
-            "2Sg": "capis",
-            "3Sg": "capit",
-            "1Pl": "capimus",
-            "2Pl": "capitis",
-            "3Pl": "capiunt"
-        }
-    },
-    {
-        "lemma": "mittere",
-        "lemmaDe": "schicken",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "mitto",
-            "2Sg": "mittis",
-            "3Sg": "mittit",
-            "1Pl": "mittimus",
-            "2Pl": "mittitis",
-            "3Pl": "mittunt"
-        }
-    },
-    {
-        "lemma": "audire",
-        "lemmaDe": "hören",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "audio",
-            "2Sg": "audis",
-            "3Sg": "audit",
-            "1Pl": "audimus",
-            "2Pl": "auditis",
-            "3Pl": "audiunt"
-        }
-    },
-    {
-        "lemma": "esse",
-        "lemmaDe": "sein",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "sum",
-            "2Sg": "es",
-            "3Sg": "est",
-            "1Pl": "sumus",
-            "2Pl": "estis",
-            "3Pl": "sunt"
-        }
-    },
-    {
-        "lemma": "posse",
-        "lemmaDe": "können",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "possum",
-            "2Sg": "potes",
-            "3Sg": "potest",
-            "1Pl": "possumus",
-            "2Pl": "potestis",
-            "3Pl": "possunt"
-        }
-    },
-    {
-        "lemma": "ire",
-        "lemmaDe": "gehen",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "eo",
-            "2Sg": "is",
-            "3Sg": "it",
-            "1Pl": "imus",
-            "2Pl": "itis",
-            "3Pl": "eunt"
-        }
-    },
-    {
-        "lemma": "ferre",
-        "lemmaDe": "tragen; bringen",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "fero",
-            "2Sg": "fers",
-            "3Sg": "fert",
-            "1Pl": "ferimus",
-            "2Pl": "fertis",
-            "3Pl": "ferunt"
-        }
-    },
-    {
-        "lemma": "velle",
-        "lemmaDe": "wollen",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "volo",
-            "2Sg": "vis",
-            "3Sg": "vult",
-            "1Pl": "volumus",
-            "2Pl": "vultis",
-            "3Pl": "volunt"
-        }
-    },
-    {
-        "lemma": "nolle",
-        "lemmaDe": "nicht wollen",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "nolo",
-            "2Sg": "non vis",
-            "3Sg": "non vult",
-            "1Pl": "nolumus",
-            "2Pl": "non vultis",
-            "3Pl": "nolunt"
-        }
-    },
-    {
-        "lemma": "malle",
-        "lemmaDe": "lieber wollen",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "malo",
-            "2Sg": "mavis",
-            "3Sg": "mavult",
-            "1Pl": "malumus",
-            "2Pl": "mavultis",
-            "3Pl": "malunt"
-        }
-    },
-    {
-        "lemma": "fieri",
-        "lemmaDe": "werden; geschehen",
-        "mood": "Indikativ",
-        "voice": "Aktiv",
-        "forms": {
-            "1Sg": "fio",
-            "2Sg": "fis",
-            "3Sg": "fit",
-            "1Pl": "fimus",
-            "2Pl": "fitis",
-            "3Pl": "fiunt"
-        }
-    }
-]
+    ]
+}
