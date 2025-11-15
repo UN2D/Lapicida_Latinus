@@ -6,20 +6,77 @@ import VERB_META_WRAPPER from "../../data/verbs_meta.json";
 // -----------------------------
 // Konstanten & Hilfen
 // -----------------------------
+
+// ===== helpers & constants (robust) =====
+const TENSES = ["Praesens", "Imperfekt", "Perfekt", "Plusquamperfekt", "Futur I", "Futur II"];
+const MOODS = ["Indikativ", "Konjunktiv", "Imperativ"];
+const VOICES = ["Aktiv", "Passiv"];
+
+// Akzeptiert Einzelwert, Array oder null → immer Array
+function asList(x) {
+    if (x == null) return [];
+    return Array.isArray(x) ? x : [x];
+}
+
+// Normalisierer für Keys
+function capFirst(s) {
+    if (!s) return "";
+    const t = String(s).trim();
+    return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+}
+function normTense(t) {
+    if (!t) return "";
+    const s = String(t).toLowerCase().replace(/\s+/g, " ").trim();
+    if (s === "futur 1" || s === "futur i" || s === "futur1") return "Futur I";
+    if (s === "futur 2" || s === "futur ii" || s === "futur2") return "Futur II";
+    if (s === "plusquamperf" || s.startsWith("plusquamperf")) return "Plusquamperfekt";
+    if (s === "praesens" || s === "präsens" || s === "prasens") return "Praesens";
+    if (s === "imperfekt") return "Imperfekt";
+    if (s === "perfekt") return "Perfekt";
+    // Fallback: Titel-Case
+    return capFirst(s);
+}
+function normMood(m) {
+    const s = capFirst(m || "");
+    if (s === "Konjunktiv" || s === "Indikativ" || s === "Imperativ") return s;
+    // Fallback, häufige Varianten
+    if (/konj/.test(s.toLowerCase())) return "Konjunktiv";
+    if (/ind/.test(s.toLowerCase())) return "Indikativ";
+    if (/imp/.test(s.toLowerCase())) return "Imperativ";
+    return s || "Indikativ";
+}
+function normVoice(v) {
+    const s = capFirst(v || "");
+    if (s === "Aktiv" || s === "Passiv") return s;
+    if (/act/.test(s.toLowerCase())) return "Aktiv";
+    if (/pass/.test(s.toLowerCase())) return "Passiv";
+    return s || "Aktiv";
+}
+
+// Lemma normalisieren für Meta-Lookups
+function normalizeLemma(s) {
+    return (s || "").toLowerCase().trim();
+}
+
+// Kleine Anzeige-Helfer für Quiz/Summary (exportiert!)
+export function formatVerbSpec({ person, number, tense, mood, voice }) {
+    const PERSON_LABEL = { "1": "1. Person", "2": "2. Person", "3": "3. Person" };
+    const NUMBER_LABEL = { "Sg": "Singular", "Pl": "Plural" };
+    return [
+        PERSON_LABEL[person] || person,
+        NUMBER_LABEL[number] || number,
+        tense,
+        mood,
+        voice
+    ].join(" ");
+}
+
 const PERSONS = ["1", "2", "3"];
 const NUMBERS = ["Sg", "Pl"];
 const DEFAULT_TENSES = ["Praesens"];
 const DEFAULT_MOODS = ["Indikativ"];
 const DEFAULT_VOICES = ["Aktiv"];
 
-const TENSETAB = {
-    "praesens": "PRS", "Präsens": "PRS", "Praesens": "PRS",
-    "imperfekt": "IMPF", "Imperfekt": "IMPF",
-    "perfekt": "PERF", "Perfekt": "PERF",
-    "plusquamperfekt": "PQP", "Plusquamperfekt": "PQP",
-    "futur i": "FUT1", "Futur I": "FUT1", "futur1": "FUT1",
-    "futur ii": "FUT2", "Futur II": "FUT2", "futur2": "FUT2"
-};
 
 const BANK = {
     Praesens: PRAES,
@@ -48,20 +105,10 @@ const VOICE_LABELS = {
     "Aktiv": "Aktiv", "Passiv": "Passiv"
 };
 
-export function formatVerbSpec(spec = {}) {
-    const p = PERSON_LABELS[spec.person] ?? spec.person ?? "";
-    const n = NUMBER_LABELS[spec.number] ?? spec.number ?? "";
-    const t = TENSE_LABELS[spec.tense] ?? spec.tense ?? "";
-    const m = MOOD_LABELS[spec.mood] ?? spec.mood ?? "";
-    const v = VOICE_LABELS[spec.voice] ?? spec.voice ?? "";
-
-    // Reihenfolge: Person, Numerus, Zeitform, Modus, Genus (Diathese)
-    return [p, n, t, m, v].filter(Boolean).join(", ");
-}
-
 // robust: akzeptiere Array ODER Objekt (Map)
 function rowsForTense(tense) {
-    const t = BANK[tense] ?? BANK[normalizePraesens(tense)];
+    const t = Array.isArray(BANK?.[tense]) ? BANK[tense] : [];
+    //const t = BANK[tense] ?? BANK[normalizePraesens(tense)];
     if (!t) return [];
     if (Array.isArray(t)) return t;
     // Falls das JSON als Objekt kommt (z.B. { "rows": [...] }):
@@ -138,6 +185,9 @@ function pickFromMeta(lemma, tense, mood, voice, person, number) {
     return { example: leaf.example || null, gloss: leaf.gloss || null };
 }
 
+
+
+
 // -----------------------------
 // Export: buildVerbQuestions
 // -----------------------------
@@ -149,9 +199,13 @@ export function buildVerbQuestions({
     const wantedAll = !lemmas || lemmas.length === 0;
     const lemmaSet = new Set(lemmas);
 
-    const allowTenses = filters.tenses?.length ? filters.tenses : DEFAULT_TENSES;
-    const allowMoods = filters.moods?.length ? filters.moods : DEFAULT_MOODS;
-    const allowVoices = filters.voices?.length ? filters.voices : DEFAULT_VOICES;
+    const fT = asList(filters?.tenses).map(normTense);
+    const fM = asList(filters?.moods).map(normMood);
+    const fV = asList(filters?.voices).map(normVoice);
+
+    const allowTenses = (fT.length ? fT : TENSES);
+    const allowMoods = (fM.length ? fM : MOODS);
+    const allowVoices = (fV.length ? fV : VOICES);
 
     const candidates = [];
 
@@ -251,4 +305,8 @@ function shuffle(arr) {
         [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
-}
+} export {
+    asList, normTense, normMood, normVoice, normalizeLemma
+    // plus alles, was du sonst schon exportierst (buildVerbQuestions etc.)
+};
+

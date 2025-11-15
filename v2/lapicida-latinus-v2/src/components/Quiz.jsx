@@ -88,20 +88,63 @@ export function Quiz({ round, onExit }) {
     if (currentResult && currentResult.done) {
         const correctCount = history.filter((h) => h.isCorrect).length;
         const totalCount = history.length || total;
+        const mistakes = history.filter((h) => !h.isCorrect);
         return (
             <div className="screen">
                 <header className="top-bar">
                     <div className="app-title">Lapicida Latinus</div>
                     <button className="top-bar-btn" onClick={onExit}>Zurück</button>
                 </header>
+
                 <main className="content">
                     <h2>Runde beendet</h2>
                     <p>{correctCount} von {totalCount} richtig.</p>
+
+                    {mistakes.length > 0 && (
+                        <>
+                            <h3>Diese Formen solltest du dir ansehen:</h3>
+                            {mistakes.map((m, i) => (
+                                <div key={i} className="summary-card">
+                                    {m.question.lemma && (
+                                        <div className="summary-lemma">
+                                            {m.question.lemma} {m.question.lemmaDe ? `– ${m.question.lemmaDe}` : ""}
+                                        </div>
+                                    )}
+                                    <div className="summary-form">{m.question.prompt}</div>
+
+                                    <div className="summary-correct-title">Richtige Bestimmung(en)</div>
+                                    <div className="summary-correct-list">
+                                        {m.correctOptions.map((opt, j) => {
+                                            // Nomen/Adjektiv
+                                            if (m.type === "noun" || m.type === "adj_context") {
+                                                const c = CASE_DE[opt.case] || opt.case || "";
+                                                const n = NUM_DE[opt.number] || opt.number || "";
+                                                const g = GEND_DE[opt.gender] || opt.gender || "";
+                                                const label = [c, n, g].filter(Boolean).join(" ");
+                                                const line = opt.de && opt.de.startsWith(label) ? opt.de
+                                                    : opt.de ? `${label} – ${opt.de}`
+                                                        : label;
+                                                return <div key={j} className="summary-correct-line">{line}</div>;
+                                            }
+                                            // Verben
+                                            const verbLine = formatVerbSpec(opt);
+                                            const line = opt.de && opt.de.startsWith(verbLine) ? opt.de
+                                                : opt.de ? `${verbLine} – ${opt.de}`
+                                                    : verbLine;
+                                            return <div key={j} className="summary-correct-line">{line}</div>;
+                                        })}
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    )}
+
                     <button className="primary-btn" onClick={onExit}>Zurück zur Auswahl</button>
                 </main>
             </div>
         );
     }
+
 
     return (
         <div className="screen">
